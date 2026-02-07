@@ -1,12 +1,19 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import Hero from "@/components/ui/neural-network-hero";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="w-screen h-screen flex flex-col relative">
+      <Hero 
+        title="Where algorithms become art."
+        description="A minimal hero with a neural canvas — crisp, elegant, and quietly expressive. Built with React, Three.js, and a custom CPPN shader."
+        badgeText="Generative Surfaces"
+        badgeLabel="New"
+        ctaButtons={[
+          { text: "Get started", href: "#get-started", primary: true },
+          { text: "View showcase", href: "#showcase" }
+        ]}
+        microDetails={["Low‑weight font", "Tight tracking", "Subtle motion"]}
+      />
     </div>
   );
 };
