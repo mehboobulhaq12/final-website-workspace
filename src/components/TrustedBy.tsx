@@ -9,15 +9,15 @@ import awsLogo from "@/assets/logos/aws.png";
 import googleLogo from "@/assets/logos/google.png";
 
 const companies = [
-  { name: "OpenAI", logo: openaiLogo },
-  { name: "NVIDIA", logo: nvidiaLogo },
-  { name: "Scale", logo: scaleLogo },
-  { name: "Meta", logo: metaLogo },
-  { name: "Microsoft", logo: microsoftLogo },
-  { name: "Anthropic", logo: anthropicLogo },
-  { name: "Tesla", logo: teslaLogo },
-  { name: "AWS", logo: awsLogo },
-  { name: "Google", logo: googleLogo },
+  { name: "OpenAI", logo: openaiLogo, invert: false },
+  { name: "NVIDIA", logo: nvidiaLogo, invert: false },
+  { name: "Scale", logo: scaleLogo, invert: false },
+  { name: "Meta", logo: metaLogo, invert: false },
+  { name: "Microsoft", logo: microsoftLogo, invert: false },
+  { name: "Anthropic", logo: anthropicLogo, invert: true },
+  { name: "Tesla", logo: teslaLogo, invert: false },
+  { name: "AWS", logo: awsLogo, invert: false },
+  { name: "Google", logo: googleLogo, invert: false },
 ];
 
 const TrustedBy = () => {
@@ -36,15 +36,19 @@ const TrustedBy = () => {
         <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-black to-transparent z-10" />
         <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-black to-transparent z-10" />
 
-        <div className="flex animate-marquee w-max gap-20 items-center">
+        <div className="flex animate-marquee w-max gap-16 items-center">
           {[...companies, ...companies].map((company, i) => (
-            <img
+            <div
               key={`${company.name}-${i}`}
-              src={company.logo}
-              alt={company.name}
-              className="h-14 w-auto object-contain hover:scale-110 transition-transform duration-300 mix-blend-screen"
-              loading="lazy"
-            />
+              className="flex items-center justify-center w-[120px] h-[48px] shrink-0"
+            >
+              <img
+                src={company.logo}
+                alt={company.name}
+                className={`max-h-[48px] max-w-[120px] w-auto h-auto object-contain hover:scale-110 transition-transform duration-300 ${company.invert ? 'invert brightness-200' : ''}`}
+                loading="lazy"
+              />
+            </div>
           ))}
         </div>
       </div>
