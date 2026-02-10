@@ -1,9 +1,10 @@
 import Hero from "@/components/ui/neural-network-hero";
 import Navbar from "@/components/Navbar";
+import TrustedBy from "@/components/TrustedBy";
 
 const Index = () => {
   return (
-    <div className="w-screen h-screen flex flex-col relative">
+    <div className="w-screen min-h-screen flex flex-col relative">
       <Navbar />
       <Hero
         title="Transform your business with AI."
@@ -16,6 +17,7 @@ const Index = () => {
         ]}
         microDetails={["Low‑weight font", "Tight tracking", "Subtle motion"]}
       />
+      <TrustedBy />
     </div>
   );
 };
