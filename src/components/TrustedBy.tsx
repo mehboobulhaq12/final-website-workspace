@@ -42,7 +42,7 @@ const TrustedBy = () => {
               key={`${company.name}-${i}`}
               src={company.logo}
               alt={company.name}
-              className="h-14 w-auto object-contain hover:scale-110 transition-transform duration-300 mix-blend-screen"
+              className="h-14 w-auto object-contain hover:scale-110 transition-transform duration-300"
               loading="lazy"
             />
           ))}
