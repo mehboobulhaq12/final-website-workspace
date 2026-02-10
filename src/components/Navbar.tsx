@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -11,9 +11,16 @@ const navLinks = [
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 w-full">
+    <nav className={`fixed top-0 inset-x-0 z-50 w-full transition-all duration-300 ${scrolled ? "bg-black/60 backdrop-blur-lg border-b border-white/5" : ""}`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10 lg:px-16">
         {/* Logo */}
         <a href="/" className="flex items-center">
