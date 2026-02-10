@@ -1,40 +1,32 @@
 
 
-## Trusted By / Logo Carousel Section
+## Colorful Company Logos + Headline Animation
 
-### What will be built
-A "Built by engineers from" section placed directly below the hero, featuring 10 real company logos scrolling horizontally in an infinite marquee animation. The design matches the reference screenshot: light/neutral background, subtle heading, and smoothly sliding logos.
+### What will change
 
-### Companies (matching the reference)
-OpenAI, Apple, AWS, Scale, Microsoft, Capital One, Google, NVIDIA, Tesla, Meta
+**1. Copy all 9 uploaded logo images to `src/assets/logos/`**
+- OpenAI, NVIDIA, Scale, Meta, Microsoft, Anthropic, Tesla, AWS, Google
+- These will be imported as ES6 modules for proper bundling
 
-### Design
-- Light gray background section (`bg-gray-50` or similar neutral tone)
-- Centered heading: "Built by engineers from" in small, muted text
-- Logos displayed as SVGs fetched from a public CDN (e.g., `svgl.app` or inline SVGs) for reliability
-- Infinite horizontal scroll animation using pure CSS (`@keyframes marquee`)
-- Logos duplicated to create seamless looping
-- Proper spacing between logos, grayscale filter with hover color reveal optional
+**2. Update `src/components/TrustedBy.tsx`**
+- Replace the Simple Icons CDN URLs with imports of the uploaded colorful logo images
+- Change heading text from "Built by engineers from" to "Leading by engineers from"
+- Add a subtle highlight/glow animation on the heading text (a shimmer or gradient text animation) for visibility
+- Increase logo height from `h-6` to `h-10` for better visibility across resolutions
+- Remove the `opacity-50` filter so logos appear in full color
+- Keep the seamless marquee animation and edge fade gradients
+- make logo transparency as 100 for visibility
+
+**3. Update `tailwind.config.ts`**
+- Add a `text-shimmer` keyframe animation that sweeps a gradient highlight across the heading text
+
+### Companies (9 logos from uploads)
+OpenAI, NVIDIA, Scale, Meta, Microsoft, Anthropic, Tesla, AWS, Google
 
 ### Technical Details
 
-**1. Create `src/components/TrustedBy.tsx`**
-- Contains the heading and a marquee wrapper
-- Uses CSS `@keyframes` for smooth infinite horizontal scrolling
-- Logos rendered as `<img>` tags using well-known public logo URLs (simple-icons CDN or similar), with company name as alt text
-- Two copies of the logo row side-by-side for seamless loop
-- Tailwind classes for layout; custom keyframe animation added inline or via Tailwind config
-
-**2. Update `tailwind.config.ts`**
-- Add a `marquee` keyframe animation:
-  ```
-  "marquee": { "0%": { transform: "translateX(0)" }, "100%": { transform: "translateX(-50%)" } }
-  ```
-
-**3. Update `src/pages/Index.tsx`**
-- Remove `h-screen` constraint from the wrapper div (so content can scroll beyond the hero)
-- Import and place `<TrustedBy />` after `<Hero />`
-
-**4. Update `src/index.css`**
-- Remove any `overflow: hidden` on body if present, to allow scrolling
+- Each logo imported via `import openaiLogo from "@/assets/logos/openai.png"` etc.
+- Logo `<img>` tags use `h-10 w-auto` for proper sizing
+- Heading gets a CSS gradient text with animated `background-position` shimmer effect
+- Marquee animation remains at 30s linear infinite
 
