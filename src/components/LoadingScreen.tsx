@@ -14,12 +14,12 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(onComplete, 800);
+          setTimeout(onComplete, 600);
           return 100;
         }
         return prev + 1;
       });
-    }, 60);
+    }, 44);
 
     return () => clearInterval(interval);
   }, [onComplete]);
@@ -27,8 +27,8 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
   return (
     <motion.div
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black px-6"
-      exit={{ opacity: 0, scale: 1.02 }}
-      transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+      exit={{ opacity: 0, scale: 1.03, filter: 'blur(8px)' }}
+      transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -38,7 +38,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
       >
         <TextShimmer
           duration={1.2}
-          className="text-lg sm:text-xl md:text-2xl font-medium [--base-color:theme(colors.blue.600)] [--base-gradient-color:theme(colors.blue.200)] dark:[--base-color:theme(colors.blue.700)] dark:[--base-gradient-color:theme(colors.blue.400)]"
+          className="text-lg sm:text-xl md:text-2xl font-medium [--base-color:#c2410c] [--base-gradient-color:#fdba74] dark:[--base-color:#c2410c] dark:[--base-gradient-color:#fdba74]"
         >
           Hi, Welcome to Effect3 Enterprise AI
         </TextShimmer>
@@ -51,7 +51,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
         transition={{ delay: 0.5, duration: 0.6 }}
       >
         <motion.div
-          className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"
+          className="h-full bg-gradient-to-r from-orange-600 to-orange-400 rounded-full"
           style={{ width: `${progress}%` }}
         />
       </motion.div>
