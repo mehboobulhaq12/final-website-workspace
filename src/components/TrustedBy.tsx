@@ -12,7 +12,7 @@ const companies = [
   { name: "OpenAI", logo: openaiLogo, invert: false },
   { name: "NVIDIA", logo: nvidiaLogo, invert: false },
   { name: "Scale", logo: scaleLogo, invert: false },
-  { name: "Meta", logo: metaLogo, invert: false },
+  { name: "Meta", logo: metaLogo, invert: true },
   { name: "Microsoft", logo: microsoftLogo, invert: false },
   { name: "Anthropic", logo: anthropicLogo, invert: true },
   { name: "Tesla", logo: teslaLogo, invert: false },
