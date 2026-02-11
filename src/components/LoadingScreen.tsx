@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { TextShimmer } from '@/components/ui/text-shimmer';
-import logo from '@/assets/logo.png';
 
 interface LoadingScreenProps {
   onComplete: () => void;
@@ -15,46 +14,47 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(onComplete, 400);
+          setTimeout(onComplete, 800);
           return 100;
         }
-        return prev + 2;
+        return prev + 1;
       });
-    }, 50);
+    }, 60);
 
     return () => clearInterval(interval);
   }, [onComplete]);
 
   return (
     <motion.div
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.6, ease: 'easeInOut' }}
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black px-6"
+      exit={{ opacity: 0, scale: 1.02 }}
+      transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
     >
-      <motion.img
-        src={logo}
-        alt="Effect3"
-        className="h-12 mb-8"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-      />
-
-      <TextShimmer
-        duration={1.2}
-        className="text-xl md:text-2xl font-medium [--base-color:theme(colors.blue.600)] [--base-gradient-color:theme(colors.blue.200)] dark:[--base-color:theme(colors.blue.700)] dark:[--base-gradient-color:theme(colors.blue.400)]"
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        className="text-center"
       >
-        Hi, Welcome to Effect3 Enterprise AI
-      </TextShimmer>
+        <TextShimmer
+          duration={1.2}
+          className="text-lg sm:text-xl md:text-2xl font-medium [--base-color:theme(colors.blue.600)] [--base-gradient-color:theme(colors.blue.200)] dark:[--base-color:theme(colors.blue.700)] dark:[--base-gradient-color:theme(colors.blue.400)]"
+        >
+          Hi, Welcome to Effect3 Enterprise AI
+        </TextShimmer>
+      </motion.div>
 
-      <div className="mt-8 w-48 h-[2px] bg-white/10 rounded-full overflow-hidden">
+      <motion.div
+        className="mt-8 w-48 h-[2px] bg-white/10 rounded-full overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.6 }}
+      >
         <motion.div
           className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"
-          initial={{ width: '0%' }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.1 }}
+          style={{ width: `${progress}%` }}
         />
-      </div>
+      </motion.div>
     </motion.div>
   );
 };
