@@ -45,7 +45,7 @@ const TrustedBy = () => {
               <img
                 src={company.logo}
                 alt={company.name}
-                className={`max-h-[48px] max-w-[120px] w-auto h-auto object-contain hover:scale-110 transition-transform duration-300 ${company.invert ? 'invert brightness-200' : ''}`}
+                className={`w-auto h-auto object-contain hover:scale-110 transition-transform duration-300 ${company.name === 'OpenAI' ? 'max-h-[36px] max-w-[100px]' : 'max-h-[48px] max-w-[120px]'} ${company.invert ? 'invert brightness-200' : ''}`}
                 loading="lazy"
               />
             </div>
