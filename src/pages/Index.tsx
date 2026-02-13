@@ -4,6 +4,7 @@ import Hero from "@/components/ui/neural-network-hero";
 import Navbar from "@/components/Navbar";
 import TrustedBy from "@/components/TrustedBy";
 import LoadingScreen from "@/components/LoadingScreen";
+import { TextShimmer } from "@/components/ui/text-shimmer";
 
 const Index = () => {
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,19 @@ const Index = () => {
       <div className="w-screen min-h-screen flex flex-col relative">
         <Navbar />
         <Hero
-          title="Transform your business with AI."
+          title={
+            <>
+              AI Systems Built for One Thing:{" "}
+              <TextShimmer
+                as="span"
+                duration={2.5}
+                spread={3}
+                className="italic font-light [--base-color:theme(colors.white)] [--base-gradient-color:theme(colors.blue.200)] dark:[--base-color:theme(colors.white)] dark:[--base-gradient-color:theme(colors.blue.200)]"
+              >
+                More Conversions
+              </TextShimmer>
+            </>
+          }
           description="Custom AI implementations tailored to your business that automate entire departments from the inside, end to end. No generalized software that only does half the job. No 18-month timelines or migrations required."
           badgeText="Enterprises AI System"
           badgeLabel="online"
