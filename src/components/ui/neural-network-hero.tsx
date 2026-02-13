@@ -7,9 +7,8 @@ import * as THREE from 'three';
 
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import { SplitText } from 'gsap/SplitText';
 
-gsap.registerPlugin(SplitText, useGSAP);
+gsap.registerPlugin(useGSAP);
 
 // ===================== SHADER =====================
 const vertexShader = `
@@ -259,12 +258,7 @@ export default function Hero({
       if (!headerRef.current) return;
 
       document.fonts.ready.then(() => {
-        const split = new SplitText(headerRef.current!, {
-          type: 'lines',
-          wordsClass: 'lines',
-        });
-
-        gsap.set(split.lines, {
+        gsap.set(headerRef.current!, {
           filter: 'blur(16px)',
           yPercent: 30,
           autoAlpha: 0,
@@ -295,14 +289,13 @@ export default function Hero({
         }
 
         tl.to(
-          split.lines,
+          headerRef.current!,
           {
             filter: 'blur(0px)',
             yPercent: 0,
             autoAlpha: 1,
             scale: 1,
             duration: 0.9,
-            stagger: 0.15,
           },
           0.1,
         );
