@@ -149,26 +149,29 @@ const ChatAnimation = () => {
   const startedRef = useRef(false);
 
   useEffect(() => {
-    const cycleCount = { current: 0 };
+    let cycleCount = 0;
     const maxCycles = 3;
     const cycleDuration = 5000;
+    const allTimers: ReturnType<typeof setTimeout>[] = [];
 
     const runCycle = () => {
-      if (cycleCount.current >= maxCycles) return;
-      cycleCount.current++;
-      setStage(0);
-      const timers = [
-        setTimeout(() => setStage(1), 200),
-        setTimeout(() => setStage(2), 900),
-        setTimeout(() => setStage(3), 1400),
-        setTimeout(() => setStage(4), 2200),
-        setTimeout(() => setStage(5), 3000),
-        setTimeout(() => setStage(6), 3800),
-      ];
-      if (cycleCount.current < maxCycles) {
-        timers.push(setTimeout(() => runCycle(), cycleDuration));
+      if (cycleCount >= maxCycles) return;
+      const offset = cycleCount * cycleDuration;
+      cycleCount++;
+
+      allTimers.push(
+        setTimeout(() => setStage(0), offset),
+        setTimeout(() => setStage(1), offset + 200),
+        setTimeout(() => setStage(2), offset + 900),
+        setTimeout(() => setStage(3), offset + 1400),
+        setTimeout(() => setStage(4), offset + 2200),
+        setTimeout(() => setStage(5), offset + 3000),
+        setTimeout(() => setStage(6), offset + 3800),
+      );
+
+      if (cycleCount < maxCycles) {
+        allTimers.push(setTimeout(() => runCycle(), cycleDuration));
       }
-      return timers;
     };
 
     const trigger = ScrollTrigger.create({
@@ -182,7 +185,11 @@ const ChatAnimation = () => {
         }
       },
     });
-    return () => trigger.kill();
+
+    return () => {
+      trigger.kill();
+      allTimers.forEach(clearTimeout);
+    };
   }, []);
 
   return (
