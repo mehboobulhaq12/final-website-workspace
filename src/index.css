@@ -104,14 +104,29 @@ All colors MUST be HSL.
   }
 }
 
-@keyframes checkPop {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
+@keyframes checkPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(251,146,60,0.4), 0 0 60px rgba(251,146,60,0.15); }
+  50% { transform: scale(1.08); box-shadow: 0 0 40px rgba(251,146,60,0.6), 0 0 80px rgba(251,146,60,0.25); }
 }
 
-@keyframes checkRing {
-  0%, 100% { opacity: 0; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.15); }
+@keyframes checkRipple1 {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes checkRipple2 {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes checkRipple3 {
+  0% { transform: scale(0.8); opacity: 0.4; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+@keyframes checkGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
 }
 
 @keyframes scanLine {

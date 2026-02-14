@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { CheckCircle2 } from "lucide-react";
+import { Check } from "lucide-react";
 
 import salesforceLogo from "@/assets/logos/salesforce.png";
 import slackLogo from "@/assets/logos/slack.png";
@@ -65,15 +65,22 @@ const IntegrationSection = () => {
         </div>
       </div>
 
-      {/* Logo marquee with centered checkmark */}
+      {/* Logo marquee with centered premium check */}
       <div className="relative w-full h-28 sm:h-32 flex items-center">
-        {/* Animated check circle in center */}
+        {/* Premium animated check in center */}
         <div className="absolute left-1/2 -translate-x-1/2 z-20 flex items-center justify-center">
-          <div className="relative">
-            {/* Glow rings */}
-            <div className="absolute inset-0 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-orange-400/10 animate-[checkRing_2.5s_ease-in-out_infinite]" />
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30 animate-[checkPop_2.5s_ease-in-out_infinite]">
-              <CheckCircle2 className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+          <div className="relative flex items-center justify-center">
+            {/* Outermost ripple */}
+            <div className="absolute w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-orange-400/10 animate-[checkRipple1_3s_ease-out_infinite]" />
+            {/* Middle ripple */}
+            <div className="absolute w-20 h-20 sm:w-24 sm:h-24 rounded-full border border-orange-400/15 animate-[checkRipple2_3s_ease-out_0.4s_infinite]" />
+            {/* Inner ripple */}
+            <div className="absolute w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-orange-400/20 animate-[checkRipple3_3s_ease-out_0.8s_infinite]" />
+            {/* Glow backdrop */}
+            <div className="absolute w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-orange-500/20 blur-xl animate-[checkGlow_2s_ease-in-out_infinite]" />
+            {/* Main check circle */}
+            <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 flex items-center justify-center shadow-[0_0_30px_rgba(251,146,60,0.4),0_0_60px_rgba(251,146,60,0.15)] animate-[checkPulse_2s_ease-in-out_infinite]">
+              <Check className="w-6 h-6 sm:w-7 sm:h-7 text-white stroke-[3]" />
             </div>
           </div>
         </div>
@@ -85,11 +92,12 @@ const IntegrationSection = () => {
         {/* Scrolling logos */}
         <div className="flex animate-[scrollLogos_25s_linear_infinite] gap-12 sm:gap-16 items-center">
           {[...logos, ...logos, ...logos].map((logo, i) => (
-            <div key={i} className="flex-shrink-0 w-24 h-12 sm:w-32 sm:h-14 flex items-center justify-center">
+            <div key={i} className="flex-shrink-0 w-28 h-14 sm:w-36 sm:h-16 flex items-center justify-center">
               <img
                 src={logo.src}
                 alt={logo.alt}
-                className={`max-w-full max-h-full object-contain opacity-50 hover:opacity-80 transition-opacity duration-300 ${logo.invert ? "brightness-0 invert" : ""}`}
+                className={`max-w-full max-h-full object-contain opacity-70 hover:opacity-100 transition-opacity duration-300 ${logo.invert ? "brightness-0 invert" : ""}`}
+                style={{ mixBlendMode: "lighten" }}
               />
             </div>
           ))}
