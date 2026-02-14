@@ -106,6 +106,7 @@ const IntegrationSection = () => {
                 src={logo.src}
                 alt={logo.alt}
                 className="max-w-full max-h-full object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
+                style={{ mixBlendMode: "lighten" }}
               />
             </div>
           ))}
