@@ -351,12 +351,12 @@ export default function Hero({
           ))}
         </div>
 
-        <ul ref={microRef} className="mt-8 flex flex-wrap gap-6 text-xs font-extralight tracking-tight text-white/60">
+        <ul ref={microRef} className="mt-8 flex flex-wrap gap-6 text-sm font-extralight italic tracking-tight text-white/60">
           {microDetails.map((detail, index) => {
             const refMap = [microItem1Ref, microItem2Ref, microItem3Ref];
             return (
-              <li key={index} ref={refMap[index]} className="flex items-center gap-2">
-                <span className="h-1 w-1 rounded-full bg-white/40" /> {detail}
+              <li key={index} ref={refMap[index]} className="flex items-center">
+                {detail}
               </li>
             );
           })}

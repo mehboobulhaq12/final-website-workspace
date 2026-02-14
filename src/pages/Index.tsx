@@ -26,22 +26,21 @@ const Index = () => {
               AI Systems Built for One Thing:{" "}
               <TextShimmer
                 as="span"
-                duration={2.5}
-                spread={3}
-                className="italic font-light [--base-color:theme(colors.white)] [--base-gradient-color:theme(colors.blue.200)] dark:[--base-color:theme(colors.white)] dark:[--base-gradient-color:theme(colors.blue.200)]"
+                duration={2}
+                spread={4}
+                className="italic font-light [--base-color:theme(colors.blue.200)] [--base-gradient-color:theme(colors.white)] dark:[--base-color:theme(colors.blue.200)] dark:[--base-gradient-color:theme(colors.white)]"
               >
                 More Conversions
               </TextShimmer>
             </>
           }
-          description="Custom AI implementations tailored to your business that automate entire departments from the inside, end to end. No generalized software that only does half the job. No 18-month timelines or migrations required."
+          description="We deploy custom AI agents that revive your dead leads and bring your old leads and customers back to life, and make them paying customers again."
           badgeText="Enterprises AI System"
           badgeLabel="online"
           ctaButtons={[
-            { text: "Get started", href: "#get-started", primary: true },
-            { text: "Book a demo", href: "#demo" }
+            { text: "Implement Now", href: "#get-started", primary: true }
           ]}
-          microDetails={["Low‑weight font", "Tight tracking", "Subtle motion"]}
+          microDetails={["Get your most boring work handled by AI agents."]}
         />
         <TrustedBy />
       </div>
