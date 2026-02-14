@@ -9,7 +9,7 @@ import awsLogo from "@/assets/logos/aws.png";
 import googleLogo from "@/assets/logos/google.png";
 
 const companies = [
-  { name: "OpenAI", logo: openaiLogo, invert: false },
+  { name: "OpenAI", logo: openaiLogo, invert: true },
   { name: "NVIDIA", logo: nvidiaLogo, invert: false },
   { name: "Scale", logo: scaleLogo, invert: false },
   { name: "Microsoft", logo: microsoftLogo, invert: false },
@@ -45,7 +45,7 @@ const TrustedBy = () => {
               <img
                 src={company.logo}
                 alt={company.name}
-                className={`w-auto h-auto object-contain hover:scale-110 transition-transform duration-300 max-h-[48px] max-w-[120px] ${company.invert ? 'invert brightness-200' : ''}`}
+                className={`w-auto h-auto object-contain hover:scale-110 transition-transform duration-300 max-h-[48px] max-w-[120px] ${company.invert ? 'invert' : ''}`}
                 loading="lazy"
               />
             </div>
