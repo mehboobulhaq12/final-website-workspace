@@ -54,11 +54,11 @@ const ProblemSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full pt-12 md:pt-16 pb-24 md:pb-32 bg-black"
+      className="w-full pt-12 md:pt-16 pb-12 md:pb-16 bg-black"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-start">
         {/* Left: Text content */}
-        <div className="flex flex-col gap-6 items-center text-center">
+        <div className="flex flex-col gap-6">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>

@@ -102,7 +102,7 @@ const InfrastructureSection = () => {
   );
 
   return (
-    <section ref={sectionRef} className="w-full py-24 md:py-32 bg-black border-t border-white/5">
+    <section ref={sectionRef} className="w-full py-12 md:py-16 bg-black border-t border-white/5">
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
         {/* Badge & Heading */}
         <div ref={headingRef} className="flex flex-col items-center text-center gap-6 mb-16">
