@@ -39,7 +39,7 @@ const ProblemStatement = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-24 md:py-32 bg-black border-t border-white/5"
+      className="w-full pt-24 md:pt-32 pb-12 md:pb-16 bg-black border-t border-white/5"
     >
       <div className="mx-auto max-w-4xl px-6 md:px-10 lg:px-16 flex flex-col items-center text-center gap-6">
         <div ref={statRef}>
