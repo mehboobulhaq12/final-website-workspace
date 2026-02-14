@@ -9,7 +9,6 @@ import InfrastructureSection from "@/components/InfrastructureSection";
 import IntegrationSection from "@/components/IntegrationSection";
 import OutcomeSection from "@/components/OutcomeSection";
 import TestimonialSection from "@/components/TestimonialSection";
-import CaseStudySection from "@/components/CaseStudySection";
 import LoadingScreen from "@/components/LoadingScreen";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 
@@ -55,7 +54,6 @@ const Index = () => {
         <InfrastructureSection />
         <IntegrationSection />
         <OutcomeSection />
-        <CaseStudySection />
         <TestimonialSection />
       </div>
     </>
