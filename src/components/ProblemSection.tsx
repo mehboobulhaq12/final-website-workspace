@@ -59,12 +59,14 @@ const ProblemSection = () => {
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-start">
         {/* Left: Text content */}
         <div className="flex flex-col gap-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-            </span>
-            <span className="text-xs font-light tracking-tight text-white/80">The Friction Map</span>
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              <span className="text-xs font-light tracking-tight text-white/80">The Friction Map</span>
+            </div>
           </div>
           <div ref={headingRef}>
             <TextShimmer
