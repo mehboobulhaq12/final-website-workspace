@@ -3,6 +3,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Check } from "lucide-react";
+import { TextShimmer } from "@/components/ui/text-shimmer";
 
 import salesforceLogo from "@/assets/logos/salesforce.png";
 import slackLogo from "@/assets/logos/slack.png";
@@ -16,12 +17,12 @@ import klaviyoLogo from "@/assets/logos/klaviyo.png";
 gsap.registerPlugin(ScrollTrigger);
 
 const logos = [
-  { src: salesforceLogo, alt: "Salesforce", invert: true },
-  { src: slackLogo, alt: "Slack", invert: true },
-  { src: zohoLogo, alt: "Zoho", invert: true },
-  { src: odooLogo, alt: "Odoo", invert: true },
-  { src: airtableLogo, alt: "Airtable", invert: true },
-  { src: whatsappLogo, alt: "WhatsApp", invert: true },
+  { src: salesforceLogo, alt: "Salesforce" },
+  { src: slackLogo, alt: "Slack" },
+  { src: zohoLogo, alt: "Zoho" },
+  { src: odooLogo, alt: "Odoo" },
+  { src: airtableLogo, alt: "Airtable" },
+  { src: whatsappLogo, alt: "WhatsApp" },
   { src: hubspotLogo, alt: "HubSpot" },
   { src: klaviyoLogo, alt: "Klaviyo" },
 ];
@@ -56,8 +57,16 @@ const IntegrationSection = () => {
               <span className="text-xs font-light tracking-tight text-white/80">Integrations</span>
             </div>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1] text-white/90">
-            Deep integration with your existing stack.
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1]">
+            <span className="text-white/90">Deep integration with your </span>
+            <TextShimmer
+              as="span"
+              duration={2}
+              spread={4}
+              className="italic font-light [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
+            >
+              existing stack.
+            </TextShimmer>
           </h2>
           <p className="text-base sm:text-lg font-light leading-relaxed text-white/40">
             Our agents connect directly to your systems — ERP, CRM, finance tools — reading, writing, and executing workflows without migration or platform changes.
@@ -96,8 +105,7 @@ const IntegrationSection = () => {
               <img
                 src={logo.src}
                 alt={logo.alt}
-                className={`max-w-full max-h-full object-contain opacity-70 hover:opacity-100 transition-opacity duration-300 ${logo.invert ? "brightness-0 invert" : ""}`}
-                style={{ mixBlendMode: "lighten" }}
+                className="max-w-full max-h-full object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
               />
             </div>
           ))}
