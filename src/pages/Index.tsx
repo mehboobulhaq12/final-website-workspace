@@ -49,10 +49,9 @@ const Index = () => {
         />
         <TrustedBy />
         <ProblemStatement />
-        <OutcomeSection />
         <IntegrationSection />
         <ProblemSection />
-        <InfrastructureSection />
+        <OutcomeSection />
         <InfrastructureSection />
       </div>
     </>
