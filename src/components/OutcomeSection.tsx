@@ -39,20 +39,43 @@ const map = new DottedMap({ height: 55, grid: "diagonal" });
 const points = map.getPoints();
 
 const highlightedPoints = [
-  { cx: 25, cy: 22 },  // US East
-  { cx: 18, cy: 28 },  // US West
-  { cx: 30, cy: 18 },  // Canada
-  { cx: 55, cy: 22 },  // UK
-  { cx: 58, cy: 24 },  // France
-  { cx: 60, cy: 22 },  // Germany
-  { cx: 85, cy: 20 },  // Japan
-  { cx: 80, cy: 28 },  // India
-  { cx: 90, cy: 22 },  // Korea
-  { cx: 65, cy: 35 },  // UAE
-  { cx: 95, cy: 38 },  // Australia
-  { cx: 42, cy: 40 },  // Brazil
-  { cx: 62, cy: 18 },  // Nordics
-  { cx: 75, cy: 25 },  // China
+  { cx: 25, cy: 22 },
+  { cx: 18, cy: 28 },
+  { cx: 30, cy: 18 },
+  { cx: 55, cy: 22 },
+  { cx: 58, cy: 24 },
+  { cx: 60, cy: 22 },
+  { cx: 85, cy: 20 },
+  { cx: 80, cy: 28 },
+  { cx: 90, cy: 22 },
+  { cx: 65, cy: 35 },
+  { cx: 95, cy: 38 },
+  { cx: 42, cy: 40 },
+  { cx: 62, cy: 18 },
+  { cx: 75, cy: 25 },
+  { cx: 22, cy: 32 },
+  { cx: 35, cy: 25 },
+  { cx: 50, cy: 30 },
+  { cx: 70, cy: 18 },
+  { cx: 78, cy: 35 },
+  { cx: 88, cy: 30 },
+  { cx: 45, cy: 22 },
+  { cx: 68, cy: 28 },
+];
+
+const connections = [
+  { x1: 25, y1: 22, x2: 55, y2: 22 },
+  { x1: 55, y1: 22, x2: 85, y2: 20 },
+  { x1: 60, y1: 22, x2: 80, y2: 28 },
+  { x1: 18, y1: 28, x2: 42, y2: 40 },
+  { x1: 30, y1: 18, x2: 62, y2: 18 },
+  { x1: 75, y1: 25, x2: 90, y2: 22 },
+  { x1: 65, y1: 35, x2: 80, y2: 28 },
+  { x1: 58, y1: 24, x2: 75, y2: 25 },
+  { x1: 25, y1: 22, x2: 35, y2: 25 },
+  { x1: 85, y1: 20, x2: 95, y2: 38 },
+  { x1: 45, y1: 22, x2: 55, y2: 22 },
+  { x1: 70, y1: 18, x2: 85, y2: 20 },
 ];
 
 const MapComponent = () => {
@@ -62,27 +85,22 @@ const MapComponent = () => {
       {points.map((point, index) => (
         <circle key={index} cx={point.x} cy={point.y} r={0.15} fill="currentColor" />
       ))}
+      {connections.map((c, i) => (
+        <line key={`line-${i}`} x1={c.x1} y1={c.y1} x2={c.x2} y2={c.y2} stroke="hsl(25 95% 53%)" strokeWidth="0.3" opacity="0.35">
+          <animate attributeName="opacity" values="0.2;0.5;0.2" dur={`${2.5 + i * 0.3}s`} repeatCount="indefinite" />
+        </line>
+      ))}
       {highlightedPoints.map((p, i) => (
         <g key={`hl-${i}`}>
-          <circle cx={p.cx} cy={p.cy} r="1.8" fill="hsl(25 95% 53%)" opacity="0.1">
-            <animate attributeName="r" values="1.2;2.4;1.2" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.15;0.05;0.15" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />
+          <circle cx={p.cx} cy={p.cy} r="1.8" fill="hsl(25 95% 53%)" opacity="0.15">
+            <animate attributeName="r" values="1.2;2.8;1.2" dur={`${2 + i * 0.2}s`} repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.2;0.06;0.2" dur={`${2 + i * 0.2}s`} repeatCount="indefinite" />
           </circle>
-          <circle cx={p.cx} cy={p.cy} r="0.5" fill="hsl(25 95% 53%)" opacity="0.9">
-            <animate attributeName="opacity" values="0.6;1;0.6" dur={`${1.5 + i * 0.2}s`} repeatCount="indefinite" />
+          <circle cx={p.cx} cy={p.cy} r="0.6" fill="hsl(25 95% 53%)" opacity="1">
+            <animate attributeName="opacity" values="0.7;1;0.7" dur={`${1.5 + i * 0.15}s`} repeatCount="indefinite" />
           </circle>
         </g>
       ))}
-      {/* Connection lines */}
-      <line x1="25" y1="22" x2="55" y2="22" stroke="hsl(25 95% 53%)" strokeWidth="0.15" opacity="0.2">
-        <animate attributeName="opacity" values="0.1;0.3;0.1" dur="3s" repeatCount="indefinite" />
-      </line>
-      <line x1="55" y1="22" x2="85" y2="20" stroke="hsl(25 95% 53%)" strokeWidth="0.15" opacity="0.2">
-        <animate attributeName="opacity" values="0.1;0.3;0.1" dur="3.5s" repeatCount="indefinite" />
-      </line>
-      <line x1="60" y1="22" x2="80" y2="28" stroke="hsl(25 95% 53%)" strokeWidth="0.15" opacity="0.2">
-        <animate attributeName="opacity" values="0.1;0.3;0.1" dur="4s" repeatCount="indefinite" />
-      </line>
     </svg>
   );
 };
@@ -110,8 +128,23 @@ const MonitoringChart = () => {
   );
 };
 
+const TypingIndicator = ({ color = "white" }: { color?: string }) => (
+  <div className="flex items-center gap-1 px-3 py-2">
+    {[0, 1, 2].map((i) => (
+      <span
+        key={i}
+        className="w-1.5 h-1.5 rounded-full"
+        style={{
+          backgroundColor: color === "orange" ? "hsl(25 95% 53%)" : "rgba(255,255,255,0.4)",
+          animation: `typingDot 1.2s ease-in-out ${i * 0.2}s infinite`,
+        }}
+      />
+    ))}
+  </div>
+);
+
 const ChatAnimation = () => {
-  const [visible, setVisible] = useState(0);
+  const [stage, setStage] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -120,12 +153,18 @@ const ChatAnimation = () => {
       start: "top 85%",
       once: true,
       onEnter: () => {
-        const timers = [
-          setTimeout(() => setVisible(1), 300),
-          setTimeout(() => setVisible(2), 1200),
-          setTimeout(() => setVisible(3), 2200),
-        ];
-        return () => timers.forEach(clearTimeout);
+        // Stage 1: typing indicator (agent)
+        setTimeout(() => setStage(1), 300);
+        // Stage 2: first agent message appears
+        setTimeout(() => setStage(2), 1400);
+        // Stage 3: typing indicator (agent second message)
+        setTimeout(() => setStage(3), 2000);
+        // Stage 4: second agent message appears
+        setTimeout(() => setStage(4), 3200);
+        // Stage 5: typing indicator (customer)
+        setTimeout(() => setStage(5), 3800);
+        // Stage 6: customer message appears
+        setTimeout(() => setStage(6), 5000);
       },
     });
     return () => trigger.kill();
@@ -133,28 +172,55 @@ const ChatAnimation = () => {
 
   return (
     <div ref={containerRef} className="flex flex-col gap-3 mt-auto">
-      <div className={`flex items-start gap-2 transition-all duration-500 ${visible >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
-        <div className="w-5 h-5 rounded-full bg-white/10 mt-0.5 flex-shrink-0" />
+      {/* Agent message 1 */}
+      <div className={`flex items-start gap-2 transition-all duration-500 ${stage >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
+        <div className="w-5 h-5 rounded-full bg-orange-500/20 mt-0.5 flex-shrink-0 flex items-center justify-center">
+          <span className="text-[8px]">🤖</span>
+        </div>
         <div>
-          <p className="text-[10px] text-white/40">Mon 14 Feb</p>
-          <div className="mt-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2">
-            <p className="text-xs text-white/60">Hey, we noticed you haven't completed your setup...</p>
-          </div>
+          <p className="text-[10px] text-white/40">AI Agent</p>
+          {stage >= 1 && stage < 2 ? (
+            <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10">
+              <TypingIndicator color="orange" />
+            </div>
+          ) : stage >= 2 ? (
+            <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10 px-3 py-2">
+              <p className="text-xs text-white/80">Hey, we noticed you haven't completed your setup...</p>
+            </div>
+          ) : null}
         </div>
       </div>
-      <div className={`flex items-start gap-2 transition-all duration-500 ${visible >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
-        <div className="w-5 h-5 rounded-full bg-white/10 mt-0.5 flex-shrink-0" />
+
+      {/* Agent message 2 */}
+      <div className={`flex items-start gap-2 transition-all duration-500 ${stage >= 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
+        <div className="w-5 h-5 rounded-full bg-orange-500/20 mt-0.5 flex-shrink-0 flex items-center justify-center">
+          <span className="text-[8px]">🤖</span>
+        </div>
         <div>
-          <div className="mt-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2">
-            <p className="text-xs text-white/60">Would you like to schedule a quick call to finish onboarding?</p>
-          </div>
+          {stage >= 3 && stage < 4 ? (
+            <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10">
+              <TypingIndicator color="orange" />
+            </div>
+          ) : stage >= 4 ? (
+            <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10 px-3 py-2">
+              <p className="text-xs text-white/80">Would you like to schedule a quick call to finish onboarding?</p>
+            </div>
+          ) : null}
         </div>
       </div>
-      <div className={`flex justify-end transition-all duration-500 ${visible >= 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
-        <div className="rounded-lg bg-gradient-to-r from-orange-500/80 to-orange-400/60 px-3 py-2 max-w-[80%]">
-          <p className="text-xs text-white">Thanks for checking in! I'd love to pick this back up.</p>
-          <p className="text-[10px] text-white/50 mt-1 text-right">Now</p>
-        </div>
+
+      {/* Customer reply */}
+      <div className={`flex justify-end transition-all duration-500 ${stage >= 5 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
+        {stage >= 5 && stage < 6 ? (
+          <div className="rounded-lg bg-white/10 border border-white/10">
+            <TypingIndicator color="white" />
+          </div>
+        ) : stage >= 6 ? (
+          <div className="rounded-lg bg-white/10 border border-white/10 px-3 py-2 max-w-[80%]">
+            <p className="text-xs text-white/70">Thanks for checking in! I'd love to pick this back up.</p>
+            <p className="text-[10px] text-white/30 mt-1 text-right">Now</p>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -176,7 +242,6 @@ const OutcomeSection = () => {
         scrollTrigger: { trigger: sectionRef.current, start: "top 75%", once: true },
       });
 
-      // Animate chart card
       if (chartCardRef.current) {
         gsap.set(chartCardRef.current, { autoAlpha: 0, y: 20 });
         gsap.to(chartCardRef.current, {
@@ -213,14 +278,14 @@ const OutcomeSection = () => {
         </div>
 
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-5 gap-3">
-          {/* Card 1 — Global Reach */}
+          {/* Card 1 - Global Reach */}
           <div className="md:col-span-3 rounded-xl border border-white/10 bg-white/[0.02] p-6 flex flex-col gap-4 overflow-hidden">
             <div className="flex items-center gap-2 text-white/50">
               <MapIcon className="w-4 h-4" />
               <span className="text-xs font-light tracking-wide">Global lead recovery</span>
             </div>
             <p className="text-base sm:text-lg font-light text-white/80 leading-relaxed">
-              Our agents reach your leads worldwide, across every timezone — automatically.
+              Our agents reach your leads worldwide, across every timezone, automatically.
             </p>
             <div className="relative h-40 sm:h-48 mt-auto">
               <MapComponent />
@@ -230,7 +295,7 @@ const OutcomeSection = () => {
             </div>
           </div>
 
-          {/* Card 2 — Support with scroll animation */}
+          {/* Card 2 - AI Conversations */}
           <div className="md:col-span-2 rounded-xl border border-white/10 bg-white/[0.02] p-6 flex flex-col gap-4">
             <div className="flex items-center gap-2 text-white/50">
               <MessageCircle className="w-4 h-4" />
@@ -242,13 +307,13 @@ const OutcomeSection = () => {
             <ChatAnimation />
           </div>
 
-          {/* Card 3 — Uptime */}
+          {/* Card 3 - Uptime */}
           <div className="md:col-span-2 rounded-xl border border-white/10 bg-white/[0.02] p-6 flex flex-col items-center justify-center text-center gap-2">
             <p className="text-4xl sm:text-5xl md:text-6xl font-extralight tracking-tight text-white/90">99.99%</p>
             <p className="text-sm font-light text-white/40">Agent Uptime</p>
           </div>
 
-          {/* Card 4 — Activity Chart */}
+          {/* Card 4 - Activity Chart */}
           <div ref={chartCardRef} className="md:col-span-3 rounded-xl border border-white/10 bg-white/[0.02] p-6 flex flex-col gap-4 overflow-hidden">
             <div className="flex items-center gap-2 text-white/50">
               <Activity className="w-4 h-4" />
