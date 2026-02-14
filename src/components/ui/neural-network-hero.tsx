@@ -351,7 +351,7 @@ export default function Hero({
           ))}
         </div>
 
-        <ul ref={microRef} className="mt-8 flex flex-wrap gap-6 text-sm font-extralight italic tracking-tight text-white/60">
+        <ul ref={microRef} className="mt-2 flex flex-wrap gap-6 text-sm font-extralight italic tracking-tight text-white/60">
           {microDetails.map((detail, index) => {
             const refMap = [microItem1Ref, microItem2Ref, microItem3Ref];
             return (
