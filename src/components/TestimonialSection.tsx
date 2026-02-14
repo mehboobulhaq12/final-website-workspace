@@ -28,10 +28,12 @@ const AnimatedCard = ({
   children,
   index,
   className = "",
+  style,
 }: {
   children: React.ReactNode;
   index: number;
   className?: string;
+  style?: React.CSSProperties;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -53,7 +55,7 @@ const AnimatedCard = ({
   );
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={className} style={style}>
       {children}
     </div>
   );
@@ -154,10 +156,11 @@ const TestimonialSection = () => {
             gridTemplateRows: "180px 180px 180px",
           }}
         >
-          {/* Card 1 - Left column, spans row 1-2, has grid pattern top half */}
+          {/* Card 1 - Left column, rows 1-2, grid pattern top */}
           <AnimatedCard
             index={0}
-            className="row-span-2 rounded-2xl overflow-hidden bg-white/[0.05] border border-white/[0.08] flex flex-col hover:bg-white/[0.08] transition-all duration-500"
+            className="rounded-2xl overflow-hidden bg-white/[0.05] border border-white/[0.08] flex flex-col hover:bg-white/[0.08] transition-all duration-500"
+            style={{ gridColumn: "1", gridRow: "1 / 3" }}
           >
             <div className="h-[45%] relative">
               <GridPattern />
@@ -182,6 +185,7 @@ const TestimonialSection = () => {
           <AnimatedCard
             index={1}
             className="rounded-2xl overflow-hidden bg-orange-500 hover:bg-orange-400 transition-all duration-500 p-5 flex flex-col justify-between"
+            style={{ gridColumn: "2", gridRow: "1" }}
           >
             <p className="text-sm font-light leading-relaxed text-white/95">
               "{cards[1].quote}"
@@ -197,10 +201,11 @@ const TestimonialSection = () => {
             </div>
           </AnimatedCard>
 
-          {/* Card 3 - Right column, row 1-2, orange (shorter top) + grid pattern bottom */}
+          {/* Card 3 - Right column, rows 1-2, grid pattern bottom */}
           <AnimatedCard
             index={2}
-            className="row-span-2 rounded-2xl overflow-hidden bg-white/[0.05] border border-white/[0.08] flex flex-col hover:bg-white/[0.08] transition-all duration-500"
+            className="rounded-2xl overflow-hidden bg-white/[0.05] border border-white/[0.08] flex flex-col hover:bg-white/[0.08] transition-all duration-500"
+            style={{ gridColumn: "3", gridRow: "1 / 3" }}
           >
             <div className="flex-1 p-5 flex flex-col justify-between">
               <p className="text-sm font-light leading-relaxed text-white/60">
@@ -225,6 +230,7 @@ const TestimonialSection = () => {
           <AnimatedCard
             index={3}
             className="rounded-2xl overflow-hidden bg-orange-500 hover:bg-orange-400 transition-all duration-500 p-5 flex flex-col justify-between"
+            style={{ gridColumn: "1", gridRow: "3" }}
           >
             <p className="text-sm font-light leading-relaxed text-white/95">
               "{cards[3].quote}"
@@ -240,10 +246,11 @@ const TestimonialSection = () => {
             </div>
           </AnimatedCard>
 
-          {/* Card 5 - Middle+Right columns, row 2-3, dark tall card */}
+          {/* Card 5 - Middle column, rows 2-3, dark */}
           <AnimatedCard
             index={4}
-            className="col-span-1 rounded-2xl overflow-hidden bg-white/[0.05] border border-white/[0.08] hover:bg-white/[0.08] transition-all duration-500 p-5 flex flex-col justify-between"
+            className="rounded-2xl overflow-hidden bg-white/[0.05] border border-white/[0.08] hover:bg-white/[0.08] transition-all duration-500 p-5 flex flex-col justify-between"
+            style={{ gridColumn: "2", gridRow: "2 / 4" }}
           >
             <p className="text-sm font-light leading-relaxed text-white/60">
               "{cards[4].quote}"
