@@ -118,3 +118,8 @@ All colors MUST be HSL.
   0%, 100% { top: 20%; opacity: 0; }
   50% { top: 80%; opacity: 1; }
 }
+
+@keyframes scrollLogos {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
