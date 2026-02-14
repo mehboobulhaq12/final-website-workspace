@@ -84,7 +84,7 @@ const ProblemSection = () => {
 
           <div ref={bodyRef} className="flex flex-col gap-5">
             <p className="text-base sm:text-lg font-light leading-relaxed tracking-tight text-white/60">
-              <span className="text-white/80 font-normal">The Problem</span>
+              <span className="text-white/80 font-normal">The Friction Map</span>
               <br />
               Reviving old leads manually is almost impossible at scale.
             </p>
