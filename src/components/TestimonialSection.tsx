@@ -11,109 +11,53 @@ interface Testimonial {
   name: string;
   role: string;
   variant: "orange" | "dark";
-  hasGrid?: boolean;
 }
 
-const GridPattern = ({ className = "" }: { className?: string }) => (
-  <div className={`w-full overflow-hidden rounded-t-xl ${className}`}>
-    <svg width="100%" height="100%" viewBox="0 0 200 80" className="opacity-20">
-      {Array.from({ length: 11 }).map((_, i) => (
-        <line key={`v-${i}`} x1={i * 20} y1="0" x2={i * 20} y2="80" stroke="currentColor" strokeWidth="0.5" />
-      ))}
-      {Array.from({ length: 5 }).map((_, i) => (
-        <line key={`h-${i}`} x1="0" y1={i * 20} x2="200" y2={i * 20} stroke="currentColor" strokeWidth="0.5" />
-      ))}
-    </svg>
-  </div>
+const GridPattern = () => (
+  <svg width="100%" height="100%" viewBox="0 0 240 100" preserveAspectRatio="none" className="opacity-15 text-white">
+    {Array.from({ length: 13 }).map((_, i) => (
+      <line key={`v-${i}`} x1={i * 20} y1="0" x2={i * 20} y2="100" stroke="currentColor" strokeWidth="0.5" />
+    ))}
+    {Array.from({ length: 6 }).map((_, i) => (
+      <line key={`h-${i}`} x1="0" y1={i * 20} x2="240" y2={i * 20} stroke="currentColor" strokeWidth="0.5" />
+    ))}
+  </svg>
 );
 
-const TestimonialCard = ({
-  testimonial,
+const AnimatedCard = ({
+  children,
   index,
+  className = "",
 }: {
-  testimonial: Testimonial;
+  children: React.ReactNode;
   index: number;
+  className?: string;
 }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
-      if (!cardRef.current) return;
-      gsap.set(cardRef.current, { autoAlpha: 0, y: 40, filter: "blur(8px)" });
-      gsap.to(cardRef.current, {
+      if (!ref.current) return;
+      gsap.set(ref.current, { autoAlpha: 0, y: 40, filter: "blur(8px)" });
+      gsap.to(ref.current, {
         autoAlpha: 1,
         y: 0,
         filter: "blur(0px)",
         duration: 0.6,
-        delay: index * 0.1,
+        delay: index * 0.12,
         ease: "power3.out",
-        scrollTrigger: { trigger: cardRef.current, start: "top 92%", once: true },
+        scrollTrigger: { trigger: ref.current, start: "top 92%", once: true },
       });
     },
-    { scope: cardRef }
+    { scope: ref }
   );
 
-  const isOrange = testimonial.variant === "orange";
-
   return (
-    <div
-      ref={cardRef}
-      className={`rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-500 ${
-        isOrange
-          ? "bg-orange-500 hover:bg-orange-400"
-          : "bg-white/[0.05] border border-white/[0.08] hover:bg-white/[0.08]"
-      }`}
-    >
-      {testimonial.hasGrid && (
-        <div className={`h-20 ${isOrange ? "text-white" : "text-white/40"}`}>
-          <GridPattern />
-        </div>
-      )}
-
-      <div className="p-5 sm:p-6 flex flex-col justify-between flex-1 gap-4">
-        <p
-          className={`text-sm sm:text-[15px] font-light leading-relaxed ${
-            isOrange ? "text-white/95" : "text-white/60"
-          }`}
-        >
-          "{testimonial.quote}"
-        </p>
-
-        <div className="flex items-center justify-between mt-auto">
-          <div>
-            <p className={`text-sm font-semibold ${isOrange ? "text-white" : "text-white/90"}`}>
-              {testimonial.name}
-            </p>
-            <p className={`text-xs ${isOrange ? "text-white/70" : "text-white/40"}`}>
-              {testimonial.role}
-            </p>
-          </div>
-          <div
-            className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 ${
-              isOrange
-                ? "bg-white/20 border border-white/30"
-                : "bg-orange-500/10 border border-orange-500/20"
-            }`}
-          >
-            <span className={`text-sm font-medium ${isOrange ? "text-white" : "text-orange-300"}`}>
-              {testimonial.name.charAt(0)}
-            </span>
-          </div>
-        </div>
-      </div>
+    <div ref={ref} className={className}>
+      {children}
     </div>
   );
 };
-
-// Exact layout from the reference image
-// Row 1-2 left: tall card with grid + testimonial
-// Row 1 mid: orange card
-// Row 1 right: orange card
-// Row 2 mid: dark tall card
-// Row 2-3 right: grid + dark card
-// Row 3 left: orange card
-// Row 3 mid: dark card
-// Row 3 right: continues
 
 const cards: Testimonial[] = [
   {
@@ -122,7 +66,6 @@ const cards: Testimonial[] = [
     name: "Ahmed Al-Rashid",
     role: "CTO of ConnectA",
     variant: "dark",
-    hasGrid: true,
   },
   {
     quote:
@@ -133,47 +76,24 @@ const cards: Testimonial[] = [
   },
   {
     quote:
-      "Effect3 has been a key partner in our growth journey. Their AI system identifies and converts leads automatically.",
-    name: "David Okonkwo",
-    role: "CEO of NovaBridge",
-    variant: "orange",
-  },
-  {
-    quote:
-      "We are extremely satisfied with Effect3. Their expertise and dedication have exceeded our expectations.",
-    name: "Bruno Casanovas",
-    role: "Co-Founder of Nude Project",
-    variant: "dark",
-  },
-  {
-    quote:
-      "We were converting brands at just 5% manually. Effect3 deployed their AI email system and our conversion rate exploded to 59%.",
+      "We were converting brands at just 5% manually. Effect3 deployed their AI email system and our conversion rate exploded to 59%. The ROI was immediate.",
     name: "Marco Bellini",
     role: "Head of Growth at Ecomera",
     variant: "dark",
-    hasGrid: true,
   },
   {
     quote:
-      "We have seen incredible results with Effect3. Their expertise and dedication to our success is unmatched.",
-    name: "Elena Petrova",
-    role: "CMO of Meridian Labs",
+      "We have seen incredible results with Effect3. Their expertise and dedication to reviving our inactive customers is unmatched.",
+    name: "Bruno Casanovas",
+    role: "Co-Founder of Nude Project",
     variant: "orange",
   },
   {
     quote:
-      "Their customer support is absolutely exceptional. They are always available, incredibly helpful, and deeply knowledgeable.",
-    name: "Liam Torres",
-    role: "Director of Ops at ScaleForge",
+      "Effect3 has been a true game-changer for us. Their exceptional service, combined with deep expertise and commitment to excellence, has made a significant impact on our business.",
+    name: "David Okonkwo",
+    role: "CEO of NovaBridge",
     variant: "dark",
-  },
-  {
-    quote:
-      "Effect3 has been a true game-changer for us. Their exceptional service, combined with their deep expertise and commitment to excellence, has made a significant impact on our business.",
-    name: "Paul Brauch",
-    role: "CTO of Spectrum",
-    variant: "dark",
-    hasGrid: true,
   },
 ];
 
@@ -217,43 +137,173 @@ const TestimonialSection = () => {
           </p>
         </div>
 
-        {/* Desktop bento grid - exact reference layout */}
-        <div className="hidden md:grid grid-cols-3 gap-3" style={{ gridTemplateRows: "auto auto auto" }}>
-          {/* Row 1 */}
-          <div className="row-span-2">
-            <TestimonialCard testimonial={cards[0]} index={0} />
-          </div>
-          <div>
-            <TestimonialCard testimonial={cards[1]} index={1} />
-          </div>
-          <div>
-            <TestimonialCard testimonial={cards[2]} index={2} />
-          </div>
+        {/* Desktop grid - exact reference layout */}
+        <div
+          className="hidden md:grid gap-3"
+          style={{
+            gridTemplateColumns: "1fr 1fr 1fr",
+            gridTemplateRows: "180px 180px 180px",
+          }}
+        >
+          {/* Card 1 - Left column, spans row 1-2, has grid pattern top half */}
+          <AnimatedCard
+            index={0}
+            className="row-span-2 rounded-2xl overflow-hidden bg-white/[0.05] border border-white/[0.08] flex flex-col hover:bg-white/[0.08] transition-all duration-500"
+          >
+            <div className="h-[45%] relative">
+              <GridPattern />
+            </div>
+            <div className="flex-1 p-5 flex flex-col justify-between">
+              <p className="text-sm font-light leading-relaxed text-white/60">
+                "{cards[0].quote}"
+              </p>
+              <div className="flex items-center justify-between mt-3">
+                <div>
+                  <p className="text-sm font-semibold text-white/90">{cards[0].name}</p>
+                  <p className="text-xs text-white/40">{cards[0].role}</p>
+                </div>
+                <div className="w-11 h-11 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center flex-shrink-0">
+                  <span className="text-sm font-medium text-orange-300">{cards[0].name.charAt(0)}</span>
+                </div>
+              </div>
+            </div>
+          </AnimatedCard>
 
-          {/* Row 2 */}
-          <div className="row-span-2">
-            <TestimonialCard testimonial={cards[3]} index={3} />
-          </div>
-          <div className="row-span-2">
-            <TestimonialCard testimonial={cards[4]} index={4} />
-          </div>
+          {/* Card 2 - Middle column, row 1, orange */}
+          <AnimatedCard
+            index={1}
+            className="rounded-2xl overflow-hidden bg-orange-500 hover:bg-orange-400 transition-all duration-500 p-5 flex flex-col justify-between"
+          >
+            <p className="text-sm font-light leading-relaxed text-white/95">
+              "{cards[1].quote}"
+            </p>
+            <div className="flex items-center justify-between mt-3">
+              <div>
+                <p className="text-sm font-semibold text-white">{cards[1].name}</p>
+                <p className="text-xs text-white/70">{cards[1].role}</p>
+              </div>
+              <div className="w-11 h-11 rounded-full bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0">
+                <span className="text-sm font-medium text-white">{cards[1].name.charAt(0)}</span>
+              </div>
+            </div>
+          </AnimatedCard>
 
-          {/* Row 3 */}
-          <div>
-            <TestimonialCard testimonial={cards[5]} index={5} />
-          </div>
-          <div>
-            <TestimonialCard testimonial={cards[6]} index={6} />
-          </div>
-          <div>
-            <TestimonialCard testimonial={cards[7]} index={7} />
-          </div>
+          {/* Card 3 - Right column, row 1-2, orange (shorter top) + grid pattern bottom */}
+          <AnimatedCard
+            index={2}
+            className="row-span-2 rounded-2xl overflow-hidden bg-white/[0.05] border border-white/[0.08] flex flex-col hover:bg-white/[0.08] transition-all duration-500"
+          >
+            <div className="flex-1 p-5 flex flex-col justify-between">
+              <p className="text-sm font-light leading-relaxed text-white/60">
+                "{cards[2].quote}"
+              </p>
+              <div className="flex items-center justify-between mt-3">
+                <div>
+                  <p className="text-sm font-semibold text-white/90">{cards[2].name}</p>
+                  <p className="text-xs text-white/40">{cards[2].role}</p>
+                </div>
+                <div className="w-11 h-11 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center flex-shrink-0">
+                  <span className="text-sm font-medium text-orange-300">{cards[2].name.charAt(0)}</span>
+                </div>
+              </div>
+            </div>
+            <div className="h-[45%] relative">
+              <GridPattern />
+            </div>
+          </AnimatedCard>
+
+          {/* Card 4 - Left column, row 3, orange */}
+          <AnimatedCard
+            index={3}
+            className="rounded-2xl overflow-hidden bg-orange-500 hover:bg-orange-400 transition-all duration-500 p-5 flex flex-col justify-between"
+          >
+            <p className="text-sm font-light leading-relaxed text-white/95">
+              "{cards[3].quote}"
+            </p>
+            <div className="flex items-center justify-between mt-3">
+              <div>
+                <p className="text-sm font-semibold text-white">{cards[3].name}</p>
+                <p className="text-xs text-white/70">{cards[3].role}</p>
+              </div>
+              <div className="w-11 h-11 rounded-full bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0">
+                <span className="text-sm font-medium text-white">{cards[3].name.charAt(0)}</span>
+              </div>
+            </div>
+          </AnimatedCard>
+
+          {/* Card 5 - Middle+Right columns, row 2-3, dark tall card */}
+          <AnimatedCard
+            index={4}
+            className="col-span-1 rounded-2xl overflow-hidden bg-white/[0.05] border border-white/[0.08] hover:bg-white/[0.08] transition-all duration-500 p-5 flex flex-col justify-between"
+          >
+            <p className="text-sm font-light leading-relaxed text-white/60">
+              "{cards[4].quote}"
+            </p>
+            <div className="flex items-center justify-between mt-3">
+              <div>
+                <p className="text-sm font-semibold text-white/90">{cards[4].name}</p>
+                <p className="text-xs text-white/40">{cards[4].role}</p>
+              </div>
+              <div className="w-11 h-11 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center flex-shrink-0">
+                <span className="text-sm font-medium text-orange-300">{cards[4].name.charAt(0)}</span>
+              </div>
+            </div>
+          </AnimatedCard>
         </div>
 
         {/* Mobile stacked */}
         <div className="flex flex-col gap-3 md:hidden">
           {cards.map((card, i) => (
-            <TestimonialCard key={i} testimonial={card} index={i} />
+            <AnimatedCard
+              key={i}
+              index={i}
+              className={`rounded-2xl overflow-hidden p-5 flex flex-col justify-between gap-4 transition-all duration-500 ${
+                card.variant === "orange"
+                  ? "bg-orange-500 hover:bg-orange-400"
+                  : "bg-white/[0.05] border border-white/[0.08] hover:bg-white/[0.08]"
+              }`}
+            >
+              <p
+                className={`text-sm font-light leading-relaxed ${
+                  card.variant === "orange" ? "text-white/95" : "text-white/60"
+                }`}
+              >
+                "{card.quote}"
+              </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p
+                    className={`text-sm font-semibold ${
+                      card.variant === "orange" ? "text-white" : "text-white/90"
+                    }`}
+                  >
+                    {card.name}
+                  </p>
+                  <p
+                    className={`text-xs ${
+                      card.variant === "orange" ? "text-white/70" : "text-white/40"
+                    }`}
+                  >
+                    {card.role}
+                  </p>
+                </div>
+                <div
+                  className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 ${
+                    card.variant === "orange"
+                      ? "bg-white/20 border border-white/30"
+                      : "bg-orange-500/10 border border-orange-500/20"
+                  }`}
+                >
+                  <span
+                    className={`text-sm font-medium ${
+                      card.variant === "orange" ? "text-white" : "text-orange-300"
+                    }`}
+                  >
+                    {card.name.charAt(0)}
+                  </span>
+                </div>
+              </div>
+            </AnimatedCard>
           ))}
         </div>
       </div>
