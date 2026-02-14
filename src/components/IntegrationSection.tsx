@@ -69,7 +69,7 @@ const IntegrationSection = () => {
             </TextShimmer>
           </h2>
           <p className="text-base sm:text-lg font-light leading-relaxed text-white/40">
-            Our agents connect directly to your systems — ERP, CRM, finance tools — reading, writing, and executing workflows without migration or platform changes.
+            Our agents connect directly to your systems, ERP, CRM, finance tools, reading, writing, and executing workflows without migration or platform changes.
           </p>
         </div>
       </div>

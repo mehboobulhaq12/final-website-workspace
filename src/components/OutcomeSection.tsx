@@ -146,25 +146,32 @@ const TypingIndicator = ({ color = "white" }: { color?: string }) => (
 const ChatAnimation = () => {
   const [stage, setStage] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const startedRef = useRef(false);
 
   useEffect(() => {
+    const runCycle = () => {
+      setStage(0);
+      const timers = [
+        setTimeout(() => setStage(1), 300),
+        setTimeout(() => setStage(2), 1400),
+        setTimeout(() => setStage(3), 2000),
+        setTimeout(() => setStage(4), 3200),
+        setTimeout(() => setStage(5), 3800),
+        setTimeout(() => setStage(6), 5000),
+        setTimeout(() => runCycle(), 7500),
+      ];
+      return timers;
+    };
+
     const trigger = ScrollTrigger.create({
       trigger: containerRef.current,
       start: "top 85%",
       once: true,
       onEnter: () => {
-        // Stage 1: typing indicator (agent)
-        setTimeout(() => setStage(1), 300);
-        // Stage 2: first agent message appears
-        setTimeout(() => setStage(2), 1400);
-        // Stage 3: typing indicator (agent second message)
-        setTimeout(() => setStage(3), 2000);
-        // Stage 4: second agent message appears
-        setTimeout(() => setStage(4), 3200);
-        // Stage 5: typing indicator (customer)
-        setTimeout(() => setStage(5), 3800);
-        // Stage 6: customer message appears
-        setTimeout(() => setStage(6), 5000);
+        if (!startedRef.current) {
+          startedRef.current = true;
+          runCycle();
+        }
       },
     });
     return () => trigger.kill();
