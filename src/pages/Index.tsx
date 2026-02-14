@@ -10,6 +10,7 @@ import IntegrationSection from "@/components/IntegrationSection";
 import OutcomeSection from "@/components/OutcomeSection";
 import TestimonialSection from "@/components/TestimonialSection";
 import CTASection from "@/components/CTASection";
+import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 
@@ -57,6 +58,7 @@ const Index = () => {
         <OutcomeSection />
         <TestimonialSection />
         <CTASection />
+        <Footer />
       </div>
     </>
   );
