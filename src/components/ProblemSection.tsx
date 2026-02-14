@@ -54,7 +54,7 @@ const ProblemSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-24 md:py-32 bg-black border-t border-white/5"
+      className="w-full pt-12 md:pt-16 pb-24 md:pb-32 bg-black"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-start">
         {/* Left: Text content */}
@@ -64,7 +64,7 @@ const ProblemSection = () => {
               as="span"
               duration={2}
               spread={4}
-              className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1] [--base-color:theme(colors.blue.200)] [--base-gradient-color:theme(colors.white)] dark:[--base-color:theme(colors.blue.200)] dark:[--base-gradient-color:theme(colors.white)]"
+              className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1] [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
             >
               Manually tracking every lead is stressful and unsustainable.
             </TextShimmer>
@@ -133,7 +133,7 @@ const ProblemSection = () => {
 
           {/* Effect3 System */}
           <div className="flex-1 border border-white/10 rounded-r-xl p-6 bg-white/[0.04] border-l-0">
-            <p className="text-[10px] sm:text-xs font-mono tracking-[0.2em] text-blue-300/70 uppercase mb-8 text-center">
+            <p className="text-[10px] sm:text-xs font-mono tracking-[0.2em] text-orange-400/80 uppercase mb-8 text-center">
               Effect3 System (End-to-End)
             </p>
             <div className="flex flex-col items-center gap-4">
