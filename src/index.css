@@ -138,3 +138,14 @@ All colors MUST be HSL.
   0% { transform: translateX(0); }
   100% { transform: translateX(-33.333%); }
 }
+
+@keyframes checkPop {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+@keyframes checkRing {
+  0% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
