@@ -42,6 +42,13 @@ const ProblemStatement = () => {
       className="w-full pt-24 md:pt-32 pb-12 md:pb-16 bg-black border-t border-white/5"
     >
       <div className="mx-auto max-w-4xl px-6 md:px-10 lg:px-16 flex flex-col items-center text-center gap-6">
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+          </span>
+          <span className="text-xs font-light tracking-tight text-white/80">The Results</span>
+        </div>
         <div ref={statRef}>
           <TextShimmer
             as="span"
