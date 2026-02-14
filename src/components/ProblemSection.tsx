@@ -139,7 +139,7 @@ const ProblemSection = () => {
             <div className="flex flex-col items-center gap-4">
               <DiagramIcon highlight><User className="w-4 h-4 text-white/80" /></DiagramIcon>
               <VerticalLine highlight />
-              <div className="rounded-xl bg-gradient-to-r from-blue-600/80 to-blue-500/60 border border-blue-400/30 px-4 py-3 flex items-center gap-2">
+              <div className="rounded-xl bg-gradient-to-r from-orange-500/80 to-orange-400/60 border border-orange-400/30 px-4 py-3 flex items-center gap-2">
                 <Bot className="w-4 h-4 text-white" />
                 <span className="text-xs sm:text-sm font-light text-white tracking-tight">Autonomous Agent</span>
               </div>
