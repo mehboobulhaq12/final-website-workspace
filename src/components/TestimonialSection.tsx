@@ -120,8 +120,17 @@ const TestimonialSection = () => {
     <section ref={sectionRef} className="w-full py-12 md:py-16 bg-black border-t border-white/5">
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
         {/* Heading */}
-        <div ref={headingRef} className="text-center mb-10 max-w-2xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1] mb-3">
+        <div ref={headingRef} className="flex flex-col gap-4 mb-10 max-w-3xl">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+              </span>
+              <span className="text-xs font-light tracking-tight text-white/80">Client Results</span>
+            </div>
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1]">
             <span className="text-white/90">Trusted by startups and </span>
             <TextShimmer
               as="span"
