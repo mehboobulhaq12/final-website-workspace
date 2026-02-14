@@ -47,7 +47,7 @@ const ProblemStatement = () => {
             as="span"
             duration={2}
             spread={4}
-            className="text-5xl sm:text-6xl md:text-7xl font-extralight tracking-tight [--base-color:theme(colors.blue.200)] [--base-gradient-color:theme(colors.white)] dark:[--base-color:theme(colors.blue.200)] dark:[--base-gradient-color:theme(colors.white)]"
+            className="text-5xl sm:text-6xl md:text-7xl font-extralight tracking-tight [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
           >
             68% of Dead Leads Recovered
           </TextShimmer>
