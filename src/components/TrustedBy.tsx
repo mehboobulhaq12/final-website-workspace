@@ -13,8 +13,8 @@ const companies = [
   { name: "NVIDIA", logo: nvidiaLogo, invert: false },
   { name: "Scale", logo: scaleLogo, invert: false },
   { name: "Microsoft", logo: microsoftLogo, invert: false },
-  { name: "Meta", logo: metaLogo, invert: true },
   { name: "Anthropic", logo: anthropicLogo, invert: true },
+  { name: "Meta", logo: metaLogo, invert: true },
   { name: "Tesla", logo: teslaLogo, invert: false },
   { name: "AWS", logo: awsLogo, invert: false },
   { name: "Google", logo: googleLogo, invert: false },
@@ -45,7 +45,7 @@ const TrustedBy = () => {
               <img
                 src={company.logo}
                 alt={company.name}
-                className={`w-auto h-auto object-contain hover:scale-110 transition-transform duration-300 ${company.name === 'OpenAI' ? 'max-h-[36px] max-w-[100px]' : 'max-h-[48px] max-w-[120px]'} ${company.invert ? 'invert brightness-200' : ''}`}
+                className={`w-auto h-auto object-contain hover:scale-110 transition-transform duration-300 max-h-[48px] max-w-[120px] ${company.invert ? 'invert brightness-200' : ''}`}
                 loading="lazy"
               />
             </div>
