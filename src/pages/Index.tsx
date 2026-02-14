@@ -3,6 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import Hero from "@/components/ui/neural-network-hero";
 import Navbar from "@/components/Navbar";
 import TrustedBy from "@/components/TrustedBy";
+import ProblemStatement from "@/components/ProblemStatement";
 import LoadingScreen from "@/components/LoadingScreen";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 
@@ -34,7 +35,7 @@ const Index = () => {
               </TextShimmer>
             </>
           }
-          description="We deploy custom AI agents that revive your dead leads and bring your old leads and customers back to life, and make them paying customers again."
+          description="We deploy custom AI agents that revive your dead leads and bring your customers back to life, turning them into paying customers again."
           badgeText="Enterprises AI System"
           badgeLabel="online"
           ctaButtons={[
@@ -43,6 +44,7 @@ const Index = () => {
           microDetails={["Get your most boring work handled by AI agents."]}
         />
         <TrustedBy />
+        <ProblemStatement />
       </div>
     </>
   );
