@@ -4,6 +4,7 @@ import Hero from "@/components/ui/neural-network-hero";
 import Navbar from "@/components/Navbar";
 import TrustedBy from "@/components/TrustedBy";
 import ProblemStatement from "@/components/ProblemStatement";
+import ProblemSection from "@/components/ProblemSection";
 import LoadingScreen from "@/components/LoadingScreen";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 
@@ -45,6 +46,7 @@ const Index = () => {
         />
         <TrustedBy />
         <ProblemStatement />
+        <ProblemSection />
       </div>
     </>
   );
