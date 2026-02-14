@@ -113,14 +113,17 @@ const InfrastructureSection = () => {
             </span>
             <span className="text-xs font-light tracking-tight text-white/80">The Infrastructure</span>
           </div>
-          <TextShimmer
-            as="span"
-            duration={2}
-            spread={4}
-            className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1] [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
-          >
-            Implement in Your Business in Just 5 Simple Steps
-          </TextShimmer>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1]">
+            <span className="text-white/90">Implement in Your Business in </span>
+            <TextShimmer
+              as="span"
+              duration={2}
+              spread={4}
+              className="italic font-light [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
+            >
+              Just 5 Simple Steps
+            </TextShimmer>
+          </h2>
         </div>
 
         {/* Bento Grid */}
