@@ -16,12 +16,12 @@ import klaviyoLogo from "@/assets/logos/klaviyo.png";
 gsap.registerPlugin(ScrollTrigger);
 
 const logos = [
-  { src: salesforceLogo, alt: "Salesforce" },
+  { src: salesforceLogo, alt: "Salesforce", invert: true },
   { src: slackLogo, alt: "Slack", invert: true },
-  { src: zohoLogo, alt: "Zoho" },
-  { src: odooLogo, alt: "Odoo" },
+  { src: zohoLogo, alt: "Zoho", invert: true },
+  { src: odooLogo, alt: "Odoo", invert: true },
   { src: airtableLogo, alt: "Airtable", invert: true },
-  { src: whatsappLogo, alt: "WhatsApp" },
+  { src: whatsappLogo, alt: "WhatsApp", invert: true },
   { src: hubspotLogo, alt: "HubSpot" },
   { src: klaviyoLogo, alt: "Klaviyo" },
 ];

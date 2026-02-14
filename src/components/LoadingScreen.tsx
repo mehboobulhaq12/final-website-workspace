@@ -38,7 +38,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
       >
         <TextShimmer
           duration={1.2}
-          className="text-lg sm:text-xl md:text-2xl font-medium [--base-color:theme(colors.blue.600)] [--base-gradient-color:theme(colors.blue.200)] dark:[--base-color:theme(colors.blue.700)] dark:[--base-gradient-color:theme(colors.blue.400)]"
+          className="text-lg sm:text-xl md:text-2xl font-medium [--base-color:theme(colors.orange.400)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.400)] dark:[--base-gradient-color:theme(colors.orange.100)]"
         >
           Hi, Welcome to Effect3 Enterprise AI
         </TextShimmer>
@@ -51,7 +51,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
         transition={{ delay: 0.5, duration: 0.6 }}
       >
         <motion.div
-          className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"
+          className="h-full bg-gradient-to-r from-orange-500 to-orange-400 rounded-full"
           style={{ width: `${progress}%` }}
         />
       </motion.div>
