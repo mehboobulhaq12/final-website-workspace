@@ -30,7 +30,7 @@ const Index = () => {
                 as="span"
                 duration={2}
                 spread={4}
-                className="italic font-light [--base-color:theme(colors.blue.200)] [--base-gradient-color:theme(colors.white)] dark:[--base-color:theme(colors.blue.200)] dark:[--base-gradient-color:theme(colors.white)]"
+                className="italic font-light [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
               >
                 More Conversions
               </TextShimmer>
