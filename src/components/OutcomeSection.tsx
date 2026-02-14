@@ -149,17 +149,25 @@ const ChatAnimation = () => {
   const startedRef = useRef(false);
 
   useEffect(() => {
+    const cycleCount = { current: 0 };
+    const maxCycles = 3;
+    const cycleDuration = 5000;
+
     const runCycle = () => {
+      if (cycleCount.current >= maxCycles) return;
+      cycleCount.current++;
       setStage(0);
       const timers = [
-        setTimeout(() => setStage(1), 300),
-        setTimeout(() => setStage(2), 1400),
-        setTimeout(() => setStage(3), 2000),
-        setTimeout(() => setStage(4), 3200),
-        setTimeout(() => setStage(5), 3800),
-        setTimeout(() => setStage(6), 5000),
-        setTimeout(() => runCycle(), 7500),
+        setTimeout(() => setStage(1), 200),
+        setTimeout(() => setStage(2), 900),
+        setTimeout(() => setStage(3), 1400),
+        setTimeout(() => setStage(4), 2200),
+        setTimeout(() => setStage(5), 3000),
+        setTimeout(() => setStage(6), 3800),
       ];
+      if (cycleCount.current < maxCycles) {
+        timers.push(setTimeout(() => runCycle(), cycleDuration));
+      }
       return timers;
     };
 
