@@ -10,98 +10,22 @@ interface Testimonial {
   quote: string;
   name: string;
   role: string;
-  company: string;
   variant: "orange" | "dark";
+  hasGrid?: boolean;
 }
 
-const testimonials: Testimonial[] = [
-  {
-    quote:
-      "Effect3 built us an AI HR avatar that conducts candidate interviews autonomously. Combined with their email outreach and AI voice agents, we now distribute our product to leads 24/7.",
-    name: "Ahmed Al-Rashid",
-    role: "CTO",
-    company: "ConnectA",
-    variant: "dark",
-  },
-  {
-    quote:
-      "Their team is highly professional, and their innovative AI solutions have truly transformed the way we recover churned leads.",
-    name: "Jon Villanueva",
-    role: "VP of Revenue",
-    company: "Sintra.AI",
-    variant: "orange",
-  },
-  {
-    quote:
-      "Effect3 has been a key partner in our growth journey. Their AI system identifies and converts leads we would have written off.",
-    name: "David Okonkwo",
-    role: "CEO",
-    company: "NovaBridge",
-    variant: "orange",
-  },
-  {
-    quote:
-      "We were converting wholesale brands at just 5% doing manual outreach. Effect3 deployed their AI email system and our conversion rate exploded to 59%. The ROI paid for itself in the first week.",
-    name: "Marco Bellini",
-    role: "Head of Growth",
-    company: "Ecomera",
-    variant: "dark",
-  },
-  {
-    quote:
-      "We are extremely satisfied with Effect3. Their expertise and dedication have exceeded our expectations in every way.",
-    name: "Bruno Casanovas",
-    role: "Co-Founder",
-    company: "Nude Project",
-    variant: "dark",
-  },
-  {
-    quote:
-      "Their AI agents replaced our entire manual follow-up process. We went from chasing leads for weeks to closing deals in days.",
-    name: "Sarah Chen",
-    role: "Managing Partner",
-    company: "Apex Consulting",
-    variant: "dark",
-  },
-  {
-    quote:
-      "We have seen incredible results with Effect3. Their expertise and dedication to our success is unmatched.",
-    name: "Elena Petrova",
-    role: "CMO",
-    company: "Meridian Labs",
-    variant: "orange",
-  },
-  {
-    quote:
-      "Their customer support is absolutely exceptional. They are always available, incredibly helpful, and deeply knowledgeable.",
-    name: "Liam Torres",
-    role: "Director of Ops",
-    company: "ScaleForge",
-    variant: "dark",
-  },
-  {
-    quote:
-      "Effect3 has been a true game-changer for us. Their exceptional service, combined with their deep expertise and commitment to excellence, has made a significant impact on our business.",
-    name: "Paul Brauch",
-    role: "CTO",
-    company: "Spectrum",
-    variant: "dark",
-  },
-];
-
-// Grid positions mirroring the reference layout (3 columns, staggered rows)
-// Each item: [gridColumn, gridRow, colSpan, rowSpan]
-const gridPositions = [
-  { col: "1 / 2", row: "1 / 3", area: "a" },       // tall left card
-  { col: "2 / 3", row: "1 / 2", area: "b" },       // mid-top
-  { col: "3 / 4", row: "1 / 2", area: "c" },       // right-top
-  { col: "1 / 2", row: "3 / 4", area: "d" },       // left-mid  
-  { col: "2 / 3", row: "2 / 4", area: "e" },       // mid-tall
-  { col: "3 / 4", row: "2 / 4", area: "f" },       // right-tall
-  { col: "1 / 2", row: "4 / 5", area: "g" },       // left-bottom
-  { col: "2 / 3", row: "4 / 5", area: "h" },       // mid-bottom
-  { col: "3 / 4", row: "4 / 5", area: "i" },       // right-bottom
-];
+const GridPattern = ({ className = "" }: { className?: string }) => (
+  <div className={`w-full overflow-hidden rounded-t-xl ${className}`}>
+    <svg width="100%" height="100%" viewBox="0 0 200 80" className="opacity-20">
+      {Array.from({ length: 11 }).map((_, i) => (
+        <line key={`v-${i}`} x1={i * 20} y1="0" x2={i * 20} y2="80" stroke="currentColor" strokeWidth="0.5" />
+      ))}
+      {Array.from({ length: 5 }).map((_, i) => (
+        <line key={`h-${i}`} x1="0" y1={i * 20} x2="200" y2={i * 20} stroke="currentColor" strokeWidth="0.5" />
+      ))}
+    </svg>
+  </div>
+);
 
 const TestimonialCard = ({
   testimonial,
@@ -121,13 +45,9 @@ const TestimonialCard = ({
         y: 0,
         filter: "blur(0px)",
         duration: 0.6,
-        delay: index * 0.12,
+        delay: index * 0.1,
         ease: "power3.out",
-        scrollTrigger: {
-          trigger: cardRef.current,
-          start: "top 92%",
-          once: true,
-        },
+        scrollTrigger: { trigger: cardRef.current, start: "top 92%", once: true },
       });
     },
     { scope: cardRef }
@@ -138,56 +58,124 @@ const TestimonialCard = ({
   return (
     <div
       ref={cardRef}
-      className={`rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-4 transition-all duration-500 ${
+      className={`rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-500 ${
         isOrange
-          ? "bg-orange-500 text-white hover:bg-orange-400"
-          : "bg-white/[0.06] border border-white/10 text-white/80 hover:bg-white/[0.1]"
+          ? "bg-orange-500 hover:bg-orange-400"
+          : "bg-white/[0.05] border border-white/[0.08] hover:bg-white/[0.08]"
       }`}
     >
-      <p
-        className={`text-sm sm:text-[15px] font-light leading-relaxed ${
-          isOrange ? "text-white/95" : "text-white/70"
-        }`}
-      >
-        "{testimonial.quote}"
-      </p>
-
-      <div className="flex items-center justify-between mt-auto pt-2">
-        <div>
-          <p
-            className={`text-sm font-medium ${
-              isOrange ? "text-white" : "text-white/90"
-            }`}
-          >
-            {testimonial.name}
-          </p>
-          <p
-            className={`text-xs ${
-              isOrange ? "text-white/70" : "text-white/40"
-            }`}
-          >
-            {testimonial.role} of {testimonial.company}
-          </p>
+      {testimonial.hasGrid && (
+        <div className={`h-20 ${isOrange ? "text-white" : "text-white/40"}`}>
+          <GridPattern />
         </div>
-        <div
-          className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-            isOrange
-              ? "bg-white/20 border border-white/30"
-              : "bg-orange-500/15 border border-orange-500/25"
+      )}
+
+      <div className="p-5 sm:p-6 flex flex-col justify-between flex-1 gap-4">
+        <p
+          className={`text-sm sm:text-[15px] font-light leading-relaxed ${
+            isOrange ? "text-white/95" : "text-white/60"
           }`}
         >
-          <span
-            className={`text-sm font-light ${
-              isOrange ? "text-white" : "text-orange-300"
+          "{testimonial.quote}"
+        </p>
+
+        <div className="flex items-center justify-between mt-auto">
+          <div>
+            <p className={`text-sm font-semibold ${isOrange ? "text-white" : "text-white/90"}`}>
+              {testimonial.name}
+            </p>
+            <p className={`text-xs ${isOrange ? "text-white/70" : "text-white/40"}`}>
+              {testimonial.role}
+            </p>
+          </div>
+          <div
+            className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 ${
+              isOrange
+                ? "bg-white/20 border border-white/30"
+                : "bg-orange-500/10 border border-orange-500/20"
             }`}
           >
-            {testimonial.name.charAt(0)}
-          </span>
+            <span className={`text-sm font-medium ${isOrange ? "text-white" : "text-orange-300"}`}>
+              {testimonial.name.charAt(0)}
+            </span>
+          </div>
         </div>
       </div>
     </div>
   );
 };
+
+// Exact layout from the reference image
+// Row 1-2 left: tall card with grid + testimonial
+// Row 1 mid: orange card
+// Row 1 right: orange card
+// Row 2 mid: dark tall card
+// Row 2-3 right: grid + dark card
+// Row 3 left: orange card
+// Row 3 mid: dark card
+// Row 3 right: continues
+
+const cards: Testimonial[] = [
+  {
+    quote:
+      "Effect3 built us an AI HR avatar that conducts candidate interviews autonomously. Their service is top-notch and their team is incredibly responsive.",
+    name: "Ahmed Al-Rashid",
+    role: "CTO of ConnectA",
+    variant: "dark",
+    hasGrid: true,
+  },
+  {
+    quote:
+      "Their team is highly professional, and their innovative AI solutions have truly transformed the way we operate.",
+    name: "Jon Villanueva",
+    role: "VP of Revenue at Sintra.AI",
+    variant: "orange",
+  },
+  {
+    quote:
+      "Effect3 has been a key partner in our growth journey. Their AI system identifies and converts leads automatically.",
+    name: "David Okonkwo",
+    role: "CEO of NovaBridge",
+    variant: "orange",
+  },
+  {
+    quote:
+      "We are extremely satisfied with Effect3. Their expertise and dedication have exceeded our expectations.",
+    name: "Bruno Casanovas",
+    role: "Co-Founder of Nude Project",
+    variant: "dark",
+  },
+  {
+    quote:
+      "We were converting brands at just 5% manually. Effect3 deployed their AI email system and our conversion rate exploded to 59%.",
+    name: "Marco Bellini",
+    role: "Head of Growth at Ecomera",
+    variant: "dark",
+    hasGrid: true,
+  },
+  {
+    quote:
+      "We have seen incredible results with Effect3. Their expertise and dedication to our success is unmatched.",
+    name: "Elena Petrova",
+    role: "CMO of Meridian Labs",
+    variant: "orange",
+  },
+  {
+    quote:
+      "Their customer support is absolutely exceptional. They are always available, incredibly helpful, and deeply knowledgeable.",
+    name: "Liam Torres",
+    role: "Director of Ops at ScaleForge",
+    variant: "dark",
+  },
+  {
+    quote:
+      "Effect3 has been a true game-changer for us. Their exceptional service, combined with their deep expertise and commitment to excellence, has made a significant impact on our business.",
+    name: "Paul Brauch",
+    role: "CTO of Spectrum",
+    variant: "dark",
+    hasGrid: true,
+  },
+];
 
 const TestimonialSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -202,21 +190,14 @@ const TestimonialSection = () => {
         y: 0,
         duration: 0.8,
         ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 75%",
-          once: true,
-        },
+        scrollTrigger: { trigger: sectionRef.current, start: "top 75%", once: true },
       });
     },
     { scope: sectionRef }
   );
 
   return (
-    <section
-      ref={sectionRef}
-      className="w-full py-12 md:py-16 bg-black border-t border-white/5"
-    >
+    <section ref={sectionRef} className="w-full py-12 md:py-16 bg-black border-t border-white/5">
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
         {/* Heading */}
         <div ref={headingRef} className="text-center mb-10 max-w-2xl mx-auto">
@@ -236,31 +217,43 @@ const TestimonialSection = () => {
           </p>
         </div>
 
-        {/* Desktop bento grid */}
-        <div
-          className="hidden md:grid gap-3"
-          style={{
-            gridTemplateColumns: "1fr 1fr 1fr",
-            gridTemplateRows: "auto auto auto auto",
-          }}
-        >
-          {testimonials.map((testimonial, i) => (
-            <div
-              key={i}
-              style={{
-                gridColumn: gridPositions[i].col,
-                gridRow: gridPositions[i].row,
-              }}
-            >
-              <TestimonialCard testimonial={testimonial} index={i} />
-            </div>
-          ))}
+        {/* Desktop bento grid - exact reference layout */}
+        <div className="hidden md:grid grid-cols-3 gap-3" style={{ gridTemplateRows: "auto auto auto" }}>
+          {/* Row 1 */}
+          <div className="row-span-2">
+            <TestimonialCard testimonial={cards[0]} index={0} />
+          </div>
+          <div>
+            <TestimonialCard testimonial={cards[1]} index={1} />
+          </div>
+          <div>
+            <TestimonialCard testimonial={cards[2]} index={2} />
+          </div>
+
+          {/* Row 2 */}
+          <div className="row-span-2">
+            <TestimonialCard testimonial={cards[3]} index={3} />
+          </div>
+          <div className="row-span-2">
+            <TestimonialCard testimonial={cards[4]} index={4} />
+          </div>
+
+          {/* Row 3 */}
+          <div>
+            <TestimonialCard testimonial={cards[5]} index={5} />
+          </div>
+          <div>
+            <TestimonialCard testimonial={cards[6]} index={6} />
+          </div>
+          <div>
+            <TestimonialCard testimonial={cards[7]} index={7} />
+          </div>
         </div>
 
         {/* Mobile stacked */}
         <div className="flex flex-col gap-3 md:hidden">
-          {testimonials.map((testimonial, i) => (
-            <TestimonialCard key={i} testimonial={testimonial} index={i} />
+          {cards.map((card, i) => (
+            <TestimonialCard key={i} testimonial={card} index={i} />
           ))}
         </div>
       </div>
