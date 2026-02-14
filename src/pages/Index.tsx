@@ -51,8 +51,8 @@ const Index = () => {
         <ProblemStatement />
         <IntegrationSection />
         <ProblemSection />
-        <OutcomeSection />
         <InfrastructureSection />
+        <OutcomeSection />
       </div>
     </>
   );

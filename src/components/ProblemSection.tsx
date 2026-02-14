@@ -68,16 +68,17 @@ const ProblemSection = () => {
               <span className="text-xs font-light tracking-tight text-white/80">The Friction Map</span>
             </div>
           </div>
-          <div ref={headingRef}>
+          <h2 ref={headingRef} className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1]">
+            <span className="text-white/90">Manually tracking every lead is stressful and </span>
             <TextShimmer
               as="span"
               duration={2}
               spread={4}
-              className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1] [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
+              className="italic font-light [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
             >
-              Manually tracking every lead is stressful and unsustainable.
+              unsustainable.
             </TextShimmer>
-          </div>
+          </h2>
 
           <div
             ref={lineRef}

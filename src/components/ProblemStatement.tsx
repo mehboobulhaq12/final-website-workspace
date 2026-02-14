@@ -49,16 +49,17 @@ const ProblemStatement = () => {
           </span>
           <span className="text-xs font-light tracking-tight text-white/80">The Results</span>
         </div>
-        <div ref={statRef}>
+        <h2 ref={statRef} className="text-5xl sm:text-6xl md:text-7xl font-extralight tracking-tight">
+          <span className="text-white/90">68% of Dead Leads </span>
           <TextShimmer
             as="span"
             duration={2}
             spread={4}
-            className="text-5xl sm:text-6xl md:text-7xl font-extralight tracking-tight [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
+            className="italic font-light [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
           >
-            68% of Dead Leads Recovered
+            Recovered
           </TextShimmer>
-        </div>
+        </h2>
 
         <p
           ref={subtitleRef}
