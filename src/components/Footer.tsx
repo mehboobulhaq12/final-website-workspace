@@ -84,7 +84,7 @@ export default function Footer() {
             © {new Date().getFullYear()} All rights reserved.
           </span>
           <span className="text-xs font-light text-white/30 tracking-tight">
-            Built with AI precision.
+            Deploy by Effect3.
           </span>
         </div>
       </div>
