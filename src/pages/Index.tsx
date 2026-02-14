@@ -6,6 +6,7 @@ import TrustedBy from "@/components/TrustedBy";
 import ProblemStatement from "@/components/ProblemStatement";
 import ProblemSection from "@/components/ProblemSection";
 import InfrastructureSection from "@/components/InfrastructureSection";
+import IntegrationSection from "@/components/IntegrationSection";
 import LoadingScreen from "@/components/LoadingScreen";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 
@@ -47,6 +48,7 @@ const Index = () => {
         />
         <TrustedBy />
         <ProblemStatement />
+        <IntegrationSection />
         <ProblemSection />
         <InfrastructureSection />
       </div>

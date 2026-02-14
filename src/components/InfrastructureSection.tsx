@@ -126,7 +126,8 @@ const InfrastructureSection = () => {
         {/* Bento Grid */}
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-6 gap-4">
           {/* Card 1 — Audit */}
-          <Card className="step-card md:col-span-2 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group">
+          <Card className="step-card md:col-span-2 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group relative">
+            <div className="absolute top-4 left-4 w-7 h-7 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-xs font-light text-white/40 group-hover:border-orange-400/20 group-hover:text-orange-300/70 transition-all duration-500">1</div>
             <CardContent className="p-0 flex flex-col h-full">
               <div className="flex items-center justify-center pt-10 pb-6 px-6">
                 <div className="relative">
@@ -145,7 +146,8 @@ const InfrastructureSection = () => {
           </Card>
 
           {/* Card 2 — Secure Data Integration */}
-          <Card className="step-card md:col-span-2 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group">
+          <Card className="step-card md:col-span-2 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group relative">
+            <div className="absolute top-4 left-4 w-7 h-7 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-xs font-light text-white/40 group-hover:border-orange-400/20 group-hover:text-orange-300/70 transition-all duration-500">2</div>
             <CardContent className="p-0 flex flex-col h-full">
               <div className="flex items-center justify-center pt-10 pb-6 px-6">
                 <div className="relative w-24 h-24">
@@ -163,7 +165,8 @@ const InfrastructureSection = () => {
           </Card>
 
           {/* Card 3 — Lead Analysis (interactive chart) */}
-          <Card className="step-card md:col-span-2 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group">
+          <Card className="step-card md:col-span-2 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group relative">
+            <div className="absolute top-4 left-4 w-7 h-7 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-xs font-light text-white/40 group-hover:border-orange-400/20 group-hover:text-orange-300/70 transition-all duration-500">3</div>
             <CardContent className="p-0 flex flex-col h-full">
               <div className="flex items-center justify-center pt-10 pb-6 px-6">
                 <InteractiveChart />
@@ -178,7 +181,8 @@ const InfrastructureSection = () => {
           </Card>
 
           {/* Card 4 — Strategy & Execution */}
-          <Card className="step-card md:col-span-3 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group">
+          <Card className="step-card md:col-span-3 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group relative">
+            <div className="absolute top-4 left-4 w-7 h-7 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-xs font-light text-white/40 group-hover:border-orange-400/20 group-hover:text-orange-300/70 transition-all duration-500">4</div>
             <CardContent className="p-0 flex flex-col sm:flex-row h-full">
               <div className="flex-1 p-6 sm:p-8 flex flex-col justify-center">
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center border border-white/10 bg-white/[0.03] mb-5 group-hover:border-orange-400/20 group-hover:bg-orange-500/5 transition-all duration-500">
@@ -212,7 +216,8 @@ const InfrastructureSection = () => {
           </Card>
 
           {/* Card 5 — Revenue Recovery */}
-          <Card className="step-card md:col-span-3 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group">
+          <Card className="step-card md:col-span-3 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group relative">
+            <div className="absolute top-4 left-4 w-7 h-7 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-xs font-light text-white/40 group-hover:border-orange-400/20 group-hover:text-orange-300/70 transition-all duration-500">5</div>
             <CardContent className="p-0 flex flex-col sm:flex-row h-full">
               <div className="flex-1 p-6 sm:p-8 flex flex-col justify-center">
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center border border-white/10 bg-white/[0.03] mb-5 group-hover:border-orange-400/20 group-hover:bg-orange-500/5 transition-all duration-500">
