@@ -3,7 +3,11 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextShimmer } from "@/components/ui/text-shimmer";
-import { User, Mail, FileText, CheckSquare, Users, Check, Bot } from "lucide-react";
+import {
+  User, Mail, FileText, CheckSquare, Users, Check, Bot,
+  Search, Clock, Phone, AlertTriangle, Database, Clipboard,
+  RefreshCw, BarChart3, MessageSquare, UserCheck
+} from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -96,23 +100,23 @@ const ProblemSection = () => {
         {/* Right: Comparison diagram */}
         <div ref={diagramRef} className="flex gap-0 w-full">
           {/* Standard Process */}
-          <div className="flex-1 border border-white/10 rounded-l-xl p-6 bg-white/[0.02]">
-            <p className="text-[10px] sm:text-xs font-mono tracking-[0.2em] text-white/40 uppercase mb-8 text-center">
-              Standard Process (12 Steps)
+          <div className="flex-1 border border-white/10 rounded-l-xl p-5 bg-white/[0.02]">
+            <p className="text-[10px] sm:text-xs font-mono tracking-[0.2em] text-white/40 uppercase mb-6 text-center">
+              Standard Process
             </p>
             <StandardProcessAnimation />
-            <p className="text-[10px] sm:text-xs text-white/30 text-center mt-6 font-light">
+            <p className="text-[10px] sm:text-xs text-white/30 text-center mt-5 font-light">
               Manual Hand-offs
             </p>
           </div>
 
           {/* Effect3 System */}
-          <div className="flex-1 border border-white/10 rounded-r-xl p-6 bg-white/[0.04] border-l-0">
-            <p className="text-[10px] sm:text-xs font-mono tracking-[0.2em] text-orange-400/80 uppercase mb-8 text-center">
-              Effect3 System (End-to-End)
+          <div className="flex-1 border border-white/10 rounded-r-xl p-5 bg-white/[0.04] border-l-0">
+            <p className="text-[10px] sm:text-xs font-mono tracking-[0.2em] text-orange-400/80 uppercase mb-6 text-center">
+              Effect3 System
             </p>
             <Effect3Animation />
-            <p className="text-[10px] sm:text-xs text-blue-300/40 text-center mt-6 font-light">
+            <p className="text-[10px] sm:text-xs text-blue-300/40 text-center mt-5 font-light">
               Fully Automated
             </p>
           </div>
@@ -122,14 +126,14 @@ const ProblemSection = () => {
   );
 };
 
-/* Animated Standard Process: icons appear sequentially top-to-bottom, then loop */
+/* Standard Process: 8 complicated manual steps with smooth sequential animation */
 const StandardProcessAnimation = () => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
 
   useEffect(() => {
-    const totalSteps = 4;
+    const totalSteps = 8;
     let interval: ReturnType<typeof setInterval>;
 
     const trigger = ScrollTrigger.create({
@@ -143,7 +147,7 @@ const StandardProcessAnimation = () => {
         interval = setInterval(() => {
           setActiveIndex(step % totalSteps);
           step++;
-        }, 800);
+        }, 900);
       },
     });
 
@@ -153,34 +157,53 @@ const StandardProcessAnimation = () => {
     };
   }, []);
 
-  const icons = [
-    <User className="w-4 h-4 text-white/40" />,
-    <Mail className="w-4 h-4 text-white/40" />,
-    <FileText className="w-4 h-4 text-white/40" />,
-    <Users className="w-4 h-4 text-white/40" />,
+  const steps = [
+    { icon: <Database className="w-3.5 h-3.5" />, label: "Export Data" },
+    { icon: <Search className="w-3.5 h-3.5" />, label: "Find Leads" },
+    { icon: <Clipboard className="w-3.5 h-3.5" />, label: "Qualify" },
+    { icon: <Mail className="w-3.5 h-3.5" />, label: "Draft Email" },
+    { icon: <Clock className="w-3.5 h-3.5" />, label: "Wait..." },
+    { icon: <Phone className="w-3.5 h-3.5" />, label: "Follow Up" },
+    { icon: <RefreshCw className="w-3.5 h-3.5" />, label: "Repeat" },
+    { icon: <AlertTriangle className="w-3.5 h-3.5" />, label: "Lost Lead" },
   ];
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center gap-4">
-      {icons.map((icon, i) => (
-        <div key={i}>
-          <div
-            className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-all duration-500 ${
-              activeIndex === i
-                ? "bg-white/10 border-white/30 scale-110 shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-                : "bg-white/[0.03] border-white/10"
-            }`}
-          >
-            {icon}
-          </div>
-          {i < icons.length - 1 && (
-            <div className="flex justify-center mt-4">
-              <div
-                className={`w-px h-6 transition-all duration-500 ${
-                  activeIndex === i ? "bg-white/40 shadow-[0_0_4px_rgba(255,255,255,0.2)]" : "bg-white/10"
-                }`}
-              />
+    <div ref={containerRef} className="flex flex-col items-center gap-1.5">
+      {steps.map((step, i) => (
+        <div key={i} className="flex flex-col items-center">
+          <div className="flex items-center gap-2">
+            <div
+              className={`w-8 h-8 rounded-lg flex items-center justify-center border transition-all duration-700 ease-in-out ${
+                activeIndex === i
+                  ? i === 7
+                    ? "bg-red-500/15 border-red-400/40 scale-110 shadow-[0_0_12px_rgba(239,68,68,0.15)]"
+                    : "bg-white/10 border-white/30 scale-110 shadow-[0_0_12px_rgba(255,255,255,0.08)]"
+                  : "bg-white/[0.02] border-white/8"
+              }`}
+            >
+              <span className={`transition-colors duration-700 ${
+                activeIndex === i
+                  ? i === 7 ? "text-red-400/80" : "text-white/60"
+                  : "text-white/25"
+              }`}>
+                {step.icon}
+              </span>
             </div>
+            <span className={`text-[9px] font-light tracking-tight transition-all duration-700 w-14 ${
+              activeIndex === i
+                ? i === 7 ? "text-red-400/70" : "text-white/60"
+                : "text-white/20"
+            }`}>
+              {step.label}
+            </span>
+          </div>
+          {i < steps.length - 1 && (
+            <div
+              className={`w-px h-3 transition-all duration-700 ease-in-out mt-1.5 ${
+                activeIndex === i ? "bg-white/30" : "bg-white/8"
+              }`}
+            />
           )}
         </div>
       ))}
@@ -209,7 +232,7 @@ const Effect3Animation = () => {
         interval = setInterval(() => {
           setActiveIndex(step % totalSteps);
           step++;
-        }, 1000);
+        }, 1200);
       },
     });
 
@@ -220,23 +243,23 @@ const Effect3Animation = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center gap-4">
+    <div ref={containerRef} className="flex flex-col items-center justify-center h-full gap-4 py-4">
       {/* User icon */}
       <div
-        className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-all duration-600 ${
+        className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-all duration-700 ease-in-out ${
           activeIndex === 0
             ? "bg-orange-500/20 border-orange-400/40 scale-110 shadow-[0_0_20px_rgba(251,146,60,0.2)]"
             : "bg-white/10 border-white/20"
         }`}
       >
-        <User className={`w-4 h-4 transition-colors duration-500 ${activeIndex === 0 ? "text-orange-300" : "text-white/80"}`} />
+        <User className={`w-4 h-4 transition-colors duration-700 ${activeIndex === 0 ? "text-orange-300" : "text-white/80"}`} />
       </div>
 
-      <div className={`w-px h-6 transition-all duration-500 ${activeIndex >= 0 ? "bg-orange-400/40" : "bg-white/20"}`} />
+      <div className={`w-px h-8 transition-all duration-700 ${activeIndex >= 0 ? "bg-orange-400/40" : "bg-white/20"}`} />
 
       {/* Agent */}
       <div
-        className={`rounded-xl bg-gradient-to-r from-orange-500/80 to-orange-400/60 border px-4 py-3 flex items-center gap-2 transition-all duration-600 ${
+        className={`rounded-xl bg-gradient-to-r from-orange-500/80 to-orange-400/60 border px-4 py-3 flex items-center gap-2 transition-all duration-700 ease-in-out ${
           activeIndex === 1
             ? "border-orange-300/50 scale-105 shadow-[0_0_30px_rgba(251,146,60,0.3)]"
             : "border-orange-400/30"
@@ -246,17 +269,17 @@ const Effect3Animation = () => {
         <span className="text-xs sm:text-sm font-light text-white tracking-tight">Autonomous Agent</span>
       </div>
 
-      <div className={`w-px h-6 transition-all duration-500 ${activeIndex >= 1 ? "bg-orange-400/40" : "bg-white/20"}`} />
+      <div className={`w-px h-8 transition-all duration-700 ${activeIndex >= 1 ? "bg-orange-400/40" : "bg-white/20"}`} />
 
       {/* Checkmark */}
       <div
-        className={`relative w-10 h-10 rounded-lg flex items-center justify-center border bg-gradient-to-br from-orange-500/80 to-orange-400/60 transition-all duration-600 ${
+        className={`relative w-10 h-10 rounded-lg flex items-center justify-center border bg-gradient-to-br from-orange-500/80 to-orange-400/60 transition-all duration-700 ease-in-out ${
           activeIndex === 2
             ? "border-orange-300/50 scale-110 shadow-[0_0_30px_rgba(251,146,60,0.4)]"
             : "border-orange-400/30"
         }`}
       >
-        <Check className={`w-5 h-5 text-white transition-transform duration-500 ${activeIndex === 2 ? "scale-125" : ""}`} />
+        <Check className={`w-5 h-5 text-white transition-transform duration-700 ${activeIndex === 2 ? "scale-125" : ""}`} />
         {activeIndex === 2 && (
           <span className="absolute inset-0 rounded-lg bg-orange-400/20 animate-[checkRing_1.5s_ease-in-out_infinite]" />
         )}

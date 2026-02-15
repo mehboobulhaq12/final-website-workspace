@@ -24,7 +24,7 @@ function AutoAnimatingChart() {
   useEffect(() => {
     let animFrame: number;
     let startTime: number;
-    const cycleDuration = 3000; // 3s per cycle
+    const cycleDuration = 8000; // 8s per cycle — slow and steady
 
     const trigger = ScrollTrigger.create({
       trigger: containerRef.current,
@@ -38,8 +38,10 @@ function AutoAnimatingChart() {
         const animate = (now: number) => {
           const elapsed = (now - startTime) % cycleDuration;
           const t = elapsed / cycleDuration;
-          setProgress(t);
-          setCount(Math.round(t * 98.7));
+          // Ease-out cubic for smooth deceleration
+          const eased = 1 - Math.pow(1 - t, 3);
+          setProgress(eased);
+          setCount(Math.round(eased * 98.7 * 10) / 10);
           animFrame = requestAnimationFrame(animate);
         };
         animFrame = requestAnimationFrame(animate);
@@ -70,7 +72,7 @@ function AutoAnimatingChart() {
           <BarChart3 className="w-3 h-3" /> Analysis
         </span>
         <span className="text-[10px] text-orange-400/80 font-mono">
-          {count.toFixed(0)}%
+          {count.toFixed(1)}%
         </span>
       </div>
       <svg viewBox="0 0 200 60" className="w-full h-auto" fill="none">
