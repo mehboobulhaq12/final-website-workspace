@@ -230,6 +230,7 @@ interface HeroProps {
   badgeLabel?: string;
   ctaButtons?: Array<{ text: string; href: string; primary?: boolean }>;
   microDetails?: Array<string>;
+  trustBadge?: { avatars: string[]; text: string };
 }
 
 export default function Hero({
@@ -241,7 +242,8 @@ export default function Hero({
     { text: "Get started", href: "#get-started", primary: true },
     { text: "View showcase", href: "#showcase" }
   ],
-  microDetails = ["Low‑weight font", "Tight tracking", "Subtle motion"]
+  microDetails = ["Low‑weight font", "Tight tracking", "Subtle motion"],
+  trustBadge,
 }: HeroProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const headerRef = useRef<HTMLHeadingElement | null>(null);
@@ -249,6 +251,7 @@ export default function Hero({
   const ctaRef = useRef<HTMLDivElement | null>(null);
   const badgeRef = useRef<HTMLDivElement | null>(null);
   const microRef = useRef<HTMLUListElement | null>(null);
+  const trustBadgeRef = useRef<HTMLDivElement | null>(null);
   const microItem1Ref = useRef<HTMLLIElement | null>(null);
   const microItem2Ref = useRef<HTMLLIElement | null>(null);
   const microItem3Ref = useRef<HTMLLIElement | null>(null);
@@ -309,6 +312,10 @@ export default function Hero({
         if (microItems.length > 0) {
           tl.to(microItems, { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.1 }, '-=0.25');
         }
+        if (trustBadgeRef.current) {
+          gsap.set(trustBadgeRef.current, { autoAlpha: 0, y: 10 });
+          tl.to(trustBadgeRef.current, { autoAlpha: 1, y: 0, duration: 0.5 }, '-=0.15');
+        }
       });
     },
     { scope: sectionRef },
@@ -361,6 +368,36 @@ export default function Hero({
             );
           })}
         </ul>
+
+        {/* Trust badge */}
+        {trustBadge && (
+          <div ref={trustBadgeRef} className="mt-4 flex items-center gap-4">
+            <div className="flex -space-x-3">
+              {trustBadge.avatars.map((avatar, i) => (
+                <img
+                  key={i}
+                  src={avatar}
+                  alt="Client"
+                  className="w-9 h-9 rounded-full border-2 border-black object-cover"
+                />
+              ))}
+            </div>
+            <div className="h-8 w-px bg-white/15" />
+            <div className="flex flex-col gap-0.5">
+              <div className="flex items-center gap-1.5">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+                <span className="text-sm font-medium text-white/90 ml-1">5.0</span>
+              </div>
+              <span className="text-xs font-light text-white/50">
+                Trusted by <span className="font-medium text-white/70">{trustBadge.text}</span>
+              </span>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent" />
