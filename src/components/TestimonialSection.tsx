@@ -3,6 +3,11 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextShimmer } from "@/components/ui/text-shimmer";
+import aliRazaImg from "@/assets/clients/ali-raza.png";
+import hassanAbbasImg from "@/assets/clients/hassan-abbas.png";
+import awaisNematImg from "@/assets/clients/awais-nemat.png";
+import brunoCasanovasImg from "@/assets/clients/bruno-casanovas.png";
+import davidOkonkwoImg from "@/assets/clients/david-okonkwo.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,6 +15,7 @@ interface Testimonial {
   quote: string;
   name: string;
   role: string;
+  image: string;
   variant: "orange" | "dark";
 }
 
@@ -65,36 +71,41 @@ const cards: Testimonial[] = [
   {
     quote:
       "Effect3 built us an AI HR avatar that conducts candidate interviews autonomously. Their service is top-notch and their team is incredibly responsive.",
-    name: "Ahmed Al-Rashid",
+    name: "Ali Raza",
     role: "CTO of ConnectA",
+    image: aliRazaImg,
     variant: "dark",
   },
   {
     quote:
-      "Their team is highly professional, and their innovative AI solutions have truly transformed the way we operate.",
-    name: "Jon Villanueva",
-    role: "VP of Revenue at Sintra.AI",
+      "Effect3's AI system transformed how we handle customer inquiries for our signage business. Automated follow-ups on custom sign quotes increased our close rate by 45%. Outstanding results.",
+    name: "Hassan Abbas",
+    role: "CEO of Precision Media & Sign",
+    image: hassanAbbasImg,
     variant: "orange",
   },
   {
     quote:
       "We were converting brands at just 5% manually. Effect3 deployed their AI email system and our conversion rate exploded to 59%. The ROI was immediate.",
-    name: "Marco Bellini",
-    role: "Head of Growth at Ecomera",
+    name: "Awais Nemat",
+    role: "Head of Growth at Ecufussion",
+    image: awaisNematImg,
     variant: "dark",
   },
   {
     quote:
       "We have seen incredible results with Effect3. Their expertise and dedication to reviving our inactive customers is unmatched.",
     name: "Bruno Casanovas",
-    role: "Co-Founder of Nude Project",
+    role: "Co-CEO of Nude Project",
+    image: brunoCasanovasImg,
     variant: "orange",
   },
   {
     quote:
-      "Effect3 has been a true game-changer for us. Their exceptional service, combined with deep expertise and commitment to excellence, has made a significant impact on our business.",
+      "Effect3 deployed their AI outreach system for Sintra AI and recovered 38% of our dead leads, turning them into retainer customers. For a SaaS tool like ours, that kind of reactivation is a game-changer.",
     name: "David Okonkwo",
-    role: "CEO of NovaBridge",
+    role: "Co-Founder of Sintra.AI",
+    image: davidOkonkwoImg,
     variant: "dark",
   },
 ];
@@ -174,9 +185,7 @@ const TestimonialSection = () => {
                   <p className="text-sm font-semibold text-white/90">{cards[0].name}</p>
                   <p className="text-xs text-white/40">{cards[0].role}</p>
                 </div>
-                <div className="w-11 h-11 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center flex-shrink-0">
-                  <span className="text-sm font-medium text-orange-300">{cards[0].name.charAt(0)}</span>
-                </div>
+                <img src={cards[0].image} alt={cards[0].name} className="w-11 h-11 rounded-full object-cover border border-orange-500/20 flex-shrink-0" />
               </div>
             </div>
           </AnimatedCard>
@@ -195,9 +204,7 @@ const TestimonialSection = () => {
                 <p className="text-sm font-semibold text-white">{cards[1].name}</p>
                 <p className="text-xs text-white/70">{cards[1].role}</p>
               </div>
-              <div className="w-11 h-11 rounded-full bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0">
-                <span className="text-sm font-medium text-white">{cards[1].name.charAt(0)}</span>
-              </div>
+                <img src={cards[1].image} alt={cards[1].name} className="w-11 h-11 rounded-full object-cover border border-white/30 flex-shrink-0" />
             </div>
           </AnimatedCard>
 
@@ -216,9 +223,7 @@ const TestimonialSection = () => {
                   <p className="text-sm font-semibold text-white/90">{cards[2].name}</p>
                   <p className="text-xs text-white/40">{cards[2].role}</p>
                 </div>
-                <div className="w-11 h-11 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center flex-shrink-0">
-                  <span className="text-sm font-medium text-orange-300">{cards[2].name.charAt(0)}</span>
-                </div>
+                <img src={cards[2].image} alt={cards[2].name} className="w-11 h-11 rounded-full object-cover border border-orange-500/20 flex-shrink-0" />
               </div>
             </div>
             <div className="h-[45%] relative">
@@ -240,9 +245,7 @@ const TestimonialSection = () => {
                 <p className="text-sm font-semibold text-white">{cards[3].name}</p>
                 <p className="text-xs text-white/70">{cards[3].role}</p>
               </div>
-              <div className="w-11 h-11 rounded-full bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0">
-                <span className="text-sm font-medium text-white">{cards[3].name.charAt(0)}</span>
-              </div>
+                <img src={cards[3].image} alt={cards[3].name} className="w-11 h-11 rounded-full object-cover border border-white/30 flex-shrink-0" />
             </div>
           </AnimatedCard>
 
@@ -260,9 +263,7 @@ const TestimonialSection = () => {
                 <p className="text-sm font-semibold text-white/90">{cards[4].name}</p>
                 <p className="text-xs text-white/40">{cards[4].role}</p>
               </div>
-              <div className="w-11 h-11 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center flex-shrink-0">
-                <span className="text-sm font-medium text-orange-300">{cards[4].name.charAt(0)}</span>
-              </div>
+                <img src={cards[4].image} alt={cards[4].name} className="w-11 h-11 rounded-full object-cover border border-orange-500/20 flex-shrink-0" />
             </div>
           </AnimatedCard>
         </div>
@@ -303,21 +304,15 @@ const TestimonialSection = () => {
                     {card.role}
                   </p>
                 </div>
-                <div
-                  className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 ${
+                <img
+                  src={card.image}
+                  alt={card.name}
+                  className={`w-11 h-11 rounded-full object-cover flex-shrink-0 border ${
                     card.variant === "orange"
-                      ? "bg-white/20 border border-white/30"
-                      : "bg-orange-500/10 border border-orange-500/20"
+                      ? "border-white/30"
+                      : "border-orange-500/20"
                   }`}
-                >
-                  <span
-                    className={`text-sm font-medium ${
-                      card.variant === "orange" ? "text-white" : "text-orange-300"
-                    }`}
-                  >
-                    {card.name.charAt(0)}
-                  </span>
-                </div>
+                />
               </div>
             </AnimatedCard>
           ))}
