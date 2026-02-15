@@ -36,13 +36,25 @@ const ProblemSection = () => {
         autoAlpha: 1, x: 0, duration: 1, ease: "power3.out",
         scrollTrigger: { trigger: sectionRef.current, start: "top 70%", once: true },
       });
+
+      // Parallax
+      const inner = sectionRef.current.querySelector(".parallax-inner");
+      if (inner) {
+        gsap.to(inner, {
+          yPercent: -6,
+          ease: "none",
+          scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "bottom top", scrub: 0.6 },
+        });
+      }
     },
     { scope: sectionRef }
   );
 
+
+
   return (
-    <section ref={sectionRef} className="w-full pt-12 md:pt-16 pb-12 md:pb-16 bg-black">
-      <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-start">
+    <section ref={sectionRef} className="w-full pt-12 md:pt-16 pb-12 md:pb-16 bg-black overflow-hidden">
+      <div className="parallax-inner mx-auto max-w-7xl px-6 md:px-10 lg:px-16 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-start">
         {/* Left: Text content */}
         <div className="flex flex-col gap-6">
           <div>

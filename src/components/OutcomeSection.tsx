@@ -238,13 +238,23 @@ const OutcomeSection = () => {
         autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.2, ease: "power3.out",
         scrollTrigger: { trigger: sectionRef.current, start: "top 75%", once: true },
       });
+
+      // Parallax
+      const inner = sectionRef.current.querySelector(".parallax-inner");
+      if (inner) {
+        gsap.to(inner, {
+          yPercent: -5,
+          ease: "none",
+          scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "bottom top", scrub: 0.6 },
+        });
+      }
     },
     { scope: sectionRef }
   );
 
   return (
-    <section ref={sectionRef} className="w-full py-12 md:py-16 bg-black border-t border-white/5">
-      <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
+    <section ref={sectionRef} className="w-full py-12 md:py-16 bg-black border-t border-white/5 overflow-hidden">
+      <div className="parallax-inner mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
         <div ref={headingRef} className="flex flex-col gap-4 mb-10 max-w-3xl">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
