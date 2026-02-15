@@ -103,7 +103,7 @@ const cards: Testimonial[] = [
   {
     quote:
       "Effect3 deployed their AI outreach system for Sintra AI and recovered 38% of our dead leads, turning them into retainer customers. For a SaaS tool like ours, that kind of reactivation is a game-changer.",
-    name: "David Okonkwo",
+    name: "Chris Sidlauskas",
     role: "Co-Founder of Sintra.AI",
     image: davidOkonkwoImg,
     variant: "dark",

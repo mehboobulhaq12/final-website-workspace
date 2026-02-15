@@ -10,11 +10,16 @@ import IntegrationSection from "@/components/IntegrationSection";
 import OutcomeSection from "@/components/OutcomeSection";
 import TestimonialSection from "@/components/TestimonialSection";
 import CaseStudiesSection from "@/components/CaseStudiesSection";
+import FAQSection from "@/components/FAQSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
 import ScrollToTop from "@/components/ScrollToTop";
 import { TextShimmer } from "@/components/ui/text-shimmer";
+import aliRazaImg from "@/assets/clients/ali-raza.png";
+import hassanAbbasImg from "@/assets/clients/hassan-abbas.png";
+import awaisNematImg from "@/assets/clients/awais-nemat.png";
+import brunoCasanovasImg from "@/assets/clients/bruno-casanovas.png";
 
 const Index = () => {
   const [loading, setLoading] = useState(true);
@@ -51,6 +56,10 @@ const Index = () => {
             { text: "Implement Now", href: "#get-started", primary: true }
           ]}
           microDetails={["Get your most boring work handled by AI agents."]}
+          trustBadge={{
+            avatars: [aliRazaImg, hassanAbbasImg, awaisNematImg, brunoCasanovasImg],
+            text: "25+ companies",
+          }}
         />
         <TrustedBy />
         <ProblemStatement />
@@ -60,6 +69,7 @@ const Index = () => {
         <OutcomeSection />
         <TestimonialSection />
         <CaseStudiesSection />
+        <FAQSection />
         <CTASection />
         <Footer />
         <ScrollToTop />
