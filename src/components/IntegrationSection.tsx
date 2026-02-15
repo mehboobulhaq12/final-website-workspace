@@ -13,17 +13,31 @@ import airtableLogo from "@/assets/logos/airtable.png";
 import whatsappLogo from "@/assets/logos/whatsapp.png";
 import hubspotLogo from "@/assets/logos/hubspot.png";
 import klaviyoLogo from "@/assets/logos/klaviyo.png";
-
-gsap.registerPlugin(ScrollTrigger);
+import excelLogo from "@/assets/logos/excel.png";
+import powerpointLogo from "@/assets/logos/powerpoint.png";
+import office365Logo from "@/assets/logos/office365.png";
+import teamsLogo from "@/assets/logos/teams.png";
+import outlookLogo from "@/assets/logos/outlook.png";
+import googleSheetsLogo from "@/assets/logos/google-sheets.png";
+import googleDocsLogo from "@/assets/logos/google-docs.png";
+import googleDriveLogo from "@/assets/logos/google-drive.png";
 
 const logos = [
   { src: salesforceLogo, alt: "Salesforce" },
+  { src: excelLogo, alt: "Microsoft Excel" },
+  { src: googleSheetsLogo, alt: "Google Sheets" },
   { src: slackLogo, alt: "Slack" },
-  { src: zohoLogo, alt: "Zoho" },
-  { src: odooLogo, alt: "Odoo" },
-  { src: airtableLogo, alt: "Airtable" },
-  { src: whatsappLogo, alt: "WhatsApp" },
+  { src: powerpointLogo, alt: "PowerPoint" },
+  { src: googleDocsLogo, alt: "Google Docs" },
   { src: hubspotLogo, alt: "HubSpot" },
+  { src: teamsLogo, alt: "Microsoft Teams" },
+  { src: googleDriveLogo, alt: "Google Drive" },
+  { src: zohoLogo, alt: "Zoho" },
+  { src: office365Logo, alt: "Microsoft 365" },
+  { src: whatsappLogo, alt: "WhatsApp" },
+  { src: odooLogo, alt: "Odoo" },
+  { src: outlookLogo, alt: "Outlook" },
+  { src: airtableLogo, alt: "Airtable" },
   { src: klaviyoLogo, alt: "Klaviyo" },
 ];
 
@@ -69,7 +83,7 @@ const IntegrationSection = () => {
             </TextShimmer>
           </h2>
           <p className="text-base sm:text-lg font-light leading-relaxed text-white/40">
-            Our agents connect directly to your systems, ERP, CRM, finance tools, reading, writing, and executing workflows without migration or platform changes.
+            Our agents connect directly to your systems — Microsoft 365, Google Workspace, ERP, CRM, finance tools — reading, writing, and executing workflows without migration or platform changes.
           </p>
         </div>
       </div>
