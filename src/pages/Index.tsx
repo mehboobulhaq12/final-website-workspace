@@ -9,9 +9,11 @@ import InfrastructureSection from "@/components/InfrastructureSection";
 import IntegrationSection from "@/components/IntegrationSection";
 import OutcomeSection from "@/components/OutcomeSection";
 import TestimonialSection from "@/components/TestimonialSection";
+import CaseStudiesSection from "@/components/CaseStudiesSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
+import ScrollToTop from "@/components/ScrollToTop";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 
 const Index = () => {
@@ -57,8 +59,10 @@ const Index = () => {
         <IntegrationSection />
         <OutcomeSection />
         <TestimonialSection />
+        <CaseStudiesSection />
         <CTASection />
         <Footer />
+        <ScrollToTop />
       </div>
     </>
   );

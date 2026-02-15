@@ -5,128 +5,55 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import { Activity, MessageCircle, Map as MapIcon } from "lucide-react";
 import DottedMap from "dotted-map";
-import { Area, AreaChart, CartesianGrid } from "recharts";
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const chartData = [
-  { month: "Jan", manual: 5, agents: 8 },
-  { month: "Feb", manual: 8, agents: 32 },
-  { month: "Mar", manual: 7, agents: 58 },
-  { month: "Apr", manual: 12, agents: 95 },
-  { month: "May", manual: 9, agents: 142 },
-  { month: "Jun", manual: 11, agents: 210 },
-];
-
-const chartConfig = {
-  manual: {
-    label: "Manual Recovery",
-    color: "hsl(0 0% 40%)",
-  },
-  agents: {
-    label: "AI Agents",
-    color: "hsl(25 95% 53%)",
-  },
-} satisfies ChartConfig;
 
 const map = new DottedMap({ height: 55, grid: "diagonal" });
 const points = map.getPoints();
 
 const highlightedPoints = [
-  { cx: 25, cy: 22 },
-  { cx: 18, cy: 28 },
-  { cx: 30, cy: 18 },
-  { cx: 55, cy: 22 },
-  { cx: 58, cy: 24 },
-  { cx: 60, cy: 22 },
-  { cx: 85, cy: 20 },
-  { cx: 80, cy: 28 },
-  { cx: 90, cy: 22 },
-  { cx: 65, cy: 35 },
-  { cx: 95, cy: 38 },
-  { cx: 42, cy: 40 },
-  { cx: 62, cy: 18 },
-  { cx: 75, cy: 25 },
-  { cx: 22, cy: 32 },
-  { cx: 35, cy: 25 },
-  { cx: 50, cy: 30 },
-  { cx: 70, cy: 18 },
-  { cx: 78, cy: 35 },
-  { cx: 88, cy: 30 },
-  { cx: 45, cy: 22 },
+  { cx: 25, cy: 22 }, { cx: 18, cy: 28 }, { cx: 30, cy: 18 },
+  { cx: 55, cy: 22 }, { cx: 58, cy: 24 }, { cx: 60, cy: 22 },
+  { cx: 85, cy: 20 }, { cx: 80, cy: 28 }, { cx: 90, cy: 22 },
+  { cx: 65, cy: 35 }, { cx: 95, cy: 38 }, { cx: 42, cy: 40 },
+  { cx: 62, cy: 18 }, { cx: 75, cy: 25 }, { cx: 22, cy: 32 },
+  { cx: 35, cy: 25 }, { cx: 50, cy: 30 }, { cx: 70, cy: 18 },
+  { cx: 78, cy: 35 }, { cx: 88, cy: 30 }, { cx: 45, cy: 22 },
   { cx: 68, cy: 28 },
 ];
 
 const connections = [
-  { x1: 25, y1: 22, x2: 55, y2: 22 },
-  { x1: 55, y1: 22, x2: 85, y2: 20 },
-  { x1: 60, y1: 22, x2: 80, y2: 28 },
-  { x1: 18, y1: 28, x2: 42, y2: 40 },
-  { x1: 30, y1: 18, x2: 62, y2: 18 },
-  { x1: 75, y1: 25, x2: 90, y2: 22 },
-  { x1: 65, y1: 35, x2: 80, y2: 28 },
-  { x1: 58, y1: 24, x2: 75, y2: 25 },
-  { x1: 25, y1: 22, x2: 35, y2: 25 },
-  { x1: 85, y1: 20, x2: 95, y2: 38 },
-  { x1: 45, y1: 22, x2: 55, y2: 22 },
-  { x1: 70, y1: 18, x2: 85, y2: 20 },
+  { x1: 25, y1: 22, x2: 55, y2: 22 }, { x1: 55, y1: 22, x2: 85, y2: 20 },
+  { x1: 60, y1: 22, x2: 80, y2: 28 }, { x1: 18, y1: 28, x2: 42, y2: 40 },
+  { x1: 30, y1: 18, x2: 62, y2: 18 }, { x1: 75, y1: 25, x2: 90, y2: 22 },
+  { x1: 65, y1: 35, x2: 80, y2: 28 }, { x1: 58, y1: 24, x2: 75, y2: 25 },
+  { x1: 25, y1: 22, x2: 35, y2: 25 }, { x1: 85, y1: 20, x2: 95, y2: 38 },
+  { x1: 45, y1: 22, x2: 55, y2: 22 }, { x1: 70, y1: 18, x2: 85, y2: 20 },
 ];
 
-const MapComponent = () => {
-  const viewBox = "0 0 120 60";
-  return (
-    <svg viewBox={viewBox} className="w-full h-full text-white/20">
-      {points.map((point, index) => (
-        <circle key={index} cx={point.x} cy={point.y} r={0.15} fill="currentColor" />
-      ))}
-      {connections.map((c, i) => (
-        <line key={`line-${i}`} x1={c.x1} y1={c.y1} x2={c.x2} y2={c.y2} stroke="hsl(25 95% 53%)" strokeWidth="0.3" opacity="0.35">
-          <animate attributeName="opacity" values="0.2;0.5;0.2" dur={`${2.5 + i * 0.3}s`} repeatCount="indefinite" />
-        </line>
-      ))}
-      {highlightedPoints.map((p, i) => (
-        <g key={`hl-${i}`}>
-          <circle cx={p.cx} cy={p.cy} r="1.8" fill="hsl(25 95% 53%)" opacity="0.15">
-            <animate attributeName="r" values="1.2;2.8;1.2" dur={`${2 + i * 0.2}s`} repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.2;0.06;0.2" dur={`${2 + i * 0.2}s`} repeatCount="indefinite" />
-          </circle>
-          <circle cx={p.cx} cy={p.cy} r="0.6" fill="hsl(25 95% 53%)" opacity="1">
-            <animate attributeName="opacity" values="0.7;1;0.7" dur={`${1.5 + i * 0.15}s`} repeatCount="indefinite" />
-          </circle>
-        </g>
-      ))}
-    </svg>
-  );
-};
-
-const MonitoringChart = () => {
-  return (
-    <ChartContainer config={chartConfig} className="aspect-auto h-full w-full">
-      <AreaChart data={chartData}>
-        <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.05)" />
-        <defs>
-          <linearGradient id="fillManual" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="hsl(0 0% 40%)" stopOpacity={0.3} />
-            <stop offset="100%" stopColor="hsl(0 0% 40%)" stopOpacity={0} />
-          </linearGradient>
-          <linearGradient id="fillAgents" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="hsl(25 95% 53%)" stopOpacity={0.4} />
-            <stop offset="100%" stopColor="hsl(25 95% 53%)" stopOpacity={0} />
-          </linearGradient>
-        </defs>
-        <Area dataKey="manual" type="monotone" fill="url(#fillManual)" stroke="hsl(0 0% 40%)" strokeWidth={1.5} />
-        <Area dataKey="agents" type="monotone" fill="url(#fillAgents)" stroke="hsl(25 95% 53%)" strokeWidth={2} />
-        <ChartTooltip content={<ChartTooltipContent />} />
-      </AreaChart>
-    </ChartContainer>
-  );
-};
+const MapComponent = () => (
+  <svg viewBox="0 0 120 60" className="w-full h-full text-white/20">
+    {points.map((point, index) => (
+      <circle key={index} cx={point.x} cy={point.y} r={0.15} fill="currentColor" />
+    ))}
+    {connections.map((c, i) => (
+      <line key={`line-${i}`} x1={c.x1} y1={c.y1} x2={c.x2} y2={c.y2} stroke="hsl(25 95% 53%)" strokeWidth="0.3" opacity="0.35">
+        <animate attributeName="opacity" values="0.2;0.5;0.2" dur={`${2.5 + i * 0.3}s`} repeatCount="indefinite" />
+      </line>
+    ))}
+    {highlightedPoints.map((p, i) => (
+      <g key={`hl-${i}`}>
+        <circle cx={p.cx} cy={p.cy} r="1.8" fill="hsl(25 95% 53%)" opacity="0.15">
+          <animate attributeName="r" values="1.2;2.8;1.2" dur={`${2 + i * 0.2}s`} repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.2;0.06;0.2" dur={`${2 + i * 0.2}s`} repeatCount="indefinite" />
+        </circle>
+        <circle cx={p.cx} cy={p.cy} r="0.6" fill="hsl(25 95% 53%)" opacity="1">
+          <animate attributeName="opacity" values="0.7;1;0.7" dur={`${1.5 + i * 0.15}s`} repeatCount="indefinite" />
+        </circle>
+      </g>
+    ))}
+  </svg>
+);
 
 const TypingIndicator = ({ color = "white" }: { color?: string }) => (
   <div className="flex items-center gap-1 px-3 py-2">
@@ -158,7 +85,6 @@ const ChatAnimation = () => {
       if (cycleCount >= maxCycles) return;
       const offset = cycleCount * cycleDuration;
       cycleCount++;
-
       allTimers.push(
         setTimeout(() => setStage(0), offset),
         setTimeout(() => setStage(1), offset + 200),
@@ -168,7 +94,6 @@ const ChatAnimation = () => {
         setTimeout(() => setStage(5), offset + 3000),
         setTimeout(() => setStage(6), offset + 3800),
       );
-
       if (cycleCount < maxCycles) {
         allTimers.push(setTimeout(() => runCycle(), cycleDuration));
       }
@@ -179,71 +104,120 @@ const ChatAnimation = () => {
       start: "top 85%",
       once: true,
       onEnter: () => {
-        if (!startedRef.current) {
-          startedRef.current = true;
-          runCycle();
-        }
+        if (!startedRef.current) { startedRef.current = true; runCycle(); }
       },
     });
 
-    return () => {
-      trigger.kill();
-      allTimers.forEach(clearTimeout);
-    };
+    return () => { trigger.kill(); allTimers.forEach(clearTimeout); };
   }, []);
 
   return (
     <div ref={containerRef} className="flex flex-col gap-3 mt-auto">
-      {/* Agent message 1 */}
       <div className={`flex items-start gap-2 transition-all duration-500 ${stage >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
-        <div className="w-5 h-5 rounded-full bg-orange-500/20 mt-0.5 flex-shrink-0 flex items-center justify-center">
-          <span className="text-[8px]">🤖</span>
-        </div>
+        <div className="w-5 h-5 rounded-full bg-orange-500/20 mt-0.5 flex-shrink-0 flex items-center justify-center"><span className="text-[8px]">🤖</span></div>
         <div>
           <p className="text-[10px] text-white/40">AI Agent</p>
-          {stage >= 1 && stage < 2 ? (
-            <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10">
-              <TypingIndicator color="orange" />
-            </div>
-          ) : stage >= 2 ? (
-            <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10 px-3 py-2">
-              <p className="text-xs text-white/80">Hey, we noticed you haven't completed your setup...</p>
-            </div>
-          ) : null}
+          {stage >= 1 && stage < 2 ? <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10"><TypingIndicator color="orange" /></div>
+           : stage >= 2 ? <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10 px-3 py-2"><p className="text-xs text-white/80">Hey, we noticed you haven't completed your setup...</p></div> : null}
         </div>
       </div>
-
-      {/* Agent message 2 */}
       <div className={`flex items-start gap-2 transition-all duration-500 ${stage >= 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
-        <div className="w-5 h-5 rounded-full bg-orange-500/20 mt-0.5 flex-shrink-0 flex items-center justify-center">
-          <span className="text-[8px]">🤖</span>
-        </div>
+        <div className="w-5 h-5 rounded-full bg-orange-500/20 mt-0.5 flex-shrink-0 flex items-center justify-center"><span className="text-[8px]">🤖</span></div>
         <div>
-          {stage >= 3 && stage < 4 ? (
-            <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10">
-              <TypingIndicator color="orange" />
-            </div>
-          ) : stage >= 4 ? (
-            <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10 px-3 py-2">
-              <p className="text-xs text-white/80">Would you like to schedule a quick call to finish onboarding?</p>
-            </div>
-          ) : null}
+          {stage >= 3 && stage < 4 ? <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10"><TypingIndicator color="orange" /></div>
+           : stage >= 4 ? <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10 px-3 py-2"><p className="text-xs text-white/80">Would you like to schedule a quick call to finish onboarding?</p></div> : null}
         </div>
       </div>
-
-      {/* Customer reply */}
       <div className={`flex justify-end transition-all duration-500 ${stage >= 5 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
-        {stage >= 5 && stage < 6 ? (
-          <div className="rounded-lg bg-white/10 border border-white/10">
-            <TypingIndicator color="white" />
-          </div>
-        ) : stage >= 6 ? (
-          <div className="rounded-lg bg-white/10 border border-white/10 px-3 py-2 max-w-[80%]">
-            <p className="text-xs text-white/70">Thanks for checking in! I'd love to pick this back up.</p>
-            <p className="text-[10px] text-white/30 mt-1 text-right">Now</p>
-          </div>
-        ) : null}
+        {stage >= 5 && stage < 6 ? <div className="rounded-lg bg-white/10 border border-white/10"><TypingIndicator color="white" /></div>
+         : stage >= 6 ? <div className="rounded-lg bg-white/10 border border-white/10 px-3 py-2 max-w-[80%]"><p className="text-xs text-white/70">Thanks for checking in! I'd love to pick this back up.</p><p className="text-[10px] text-white/30 mt-1 text-right">Now</p></div> : null}
       </div>
+    </div>
+  );
+};
+
+/* Continuous auto-animating chart for Outcome section */
+const AutoOutcomeChart = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [progress, setProgress] = useState(0);
+  const [manualCount, setManualCount] = useState(0);
+  const [agentCount, setAgentCount] = useState(0);
+  const startedRef = useRef(false);
+
+  useEffect(() => {
+    let animFrame: number;
+    let startTime: number;
+    const cycleDuration = 4000;
+
+    const trigger = ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top 85%",
+      once: true,
+      onEnter: () => {
+        if (startedRef.current) return;
+        startedRef.current = true;
+        startTime = performance.now();
+
+        const animate = (now: number) => {
+          const elapsed = (now - startTime) % cycleDuration;
+          const t = elapsed / cycleDuration;
+          setProgress(t);
+          setManualCount(Math.round(t * 11));
+          setAgentCount(Math.round(t * 210));
+          animFrame = requestAnimationFrame(animate);
+        };
+        animFrame = requestAnimationFrame(animate);
+      },
+    });
+
+    return () => { trigger.kill(); cancelAnimationFrame(animFrame); };
+  }, []);
+
+  // Manual line (flat-ish)
+  const manualPoints = [
+    { x: 0, y: 58 }, { x: 40, y: 52 }, { x: 80, y: 55 },
+    { x: 120, y: 48 }, { x: 160, y: 53 }, { x: 200, y: 50 },
+  ];
+  // Agent line (goes up steeply)
+  const agentPoints = [
+    { x: 0, y: 55 }, { x: 40, y: 42 }, { x: 80, y: 32 },
+    { x: 120, y: 20 }, { x: 160, y: 10 }, { x: 200, y: 3 },
+  ];
+
+  const visibleCount = Math.max(2, Math.ceil(progress * agentPoints.length));
+  const visManual = manualPoints.slice(0, visibleCount);
+  const visAgent = agentPoints.slice(0, visibleCount);
+
+  const toPath = (pts: typeof manualPoints) => pts.map((p, i) => `${i === 0 ? "M" : "L"}${p.x} ${p.y}`).join(" ");
+  const lastAgent = visAgent[visAgent.length - 1];
+  const lastManual = visManual[visManual.length - 1];
+
+  return (
+    <div ref={containerRef} className="h-full w-full flex flex-col">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex gap-4 text-[10px] text-white/40">
+          <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-white/30" /> Manual <span className="font-mono text-white/50">{manualCount}</span></span>
+          <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-orange-500" /> AI Agents <span className="font-mono text-orange-400">{agentCount}</span></span>
+        </div>
+      </div>
+      <svg viewBox="0 0 200 60" className="w-full flex-1" fill="none" preserveAspectRatio="none">
+        {/* Manual */}
+        <path d={toPath(visManual)} stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" strokeLinecap="round" />
+        <path d={`${toPath(visManual)} L${lastManual.x} 60 L0 60 Z`} fill="rgba(255,255,255,0.03)" />
+        {/* Agent */}
+        <path d={toPath(visAgent)} stroke="hsl(25 95% 53%)" strokeWidth="2" strokeLinecap="round" />
+        <path d={`${toPath(visAgent)} L${lastAgent.x} 60 L0 60 Z`} fill="url(#outcomeAgentFill)" />
+        {/* Dot */}
+        <circle cx={lastAgent.x} cy={lastAgent.y} r="3" fill="#fb923c">
+          <animate attributeName="r" values="2;4;2" dur="1s" repeatCount="indefinite" />
+        </circle>
+        <defs>
+          <linearGradient id="outcomeAgentFill" x1="0" y1="0" x2="0" y2="60">
+            <stop offset="0%" stopColor="rgba(251,146,60,0.2)" />
+            <stop offset="100%" stopColor="rgba(251,146,60,0)" />
+          </linearGradient>
+        </defs>
+      </svg>
     </div>
   );
 };
@@ -252,7 +226,6 @@ const OutcomeSection = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
   const headingRef = useRef<HTMLDivElement | null>(null);
   const gridRef = useRef<HTMLDivElement | null>(null);
-  const chartCardRef = useRef<HTMLDivElement | null>(null);
 
   useGSAP(
     () => {
@@ -263,14 +236,6 @@ const OutcomeSection = () => {
         autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.2, ease: "power3.out",
         scrollTrigger: { trigger: sectionRef.current, start: "top 75%", once: true },
       });
-
-      if (chartCardRef.current) {
-        gsap.set(chartCardRef.current, { autoAlpha: 0, y: 20 });
-        gsap.to(chartCardRef.current, {
-          autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out",
-          scrollTrigger: { trigger: chartCardRef.current, start: "top 85%", once: true },
-        });
-      }
     },
     { scope: sectionRef }
   );
@@ -335,8 +300,8 @@ const OutcomeSection = () => {
             <p className="text-sm font-light text-white/40">Agent Uptime</p>
           </div>
 
-          {/* Card 4 - Activity Chart */}
-          <div ref={chartCardRef} className="md:col-span-3 rounded-xl border border-white/10 bg-white/[0.02] p-6 flex flex-col gap-4 overflow-hidden">
+          {/* Card 4 - Auto-animating Activity Chart */}
+          <div className="md:col-span-3 rounded-xl border border-white/10 bg-white/[0.02] p-6 flex flex-col gap-4 overflow-hidden">
             <div className="flex items-center gap-2 text-white/50">
               <Activity className="w-4 h-4" />
               <span className="text-xs font-light tracking-wide">Lead recovery performance</span>
@@ -347,16 +312,8 @@ const OutcomeSection = () => {
                 <span className="text-white/40">See the difference in real conversions.</span>
               </p>
             </div>
-            <div className="flex gap-4 text-[10px] text-white/40">
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-white/30" /> Manual
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-orange-500" /> AI Agents
-              </span>
-            </div>
             <div className="h-36 sm:h-44 mt-auto">
-              <MonitoringChart />
+              <AutoOutcomeChart />
             </div>
           </div>
         </div>

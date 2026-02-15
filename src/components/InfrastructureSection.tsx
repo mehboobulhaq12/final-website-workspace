@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -14,59 +14,82 @@ import {
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* Interactive chart data for Lead Analysis card */
-const chartPoints = [
-  { x: 0, y: 55 }, { x: 40, y: 45 }, { x: 80, y: 30 },
-  { x: 120, y: 20 }, { x: 160, y: 25 }, { x: 200, y: 5 },
-];
-const chartPath = "M0 55 Q20 50 40 45 T80 30 T120 20 T160 25 T200 5";
+/* Auto-animating chart that continuously draws upward with counting number */
+function AutoAnimatingChart() {
+  const [progress, setProgress] = useState(0);
+  const [count, setCount] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const startedRef = useRef(false);
 
-function InteractiveChart() {
-  const [hover, setHover] = useState<number | null>(null);
+  useEffect(() => {
+    let animFrame: number;
+    let startTime: number;
+    const cycleDuration = 3000; // 3s per cycle
+
+    const trigger = ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top 85%",
+      once: true,
+      onEnter: () => {
+        if (startedRef.current) return;
+        startedRef.current = true;
+        startTime = performance.now();
+
+        const animate = (now: number) => {
+          const elapsed = (now - startTime) % cycleDuration;
+          const t = elapsed / cycleDuration;
+          setProgress(t);
+          setCount(Math.round(t * 98.7));
+          animFrame = requestAnimationFrame(animate);
+        };
+        animFrame = requestAnimationFrame(animate);
+      },
+    });
+
+    return () => {
+      trigger.kill();
+      cancelAnimationFrame(animFrame);
+    };
+  }, []);
+
+  // Generate path based on progress
+  const points = [
+    { x: 0, y: 55 }, { x: 33, y: 48 }, { x: 66, y: 38 },
+    { x: 100, y: 25 }, { x: 133, y: 18 }, { x: 166, y: 10 }, { x: 200, y: 5 },
+  ];
+
+  const visibleCount = Math.max(2, Math.ceil(progress * points.length));
+  const visible = points.slice(0, visibleCount);
+  const pathD = visible.map((p, i) => `${i === 0 ? "M" : "L"}${p.x} ${p.y}`).join(" ");
+  const lastPoint = visible[visible.length - 1];
 
   return (
-    <div className="w-full max-w-[200px]">
+    <div ref={containerRef} className="w-full max-w-[200px]">
       <div className="flex items-center justify-between mb-2">
         <span className="text-[10px] text-white/30 flex items-center gap-1">
           <BarChart3 className="w-3 h-3" /> Analysis
         </span>
         <span className="text-[10px] text-orange-400/80 font-mono">
-          {hover !== null ? `${(100 - chartPoints[hover].y * 1.5).toFixed(1)}%` : "98.7%"}
+          {count.toFixed(0)}%
         </span>
       </div>
-      <svg
-        viewBox="0 0 200 60"
-        className="w-full h-auto"
-        fill="none"
-        onMouseLeave={() => setHover(null)}
-      >
-        <path d={chartPath} stroke="url(#chartGrad)" strokeWidth="1.5" strokeLinecap="round" />
-        {/* Hover hit areas + dots + tooltips */}
-        {chartPoints.map((pt, i) => (
-          <g key={i} onMouseEnter={() => setHover(i)}>
-            <rect x={pt.x - 15} y={0} width={30} height={60} fill="transparent" />
-            <circle
-              cx={pt.x}
-              cy={pt.y}
-              r={hover === i ? 4 : 2.5}
-              fill={hover === i ? "#fb923c" : "rgba(251,146,60,0.5)"}
-              className="transition-all duration-200"
-            />
-            {hover === i && (
-              <>
-                <line x1={pt.x} y1={pt.y + 5} x2={pt.x} y2={60} stroke="rgba(251,146,60,0.3)" strokeWidth="0.5" strokeDasharray="2 2" />
-                <rect x={pt.x - 16} y={pt.y - 18} width={32} height={14} rx={3} fill="rgba(0,0,0,0.7)" stroke="rgba(251,146,60,0.4)" strokeWidth="0.5" />
-                <text x={pt.x} y={pt.y - 8} textAnchor="middle" fill="white" fontSize="7" fontFamily="monospace">
-                  {(100 - pt.y * 1.5).toFixed(0)}%
-                </text>
-              </>
-            )}
-          </g>
-        ))}
+      <svg viewBox="0 0 200 60" className="w-full h-auto" fill="none">
+        <path d={pathD} stroke="url(#autoChartGrad)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        {/* Area fill */}
+        <path d={`${pathD} L${lastPoint.x} 60 L0 60 Z`} fill="url(#autoAreaGrad)" />
+        {/* Animated dot at tip */}
+        <circle cx={lastPoint.x} cy={lastPoint.y} r="3" fill="#fb923c">
+          <animate attributeName="r" values="2;4;2" dur="1s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="1;0.5;1" dur="1s" repeatCount="indefinite" />
+        </circle>
         <defs>
-          <linearGradient id="chartGrad" x1="0" y1="0" x2="200" y2="0">
+          <linearGradient id="autoChartGrad" x1="0" y1="0" x2="200" y2="0">
             <stop offset="0%" stopColor="rgba(255,255,255,0.15)" />
-            <stop offset="100%" stopColor="rgba(251,146,60,0.7)" />
+            <stop offset="100%" stopColor="rgba(251,146,60,0.8)" />
+          </linearGradient>
+          <linearGradient id="autoAreaGrad" x1="0" y1="0" x2="0" y2="60">
+            <stop offset="0%" stopColor="rgba(251,146,60,0.15)" />
+            <stop offset="100%" stopColor="rgba(251,146,60,0)" />
           </linearGradient>
         </defs>
       </svg>
@@ -82,7 +105,6 @@ const InfrastructureSection = () => {
   useGSAP(
     () => {
       if (!sectionRef.current) return;
-
       gsap.set(headingRef.current, { autoAlpha: 0, y: 30 });
       gsap.to(headingRef.current, {
         autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out",
@@ -116,9 +138,7 @@ const InfrastructureSection = () => {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1]">
             <span className="text-white/90">Implement in Your Business in </span>
             <TextShimmer
-              as="span"
-              duration={2}
-              spread={4}
+              as="span" duration={2} spread={4}
               className="italic font-light [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
             >
               Just 5 Simple Steps
@@ -167,12 +187,12 @@ const InfrastructureSection = () => {
             </CardContent>
           </Card>
 
-          {/* Card 3 — Lead Analysis (interactive chart) */}
+          {/* Card 3 — Lead Analysis (auto-animating chart) */}
           <Card className="step-card md:col-span-2 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group relative">
             <div className="absolute top-4 left-4 w-7 h-7 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-xs font-light text-white/40 group-hover:border-orange-400/20 group-hover:text-orange-300/70 transition-all duration-500">3</div>
             <CardContent className="p-0 flex flex-col h-full">
               <div className="flex items-center justify-center pt-10 pb-6 px-6">
-                <InteractiveChart />
+                <AutoAnimatingChart />
               </div>
               <div className="px-6 pb-8 text-center">
                 <h3 className="text-xl font-light text-white/90 mb-2">Lead Analysis & Segmentation</h3>
