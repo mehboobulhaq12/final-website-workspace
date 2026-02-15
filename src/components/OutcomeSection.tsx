@@ -147,7 +147,7 @@ const AutoOutcomeChart = () => {
   useEffect(() => {
     let animFrame: number;
     let startTime: number;
-    const cycleDuration = 4000;
+    const cycleDuration = 8000; // 8s — slow and smooth
 
     const trigger = ScrollTrigger.create({
       trigger: containerRef.current,
@@ -161,9 +161,11 @@ const AutoOutcomeChart = () => {
         const animate = (now: number) => {
           const elapsed = (now - startTime) % cycleDuration;
           const t = elapsed / cycleDuration;
-          setProgress(t);
-          setManualCount(Math.round(t * 11));
-          setAgentCount(Math.round(t * 210));
+          // Ease-out cubic for smooth deceleration
+          const eased = 1 - Math.pow(1 - t, 3);
+          setProgress(eased);
+          setManualCount(Math.round(eased * 11));
+          setAgentCount(Math.round(eased * 210));
           animFrame = requestAnimationFrame(animate);
         };
         animFrame = requestAnimationFrame(animate);
@@ -197,7 +199,7 @@ const AutoOutcomeChart = () => {
       <div className="flex items-center justify-between mb-2">
         <div className="flex gap-4 text-[10px] text-white/40">
           <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-white/30" /> Manual <span className="font-mono text-white/50">{manualCount}</span></span>
-          <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-orange-500" /> AI Agents <span className="font-mono text-orange-400">{agentCount}</span></span>
+          <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-orange-500" /> Effect3 Agents <span className="font-mono text-orange-400">{agentCount}</span></span>
         </div>
       </div>
       <svg viewBox="0 0 200 60" className="w-full flex-1" fill="none" preserveAspectRatio="none">

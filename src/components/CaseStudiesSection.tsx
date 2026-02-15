@@ -65,8 +65,8 @@ const AnimatedNumber = ({ target, suffix, started }: { target: number; suffix: s
 
   useEffect(() => {
     if (!started) return;
-    const duration = 1500;
-    const steps = 40;
+    const duration = 2000;
+    const steps = 60;
     const increment = target / steps;
     let current = 0;
     let step = 0;
@@ -117,6 +117,45 @@ const CaseStudiesSection = () => {
       });
     }
   }, { scope: sectionRef });
+
+  // Auto-sliding: scroll track automatically
+  useEffect(() => {
+    if (!trackRef.current) return;
+    const track = trackRef.current;
+    let scrollPos = 0;
+    let direction = 1;
+    let paused = false;
+    let animFrame: number;
+
+    const autoScroll = () => {
+      if (!paused) {
+        scrollPos += 0.5 * direction;
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        if (scrollPos >= maxScroll) { scrollPos = maxScroll; direction = -1; }
+        if (scrollPos <= 0) { scrollPos = 0; direction = 1; }
+        track.scrollLeft = scrollPos;
+      }
+      animFrame = requestAnimationFrame(autoScroll);
+    };
+
+    const onEnter = () => { paused = true; };
+    const onLeave = () => { paused = false; scrollPos = track.scrollLeft; };
+
+    track.addEventListener("mouseenter", onEnter);
+    track.addEventListener("mouseleave", onLeave);
+    track.addEventListener("touchstart", onEnter, { passive: true });
+    track.addEventListener("touchend", onLeave);
+
+    animFrame = requestAnimationFrame(autoScroll);
+
+    return () => {
+      cancelAnimationFrame(animFrame);
+      track.removeEventListener("mouseenter", onEnter);
+      track.removeEventListener("mouseleave", onLeave);
+      track.removeEventListener("touchstart", onEnter);
+      track.removeEventListener("touchend", onLeave);
+    };
+  }, []);
 
   return (
     <section ref={sectionRef} className="w-full py-12 md:py-16 bg-black border-t border-white/5 overflow-hidden">
