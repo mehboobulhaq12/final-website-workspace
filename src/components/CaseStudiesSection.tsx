@@ -118,38 +118,39 @@ const CaseStudiesSection = () => {
     }
   }, { scope: sectionRef });
 
-  // Auto-sliding: scroll track automatically
+  // Auto-sliding with GSAP for smooth continuous animation
   useEffect(() => {
     if (!trackRef.current) return;
     const track = trackRef.current;
-    let scrollPos = 0;
-    let direction = 1;
     let paused = false;
-    let animFrame: number;
+    let tween: gsap.core.Tween;
 
-    const autoScroll = () => {
-      if (!paused) {
-        scrollPos += 0.5 * direction;
-        const maxScroll = track.scrollWidth - track.clientWidth;
-        if (scrollPos >= maxScroll) { scrollPos = maxScroll; direction = -1; }
-        if (scrollPos <= 0) { scrollPos = 0; direction = 1; }
-        track.scrollLeft = scrollPos;
-      }
-      animFrame = requestAnimationFrame(autoScroll);
-    };
+    // Wait a moment for cards to render
+    const timeout = setTimeout(() => {
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      if (maxScroll <= 0) return;
 
-    const onEnter = () => { paused = true; };
-    const onLeave = () => { paused = false; scrollPos = track.scrollLeft; };
+      tween = gsap.to(track, {
+        scrollLeft: maxScroll,
+        duration: 12,
+        ease: "none",
+        repeat: -1,
+        yoyo: true,
+        paused: false,
+      });
+    }, 1500);
+
+    const onEnter = () => { if (tween) tween.pause(); paused = true; };
+    const onLeave = () => { if (tween) tween.resume(); paused = false; };
 
     track.addEventListener("mouseenter", onEnter);
     track.addEventListener("mouseleave", onLeave);
     track.addEventListener("touchstart", onEnter, { passive: true });
     track.addEventListener("touchend", onLeave);
 
-    animFrame = requestAnimationFrame(autoScroll);
-
     return () => {
-      cancelAnimationFrame(animFrame);
+      clearTimeout(timeout);
+      if (tween) tween.kill();
       track.removeEventListener("mouseenter", onEnter);
       track.removeEventListener("mouseleave", onLeave);
       track.removeEventListener("touchstart", onEnter);

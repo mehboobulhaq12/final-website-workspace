@@ -29,6 +29,18 @@ const CTASection = () => {
         },
       }
     );
+
+    // Parallax
+    gsap.to(contentRef.current, {
+      yPercent: -12,
+      ease: "none",
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 0.6,
+      },
+    });
   }, []);
 
   return (
