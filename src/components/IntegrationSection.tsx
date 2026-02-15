@@ -113,7 +113,7 @@ const IntegrationSection = () => {
         <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-40 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
 
         {/* Scrolling logos */}
-        <div className="flex animate-[scrollLogos_25s_linear_infinite] gap-12 sm:gap-16 items-center">
+        <div className="flex animate-[scrollLogos_45s_linear_infinite] gap-12 sm:gap-16 items-center">
           {[...logos, ...logos, ...logos].map((logo, i) => (
             <div key={i} className="flex-shrink-0 w-28 h-14 sm:w-36 sm:h-16 flex items-center justify-center">
               <img
