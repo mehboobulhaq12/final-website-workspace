@@ -92,6 +92,7 @@ const CaseStudiesSection = () => {
   const headingRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [started, setStarted] = useState(false);
+  const [activeCard, setActiveCard] = useState(0);
 
   useGSAP(() => {
     if (!sectionRef.current) return;
@@ -158,6 +159,29 @@ const CaseStudiesSection = () => {
     };
   }, []);
 
+  // Track which card is most visible
+  useEffect(() => {
+    if (!trackRef.current) return;
+    const track = trackRef.current;
+    const onScroll = () => {
+      const cards = track.querySelectorAll(".case-card");
+      if (!cards.length) return;
+      const trackLeft = track.getBoundingClientRect().left;
+      const trackCenter = trackLeft + track.clientWidth / 2;
+      let closest = 0;
+      let minDist = Infinity;
+      cards.forEach((card, i) => {
+        const rect = card.getBoundingClientRect();
+        const cardCenter = rect.left + rect.width / 2;
+        const dist = Math.abs(cardCenter - trackCenter);
+        if (dist < minDist) { minDist = dist; closest = i; }
+      });
+      setActiveCard(closest);
+    };
+    track.addEventListener("scroll", onScroll, { passive: true });
+    return () => track.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <section ref={sectionRef} className="w-full py-12 md:py-16 bg-black border-t border-white/5 overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
@@ -220,6 +244,26 @@ const CaseStudiesSection = () => {
                 ))}
               </div>
             </div>
+          ))}
+        </div>
+
+        {/* Progress dots */}
+        <div className="flex items-center justify-center gap-2 mt-6">
+          {caseStudies.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Go to case study ${i + 1}`}
+              onClick={() => {
+                if (!trackRef.current) return;
+                const cards = trackRef.current.querySelectorAll(".case-card");
+                if (cards[i]) cards[i].scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+              }}
+              className={`rounded-full transition-all duration-500 ${
+                activeCard === i
+                  ? "w-6 h-2 bg-orange-400"
+                  : "w-2 h-2 bg-white/20 hover:bg-white/40"
+              }`}
+            />
           ))}
         </div>
       </div>
