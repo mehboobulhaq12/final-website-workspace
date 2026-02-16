@@ -255,7 +255,7 @@ const Effect3Animation = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center justify-center h-full gap-4 py-4">
+    <div ref={containerRef} className="flex flex-col items-center justify-center gap-4 py-4">
       {/* User icon */}
       <div
         className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-all duration-700 ease-in-out ${
