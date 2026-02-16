@@ -76,7 +76,7 @@ const ProblemSection = () => {
             </TextShimmer>
           </h2>
 
-          <div ref={lineRef} className="w-14 h-[3px] bg-blue-400/60 rounded-full" />
+          <div ref={lineRef} className="w-14 h-[3px] bg-orange-400/60 rounded-full" />
 
           <div ref={bodyRef} className="flex flex-col gap-5">
             <p className="text-base sm:text-lg font-light leading-relaxed tracking-tight text-white/60">
@@ -128,7 +128,7 @@ const ProblemSection = () => {
               Effect3 System
             </p>
             <Effect3Animation />
-            <p className="text-[10px] sm:text-xs text-blue-300/40 text-center mt-5 font-light">
+            <p className="text-[10px] sm:text-xs text-orange-300/40 text-center mt-5 font-light">
               Fully Automated
             </p>
           </div>
