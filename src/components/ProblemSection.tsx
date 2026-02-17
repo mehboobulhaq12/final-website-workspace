@@ -7,7 +7,7 @@ import {
   User, Mail, Bot, Check, Search, Clock, AlertTriangle,
   Users, BarChart3, MessageSquare, Megaphone, Globe, PenTool,
   Target, Brain, Zap, Eye, PhoneCall, FileText, TrendingUp,
-  Layers, Sparkles, Activity
+  Layers, Sparkles, Activity, HeartCrack, Frown
 } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -65,12 +65,12 @@ const ProblemSection = () => {
             </div>
           </div>
           <h2 ref={headingRef} className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1]">
-            <span className="text-white/90">Revenue recovery, content, and SEO at scale is </span>
+            <span className="text-white/90">Managing revenue recovery, content & SEO manually is </span>
             <TextShimmer
               as="span" duration={2} spread={4}
-              className="italic font-light [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
+              className="italic font-light [--base-color:theme(colors.red.400)] [--base-gradient-color:theme(colors.orange.200)] dark:[--base-color:theme(colors.red.400)] dark:[--base-gradient-color:theme(colors.orange.200)]"
             >
-              impossible manually.
+              painfully exhausting.
             </TextShimmer>
           </h2>
 
@@ -136,15 +136,16 @@ const ProblemSection = () => {
   );
 };
 
-/* Standard Process: Shows 3 offerings as manual steps - each one is painful */
+/* Standard Process: Reveals each group one at a time with staggered entrance */
 const StandardProcessAnimation = () => {
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const [activeGroup, setActiveGroup] = useState(-1);
+  const [activeStep, setActiveStep] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
 
   useEffect(() => {
-    const totalSteps = 12;
-    let interval: ReturnType<typeof setInterval>;
+    let timeout: ReturnType<typeof setTimeout>;
+    let stepInterval: ReturnType<typeof setInterval>;
 
     const trigger = ScrollTrigger.create({
       trigger: containerRef.current,
@@ -153,17 +154,42 @@ const StandardProcessAnimation = () => {
       onEnter: () => {
         if (startedRef.current) return;
         startedRef.current = true;
-        let step = 0;
-        interval = setInterval(() => {
-          setActiveIndex(step % totalSteps);
-          step++;
-        }, 800);
+
+        let group = 0;
+        const revealGroup = () => {
+          setActiveGroup(group);
+          let step = 0;
+          const stepsInGroup = sections[group].steps.length;
+
+          stepInterval = setInterval(() => {
+            setActiveStep(group * 4 + step);
+            step++;
+            if (step >= stepsInGroup) {
+              clearInterval(stepInterval);
+              group++;
+              if (group < sections.length) {
+                timeout = setTimeout(revealGroup, 600);
+              } else {
+                // Loop back
+                timeout = setTimeout(() => {
+                  group = 0;
+                  setActiveGroup(-1);
+                  setActiveStep(-1);
+                  timeout = setTimeout(revealGroup, 400);
+                }, 1200);
+              }
+            }
+          }, 600);
+        };
+
+        revealGroup();
       },
     });
 
     return () => {
       trigger.kill();
-      clearInterval(interval);
+      clearTimeout(timeout);
+      clearInterval(stepInterval);
     };
   }, []);
 
@@ -171,18 +197,18 @@ const StandardProcessAnimation = () => {
     {
       label: "Revenue Recovery",
       steps: [
-        { icon: <Target className="w-3 h-3" />, label: "Find Inactive" },
-        { icon: <Users className="w-3 h-3" />, label: "Segment Leads" },
-        { icon: <Mail className="w-3 h-3" />, label: "Write Emails" },
-        { icon: <Clock className="w-3 h-3" />, label: "Follow Up" },
+        { icon: <Target className="w-3 h-3" />, label: "Find Inactive Leads" },
+        { icon: <Users className="w-3 h-3" />, label: "Segment by Sentiment" },
+        { icon: <Mail className="w-3 h-3" />, label: "Write Personalised Emails" },
+        { icon: <Clock className="w-3 h-3" />, label: "Chase Follow-Ups" },
       ],
     },
     {
       label: "Content Distribution",
       steps: [
-        { icon: <PenTool className="w-3 h-3" />, label: "Create Content" },
-        { icon: <Megaphone className="w-3 h-3" />, label: "Distribute" },
-        { icon: <Eye className="w-3 h-3" />, label: "Track Results" },
+        { icon: <PenTool className="w-3 h-3" />, label: "Create Niche Content" },
+        { icon: <Megaphone className="w-3 h-3" />, label: "Distribute Everywhere" },
+        { icon: <Eye className="w-3 h-3" />, label: "Track Conversions" },
         { icon: <BarChart3 className="w-3 h-3" />, label: "Measure ROI" },
       ],
     },
@@ -192,75 +218,95 @@ const StandardProcessAnimation = () => {
         { icon: <Search className="w-3 h-3" />, label: "Keyword Research" },
         { icon: <FileText className="w-3 h-3" />, label: "Write Pages" },
         { icon: <Globe className="w-3 h-3" />, label: "Publish & Index" },
-        { icon: <AlertTriangle className="w-3 h-3" />, label: "No Rankings" },
+        { icon: <AlertTriangle className="w-3 h-3" />, label: "Still No Rankings" },
       ],
     },
   ];
 
-  let globalIndex = 0;
-
   return (
     <div ref={containerRef} className="flex flex-col gap-3">
-      {sections.map((section, sIdx) => (
-        <div key={sIdx} className="flex flex-col gap-1">
-          <p className="text-[8px] font-mono tracking-widest text-white/25 uppercase mb-1">{section.label}</p>
-          {section.steps.map((step, i) => {
-            const thisIndex = globalIndex++;
-            const isActive = activeIndex === thisIndex;
-            const isLast = i === section.steps.length - 1 && sIdx === sections.length - 1;
-            const isFailStep = sIdx === 2 && i === 3;
-            return (
-              <div key={i} className="flex flex-col items-center">
-                <div className="flex items-center gap-2 w-full">
-                  <div
-                    className={`w-6 h-6 rounded flex items-center justify-center border transition-all duration-700 ease-in-out ${
+      {sections.map((section, sIdx) => {
+        const isGroupVisible = activeGroup >= sIdx;
+        return (
+          <div
+            key={sIdx}
+            className={`flex flex-col gap-1 transition-all duration-700 ease-out ${
+              isGroupVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+            }`}
+          >
+            <p className="text-[8px] font-mono tracking-widest text-white/25 uppercase mb-1">{section.label}</p>
+            {section.steps.map((step, i) => {
+              const globalIdx = sIdx * 4 + i;
+              const isActive = activeStep === globalIdx;
+              const isPast = activeStep > globalIdx;
+              const isFailStep = sIdx === 2 && i === 3;
+              return (
+                <div key={i} className="flex flex-col items-center">
+                  <div className="flex items-center gap-2 w-full">
+                    <div
+                      className={`w-6 h-6 rounded flex items-center justify-center border transition-all duration-500 ease-in-out ${
+                        isActive
+                          ? isFailStep
+                            ? "bg-red-500/15 border-red-400/40 scale-110 shadow-[0_0_12px_rgba(239,68,68,0.2)]"
+                            : "bg-white/10 border-white/30 scale-110 shadow-[0_0_12px_rgba(255,255,255,0.08)]"
+                          : isPast
+                            ? "bg-white/5 border-white/15"
+                            : "bg-white/[0.02] border-white/8"
+                      }`}
+                    >
+                      <span className={`transition-colors duration-500 ${
+                        isActive
+                          ? isFailStep ? "text-red-400/80" : "text-white/60"
+                          : isPast ? "text-white/30" : "text-white/15"
+                      }`}>
+                        {step.icon}
+                      </span>
+                    </div>
+                    <span className={`text-[8px] font-light tracking-tight transition-all duration-500 ${
                       isActive
-                        ? isFailStep
-                          ? "bg-red-500/15 border-red-400/40 scale-110 shadow-[0_0_12px_rgba(239,68,68,0.15)]"
-                          : "bg-white/10 border-white/30 scale-110 shadow-[0_0_12px_rgba(255,255,255,0.08)]"
-                        : "bg-white/[0.02] border-white/8"
-                    }`}
-                  >
-                    <span className={`transition-colors duration-700 ${
-                      isActive
-                        ? isFailStep ? "text-red-400/80" : "text-white/60"
-                        : "text-white/20"
+                        ? isFailStep ? "text-red-400/70" : "text-white/50"
+                        : isPast ? "text-white/25" : "text-white/12"
                     }`}>
-                      {step.icon}
+                      {step.label}
                     </span>
                   </div>
-                  <span className={`text-[8px] font-light tracking-tight transition-all duration-700 ${
-                    isActive
-                      ? isFailStep ? "text-red-400/70" : "text-white/50"
-                      : "text-white/15"
-                  }`}>
-                    {step.label}
-                  </span>
+                  {i < section.steps.length - 1 && (
+                    <div className={`w-px h-2 transition-all duration-500 mt-0.5 ${
+                      isActive ? "bg-white/20" : isPast ? "bg-white/10" : "bg-white/5"
+                    }`} />
+                  )}
+                  {i === section.steps.length - 1 && sIdx < sections.length - 1 && (
+                    <div className="w-px h-2 bg-white/8 mt-1" />
+                  )}
                 </div>
-                {!isLast && i === section.steps.length - 1 && (
-                  <div className="w-px h-2 bg-white/8 mt-1" />
-                )}
-                {i < section.steps.length - 1 && (
-                  <div className={`w-px h-2 transition-all duration-700 mt-0.5 ${isActive ? "bg-white/20" : "bg-white/5"}`} />
-                )}
+              );
+            })}
+            {/* Frustration indicator after each group */}
+            {isGroupVisible && activeGroup === sIdx && (
+              <div className="flex items-center gap-1.5 mt-1 ml-1 transition-all duration-500">
+                <Frown className="w-2.5 h-2.5 text-red-400/50" />
+                <span className="text-[7px] text-red-400/40 font-light italic">
+                  {sIdx === 0 ? "Exhausting..." : sIdx === 1 ? "Overwhelming..." : "Impossible..."}
+                </span>
               </div>
-            );
-          })}
-        </div>
-      ))}
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };
 
-/* Effect3 System: Shows unified AI system handling all three offerings */
+/* Effect3 System: Shows 3 matching groups automated by AI */
 const Effect3Animation = () => {
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const [activeGroup, setActiveGroup] = useState(-1);
+  const [activeStep, setActiveStep] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
 
   useEffect(() => {
-    const totalSteps = 5;
-    let interval: ReturnType<typeof setInterval>;
+    let timeout: ReturnType<typeof setTimeout>;
+    let stepInterval: ReturnType<typeof setInterval>;
 
     const trigger = ScrollTrigger.create({
       trigger: containerRef.current,
@@ -269,67 +315,138 @@ const Effect3Animation = () => {
       onEnter: () => {
         if (startedRef.current) return;
         startedRef.current = true;
-        let step = 0;
-        interval = setInterval(() => {
-          setActiveIndex(step % totalSteps);
-          step++;
-        }, 1400);
+
+        let group = 0;
+        const revealGroup = () => {
+          setActiveGroup(group);
+          let step = 0;
+          const stepsInGroup = sections[group].steps.length;
+
+          stepInterval = setInterval(() => {
+            setActiveStep(group * 3 + step);
+            step++;
+            if (step >= stepsInGroup) {
+              clearInterval(stepInterval);
+              group++;
+              if (group < sections.length) {
+                timeout = setTimeout(revealGroup, 500);
+              } else {
+                timeout = setTimeout(() => {
+                  group = 0;
+                  setActiveGroup(-1);
+                  setActiveStep(-1);
+                  timeout = setTimeout(revealGroup, 400);
+                }, 1200);
+              }
+            }
+          }, 700);
+        };
+
+        revealGroup();
       },
     });
 
     return () => {
       trigger.kill();
-      clearInterval(interval);
+      clearTimeout(timeout);
+      clearInterval(stepInterval);
     };
   }, []);
 
-  const steps = [
-    { icon: <User className="w-4 h-4" />, label: "Your Brand", isAgent: false },
-    { icon: <Brain className="w-4 h-4" />, label: "AI Agent Army", isAgent: true },
-    { icon: <Layers className="w-3.5 h-3.5" />, label: "Recovery + Content + SEO", isAgent: true },
-    { icon: <Activity className="w-3.5 h-3.5" />, label: "Multi-Channel Deploy", isAgent: true },
-    { icon: <TrendingUp className="w-4 h-4" />, label: "Revenue Growth", isAgent: true },
+  const sections = [
+    {
+      label: "Revenue Recovery",
+      steps: [
+        { icon: <Brain className="w-3 h-3" />, label: "AI Sentiment Analysis" },
+        { icon: <Bot className="w-3 h-3" />, label: "Auto Campaigns Deploy" },
+        { icon: <TrendingUp className="w-3 h-3" />, label: "Revenue Recovered" },
+      ],
+    },
+    {
+      label: "Content Distribution",
+      steps: [
+        { icon: <Sparkles className="w-3 h-3" />, label: "48hr Content Creation" },
+        { icon: <Megaphone className="w-3 h-3" />, label: "Multi-Channel Push" },
+        { icon: <Activity className="w-3 h-3" />, label: "Conversions Tracked" },
+      ],
+    },
+    {
+      label: "SEO Discovery",
+      steps: [
+        { icon: <Layers className="w-3 h-3" />, label: "Programmatic Pages" },
+        { icon: <Globe className="w-3 h-3" />, label: "LLM + Search Ranking" },
+        { icon: <Zap className="w-3 h-3" />, label: "New Customers Found" },
+      ],
+    },
   ];
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center gap-2 py-2">
-      {steps.map((step, i) => (
-        <div key={i} className="flex flex-col items-center">
-          <div className="flex items-center gap-2">
-            <div
-              className={`w-8 h-8 rounded-lg flex items-center justify-center border transition-all duration-700 ease-in-out ${
-                activeIndex === i
-                  ? step.isAgent
-                    ? "bg-orange-500/20 border-orange-400/40 scale-110 shadow-[0_0_20px_rgba(251,146,60,0.25)]"
-                    : "bg-white/15 border-white/30 scale-110 shadow-[0_0_12px_rgba(255,255,255,0.1)]"
-                  : step.isAgent
-                    ? "bg-orange-500/5 border-orange-400/20"
-                    : "bg-white/5 border-white/15"
-              }`}
-            >
-              <span className={`transition-colors duration-700 ${
-                activeIndex === i
-                  ? step.isAgent ? "text-orange-300" : "text-white/80"
-                  : step.isAgent ? "text-orange-400/40" : "text-white/40"
-              }`}>
-                {step.icon}
-              </span>
-            </div>
-            <span className={`text-[8px] font-light tracking-tight transition-all duration-700 w-24 ${
-              activeIndex === i
-                ? step.isAgent ? "text-orange-300/80" : "text-white/60"
-                : "text-white/20"
-            }`}>
-              {step.label}
-            </span>
+    <div ref={containerRef} className="flex flex-col gap-3 py-1">
+      {sections.map((section, sIdx) => {
+        const isGroupVisible = activeGroup >= sIdx;
+        return (
+          <div
+            key={sIdx}
+            className={`flex flex-col gap-1 transition-all duration-700 ease-out ${
+              isGroupVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+            }`}
+          >
+            <p className="text-[8px] font-mono tracking-widest text-orange-400/40 uppercase mb-1">{section.label}</p>
+            {section.steps.map((step, i) => {
+              const globalIdx = sIdx * 3 + i;
+              const isActive = activeStep === globalIdx;
+              const isPast = activeStep > globalIdx;
+              const isSuccess = i === section.steps.length - 1;
+              return (
+                <div key={i} className="flex flex-col items-center">
+                  <div className="flex items-center gap-2 w-full">
+                    <div
+                      className={`w-6 h-6 rounded-md flex items-center justify-center border transition-all duration-500 ease-in-out ${
+                        isActive
+                          ? isSuccess
+                            ? "bg-green-500/15 border-green-400/40 scale-110 shadow-[0_0_16px_rgba(34,197,94,0.2)]"
+                            : "bg-orange-500/15 border-orange-400/40 scale-110 shadow-[0_0_16px_rgba(251,146,60,0.2)]"
+                          : isPast
+                            ? isSuccess
+                              ? "bg-green-500/8 border-green-400/20"
+                              : "bg-orange-500/8 border-orange-400/20"
+                            : "bg-orange-500/[0.03] border-orange-400/10"
+                      }`}
+                    >
+                      <span className={`transition-colors duration-500 ${
+                        isActive
+                          ? isSuccess ? "text-green-300" : "text-orange-300"
+                          : isPast
+                            ? isSuccess ? "text-green-400/50" : "text-orange-400/40"
+                            : "text-orange-400/20"
+                      }`}>
+                        {isActive && isSuccess ? <Check className="w-3 h-3" /> : step.icon}
+                      </span>
+                    </div>
+                    <span className={`text-[8px] font-light tracking-tight transition-all duration-500 ${
+                      isActive
+                        ? isSuccess ? "text-green-300/80" : "text-orange-300/80"
+                        : isPast ? "text-orange-300/30" : "text-white/15"
+                    }`}>
+                      {step.label}
+                    </span>
+                  </div>
+                  {i < section.steps.length - 1 && (
+                    <div className={`w-px h-2 transition-all duration-500 mt-0.5 ${
+                      isActive || isPast ? "bg-orange-400/30" : "bg-white/5"
+                    }`} />
+                  )}
+                  {i === section.steps.length - 1 && sIdx < sections.length - 1 && (
+                    <div className={`w-px h-2 mt-1 transition-all duration-500 ${
+                      isPast || isActive ? "bg-orange-400/20" : "bg-white/5"
+                    }`} />
+                  )}
+                </div>
+              );
+            })}
           </div>
-          {i < steps.length - 1 && (
-            <div className={`w-px h-3 transition-all duration-700 mt-1 ${
-              activeIndex >= i ? "bg-orange-400/40" : "bg-white/10"
-            }`} />
-          )}
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
