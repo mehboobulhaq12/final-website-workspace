@@ -67,12 +67,12 @@ const ProblemSection = () => {
             </div>
           </div>
           <h2 ref={headingRef} className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1]">
-            <span className="text-white/90">Manually tracking every lead is stressful and </span>
+            <span className="text-white/90">Managing all of this at once is really </span>
             <TextShimmer
               as="span" duration={2} spread={4}
               className="italic font-light [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
             >
-              unsustainable.
+              Painfully exhausting.
             </TextShimmer>
           </h2>
 
@@ -80,32 +80,33 @@ const ProblemSection = () => {
 
           <div ref={bodyRef} className="flex flex-col gap-5">
             <p className="text-base sm:text-lg font-light leading-relaxed tracking-tight text-white/60">
-              <span className="text-white/80 font-normal">The Friction Map</span>
+              <span className="text-white/80 font-normal">Three systems, one platform</span>
               <br />
-              Reviving old leads manually is almost impossible at scale.
+              We give brands an AI-powered engine that handles dead lead revival, content distribution, and programmatic SEO discovery.
             </p>
             <ul className="flex flex-col gap-3 text-base sm:text-lg font-light leading-relaxed tracking-tight text-white/50">
               <li className="flex items-start gap-2">
-                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-white/20 shrink-0" />
-                Creating tailored emails for every lead would take weeks.
+                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-orange-400/40 shrink-0" />
+                Target inactive leads, segment by sentiment, and deploy personalised campaigns across email, AI voice agents, and web systems.
               </li>
               <li className="flex items-start gap-2">
-                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-white/20 shrink-0" />
-                Following up consistently? Even harder.
+                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-orange-400/40 shrink-0" />
+                Create niche content within 48 hours, distribute across channels, and track every conversion automatically.
               </li>
               <li className="flex items-start gap-2">
-                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-white/20 shrink-0" />
-                Understanding sentiment and timing? Nearly impossible.
+                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-orange-400/40 shrink-0" />
+                Programmatic SEO to rank on LLMs and search engines, so new customers discover your brand organically.
               </li>
             </ul>
           </div>
 
-          <div ref={resultRef} className="mt-2">
+          <div ref={resultRef} className="mt-2 flex flex-col gap-4">
             <p className="text-base sm:text-lg font-light leading-relaxed tracking-tight text-white/60">
-              <span className="text-white/80 font-normal">The results:</span>
+              <span className="text-white/80 font-normal">The result:</span>
               <br />
-              Instead of hiring more people to chase old leads, you deploy autonomous agents that work 24/7.
+              Instead of hiring teams for each function, you deploy one AI system that works 24/7 across all three.
             </p>
+            <RotatingHeadlines />
           </div>
         </div>
 
@@ -296,6 +297,61 @@ const Effect3Animation = () => {
           <span className="absolute inset-0 rounded-lg bg-orange-400/20 animate-[checkRing_1.5s_ease-in-out_infinite]" />
         )}
       </div>
+    </div>
+  );
+};
+
+/* Rotating Headlines: cycles through 4 result headlines continuously */
+const RotatingHeadlines = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const startedRef = useRef(false);
+
+  const headlines = [
+    "AI Writing App with 20% monthly churn recovered 11% of churned subscribers in 45 days.",
+    "Gymwear Brand recovered 15\u201335% of inactive customers in 60 days using Effect3 Revenue Recovery system.",
+    "SaaS Platform cut involuntary churn by 28% and reactivated 1,200+ expired trials in under 90 days.",
+    "D2C Skincare Brand re-engaged 22% of lapsed buyers and generated $140K in win-back revenue within 8 weeks.",
+  ];
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+
+    const trigger = ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top 85%",
+      once: true,
+      onEnter: () => {
+        if (startedRef.current) return;
+        startedRef.current = true;
+        let step = 0;
+        interval = setInterval(() => {
+          step++;
+          setActiveIndex(step % headlines.length);
+        }, 3500);
+      },
+    });
+
+    return () => {
+      trigger.kill();
+      clearInterval(interval);
+    };
+  }, []);
+
+  return (
+    <div ref={containerRef} className="relative h-[72px] sm:h-[60px] overflow-hidden rounded-lg border border-white/5 bg-white/[0.02] px-4 py-3">
+      {headlines.map((headline, i) => (
+        <p
+          key={i}
+          className={`absolute inset-x-4 top-3 text-sm sm:text-[15px] font-light leading-relaxed tracking-tight transition-all duration-700 ease-in-out ${
+            activeIndex === i
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-4"
+          } text-orange-200/70`}
+        >
+          {headline}
+        </p>
+      ))}
     </div>
   );
 };
