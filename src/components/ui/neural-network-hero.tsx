@@ -340,7 +340,7 @@ export default function Hero({
           </a>
         </div>
 
-        <h1 ref={headerRef} className="max-w-2xl text-left text-3xl sm:text-5xl font-extralight leading-[1.08] tracking-tight text-white md:text-7xl">
+        <h1 ref={headerRef} className="max-w-2xl text-left text-4xl sm:text-5xl font-extralight leading-[1.08] tracking-tight text-white md:text-7xl">
           {title}
         </h1>
 
@@ -358,6 +358,12 @@ export default function Hero({
                   ? "bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
                   : "text-white/80 hover:bg-white/5"
               }`}
+              onClick={(e) => {
+                if (button.href.startsWith('#')) {
+                  e.preventDefault();
+                  document.querySelector(button.href)?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
             >
               {button.text}
             </a>
