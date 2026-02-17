@@ -1,10 +1,62 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const headlines = [
+  "AI Writing App with 20% monthly churn recovered 11% of churned subscribers in 45 days.",
+  "Gymwear Brand Recovered 15–35% of Inactive Customers in 60 Days Using Effect3 Revenue Recovery System.",
+  "B2B SaaS Platform re-engaged 2,400 dormant accounts and converted 18% into paid plans within 30 days.",
+  "D2C Skincare Brand brought back 22% of lapsed buyers through AI-powered win-back sequences in under 6 weeks.",
+];
+
+const RotatingHeadlines = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const headlineRef = useRef<HTMLParagraphElement>(null);
+  const startedRef = useRef(false);
+
+  useEffect(() => {
+    const trigger = ScrollTrigger.create({
+      trigger: headlineRef.current,
+      start: "top 85%",
+      once: true,
+      onEnter: () => {
+        if (startedRef.current) return;
+        startedRef.current = true;
+      },
+    });
+
+    const interval = setInterval(() => {
+      if (!startedRef.current) return;
+      setCurrentIndex((prev) => (prev + 1) % headlines.length);
+    }, 4000);
+
+    return () => {
+      trigger.kill();
+      clearInterval(interval);
+    };
+  }, []);
+
+  return (
+    <div ref={headlineRef} className="relative h-[4.5rem] sm:h-[3.5rem] md:h-[3rem] overflow-hidden">
+      {headlines.map((headline, i) => (
+        <p
+          key={i}
+          className={`absolute inset-0 max-w-3xl text-sm sm:text-base font-light leading-relaxed tracking-tight text-orange-300/70 italic transition-all duration-700 ease-in-out ${
+            i === currentIndex
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-4"
+          }`}
+        >
+          "{headline}"
+        </p>
+      ))}
+    </div>
+  );
+};
 
 const ProblemStatement = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -33,7 +85,6 @@ const ProblemStatement = () => {
         },
       });
 
-      // Parallax on inner content
       const inner = sectionRef.current.querySelector(".parallax-inner");
       if (inner) {
         gsap.to(inner, {
@@ -62,7 +113,7 @@ const ProblemStatement = () => {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
           </span>
-          <span className="text-xs font-light tracking-tight text-white/80">The Results</span>
+          <span className="text-xs font-light tracking-tight text-white/80">AI Revenue Recovery System</span>
         </div>
         <h2 ref={statRef} className="text-5xl sm:text-6xl md:text-7xl font-extralight tracking-tight">
           <span className="text-white/90">68% of Dead Leads </span>
@@ -85,8 +136,10 @@ const ProblemStatement = () => {
 
         <div
           ref={lineRef}
-          className="w-16 h-px bg-white/10 my-4"
+          className="w-16 h-px bg-white/10 my-2"
         />
+
+        <RotatingHeadlines />
 
         <p
           ref={bodyRef}

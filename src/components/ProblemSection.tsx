@@ -4,9 +4,10 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import {
-  User, Mail, FileText, CheckSquare, Users, Check, Bot,
-  Search, Clock, Phone, AlertTriangle, Database, Clipboard,
-  RefreshCw, BarChart3, MessageSquare, UserCheck
+  User, Mail, Bot, Check, Search, Clock, AlertTriangle,
+  Users, BarChart3, MessageSquare, Megaphone, Globe, PenTool,
+  Target, Brain, Zap, Eye, PhoneCall, FileText, TrendingUp,
+  Layers, Sparkles, Activity
 } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -37,7 +38,6 @@ const ProblemSection = () => {
         scrollTrigger: { trigger: sectionRef.current, start: "top 70%", once: true },
       });
 
-      // Parallax
       const inner = sectionRef.current.querySelector(".parallax-inner");
       if (inner) {
         gsap.to(inner, {
@@ -49,8 +49,6 @@ const ProblemSection = () => {
     },
     { scope: sectionRef }
   );
-
-
 
   return (
     <section ref={sectionRef} className="w-full pt-12 md:pt-16 pb-12 md:pb-16 bg-black overflow-hidden">
@@ -67,12 +65,12 @@ const ProblemSection = () => {
             </div>
           </div>
           <h2 ref={headingRef} className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1]">
-            <span className="text-white/90">Manually tracking every lead is stressful and </span>
+            <span className="text-white/90">Revenue recovery, content, and SEO at scale is </span>
             <TextShimmer
               as="span" duration={2} spread={4}
               className="italic font-light [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
             >
-              unsustainable.
+              impossible manually.
             </TextShimmer>
           </h2>
 
@@ -80,31 +78,31 @@ const ProblemSection = () => {
 
           <div ref={bodyRef} className="flex flex-col gap-5">
             <p className="text-base sm:text-lg font-light leading-relaxed tracking-tight text-white/60">
-              <span className="text-white/80 font-normal">The Friction Map</span>
+              <span className="text-white/80 font-normal">Three systems, one platform</span>
               <br />
-              Reviving old leads manually is almost impossible at scale.
+              We give brands an AI-powered engine that handles dead lead revival, content distribution, and programmatic SEO discovery.
             </p>
             <ul className="flex flex-col gap-3 text-base sm:text-lg font-light leading-relaxed tracking-tight text-white/50">
               <li className="flex items-start gap-2">
-                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-white/20 shrink-0" />
-                Creating tailored emails for every lead would take weeks.
+                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-orange-400/40 shrink-0" />
+                Target inactive leads, segment by sentiment, and deploy personalised campaigns across email, AI voice agents, and web systems.
               </li>
               <li className="flex items-start gap-2">
-                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-white/20 shrink-0" />
-                Following up consistently? Even harder.
+                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-orange-400/40 shrink-0" />
+                Create niche content within 48 hours, distribute across your channels, and track every conversion automatically.
               </li>
               <li className="flex items-start gap-2">
-                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-white/20 shrink-0" />
-                Understanding sentiment and timing? Nearly impossible.
+                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-orange-400/40 shrink-0" />
+                Programmatic SEO to rank on LLMs and search engines, so new customers discover your brand organically.
               </li>
             </ul>
           </div>
 
           <div ref={resultRef} className="mt-2">
             <p className="text-base sm:text-lg font-light leading-relaxed tracking-tight text-white/60">
-              <span className="text-white/80 font-normal">The results:</span>
+              <span className="text-white/80 font-normal">The result:</span>
               <br />
-              Instead of hiring more people to chase old leads, you deploy autonomous agents that work 24/7.
+              Instead of hiring teams for each function, you deploy one AI system that works 24/7 across all three.
             </p>
           </div>
         </div>
@@ -113,7 +111,7 @@ const ProblemSection = () => {
         <div ref={diagramRef} className="flex gap-0 w-full">
           {/* Standard Process */}
           <div className="flex-1 border border-white/10 rounded-l-xl p-5 bg-white/[0.02]">
-            <p className="text-[10px] sm:text-xs font-mono tracking-[0.2em] text-white/40 uppercase mb-6 text-center">
+            <p className="text-[10px] sm:text-xs font-mono tracking-[0.2em] text-white/40 uppercase mb-4 text-center">
               Standard Process
             </p>
             <StandardProcessAnimation />
@@ -124,7 +122,7 @@ const ProblemSection = () => {
 
           {/* Effect3 System */}
           <div className="flex-1 border border-white/10 rounded-r-xl p-5 bg-white/[0.04] border-l-0">
-            <p className="text-[10px] sm:text-xs font-mono tracking-[0.2em] text-orange-400/80 uppercase mb-6 text-center">
+            <p className="text-[10px] sm:text-xs font-mono tracking-[0.2em] text-orange-400/80 uppercase mb-4 text-center">
               Effect3 System
             </p>
             <Effect3Animation />
@@ -138,14 +136,14 @@ const ProblemSection = () => {
   );
 };
 
-/* Standard Process: 8 complicated manual steps with smooth sequential animation */
+/* Standard Process: Shows 3 offerings as manual steps - each one is painful */
 const StandardProcessAnimation = () => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
 
   useEffect(() => {
-    const totalSteps = 8;
+    const totalSteps = 12;
     let interval: ReturnType<typeof setInterval>;
 
     const trigger = ScrollTrigger.create({
@@ -159,7 +157,123 @@ const StandardProcessAnimation = () => {
         interval = setInterval(() => {
           setActiveIndex(step % totalSteps);
           step++;
-        }, 900);
+        }, 800);
+      },
+    });
+
+    return () => {
+      trigger.kill();
+      clearInterval(interval);
+    };
+  }, []);
+
+  const sections = [
+    {
+      label: "Revenue Recovery",
+      steps: [
+        { icon: <Target className="w-3 h-3" />, label: "Find Inactive" },
+        { icon: <Users className="w-3 h-3" />, label: "Segment Leads" },
+        { icon: <Mail className="w-3 h-3" />, label: "Write Emails" },
+        { icon: <Clock className="w-3 h-3" />, label: "Follow Up" },
+      ],
+    },
+    {
+      label: "Content Distribution",
+      steps: [
+        { icon: <PenTool className="w-3 h-3" />, label: "Create Content" },
+        { icon: <Megaphone className="w-3 h-3" />, label: "Distribute" },
+        { icon: <Eye className="w-3 h-3" />, label: "Track Results" },
+        { icon: <BarChart3 className="w-3 h-3" />, label: "Measure ROI" },
+      ],
+    },
+    {
+      label: "SEO Discovery",
+      steps: [
+        { icon: <Search className="w-3 h-3" />, label: "Keyword Research" },
+        { icon: <FileText className="w-3 h-3" />, label: "Write Pages" },
+        { icon: <Globe className="w-3 h-3" />, label: "Publish & Index" },
+        { icon: <AlertTriangle className="w-3 h-3" />, label: "No Rankings" },
+      ],
+    },
+  ];
+
+  let globalIndex = 0;
+
+  return (
+    <div ref={containerRef} className="flex flex-col gap-3">
+      {sections.map((section, sIdx) => (
+        <div key={sIdx} className="flex flex-col gap-1">
+          <p className="text-[8px] font-mono tracking-widest text-white/25 uppercase mb-1">{section.label}</p>
+          {section.steps.map((step, i) => {
+            const thisIndex = globalIndex++;
+            const isActive = activeIndex === thisIndex;
+            const isLast = i === section.steps.length - 1 && sIdx === sections.length - 1;
+            const isFailStep = sIdx === 2 && i === 3;
+            return (
+              <div key={i} className="flex flex-col items-center">
+                <div className="flex items-center gap-2 w-full">
+                  <div
+                    className={`w-6 h-6 rounded flex items-center justify-center border transition-all duration-700 ease-in-out ${
+                      isActive
+                        ? isFailStep
+                          ? "bg-red-500/15 border-red-400/40 scale-110 shadow-[0_0_12px_rgba(239,68,68,0.15)]"
+                          : "bg-white/10 border-white/30 scale-110 shadow-[0_0_12px_rgba(255,255,255,0.08)]"
+                        : "bg-white/[0.02] border-white/8"
+                    }`}
+                  >
+                    <span className={`transition-colors duration-700 ${
+                      isActive
+                        ? isFailStep ? "text-red-400/80" : "text-white/60"
+                        : "text-white/20"
+                    }`}>
+                      {step.icon}
+                    </span>
+                  </div>
+                  <span className={`text-[8px] font-light tracking-tight transition-all duration-700 ${
+                    isActive
+                      ? isFailStep ? "text-red-400/70" : "text-white/50"
+                      : "text-white/15"
+                  }`}>
+                    {step.label}
+                  </span>
+                </div>
+                {!isLast && i === section.steps.length - 1 && (
+                  <div className="w-px h-2 bg-white/8 mt-1" />
+                )}
+                {i < section.steps.length - 1 && (
+                  <div className={`w-px h-2 transition-all duration-700 mt-0.5 ${isActive ? "bg-white/20" : "bg-white/5"}`} />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+/* Effect3 System: Shows unified AI system handling all three offerings */
+const Effect3Animation = () => {
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const startedRef = useRef(false);
+
+  useEffect(() => {
+    const totalSteps = 5;
+    let interval: ReturnType<typeof setInterval>;
+
+    const trigger = ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top 85%",
+      once: true,
+      onEnter: () => {
+        if (startedRef.current) return;
+        startedRef.current = true;
+        let step = 0;
+        interval = setInterval(() => {
+          setActiveIndex(step % totalSteps);
+          step++;
+        }, 1400);
       },
     });
 
@@ -170,132 +284,52 @@ const StandardProcessAnimation = () => {
   }, []);
 
   const steps = [
-    { icon: <Database className="w-3.5 h-3.5" />, label: "Export Data" },
-    { icon: <Search className="w-3.5 h-3.5" />, label: "Find Leads" },
-    { icon: <Clipboard className="w-3.5 h-3.5" />, label: "Qualify" },
-    { icon: <Mail className="w-3.5 h-3.5" />, label: "Draft Email" },
-    { icon: <Clock className="w-3.5 h-3.5" />, label: "Wait..." },
-    { icon: <Phone className="w-3.5 h-3.5" />, label: "Follow Up" },
-    { icon: <RefreshCw className="w-3.5 h-3.5" />, label: "Repeat" },
-    { icon: <AlertTriangle className="w-3.5 h-3.5" />, label: "Lost Lead" },
+    { icon: <User className="w-4 h-4" />, label: "Your Brand", isAgent: false },
+    { icon: <Brain className="w-4 h-4" />, label: "AI Agent Army", isAgent: true },
+    { icon: <Layers className="w-3.5 h-3.5" />, label: "Recovery + Content + SEO", isAgent: true },
+    { icon: <Activity className="w-3.5 h-3.5" />, label: "Multi-Channel Deploy", isAgent: true },
+    { icon: <TrendingUp className="w-4 h-4" />, label: "Revenue Growth", isAgent: true },
   ];
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center gap-1.5">
+    <div ref={containerRef} className="flex flex-col items-center gap-2 py-2">
       {steps.map((step, i) => (
         <div key={i} className="flex flex-col items-center">
           <div className="flex items-center gap-2">
             <div
               className={`w-8 h-8 rounded-lg flex items-center justify-center border transition-all duration-700 ease-in-out ${
                 activeIndex === i
-                  ? i === 7
-                    ? "bg-red-500/15 border-red-400/40 scale-110 shadow-[0_0_12px_rgba(239,68,68,0.15)]"
-                    : "bg-white/10 border-white/30 scale-110 shadow-[0_0_12px_rgba(255,255,255,0.08)]"
-                  : "bg-white/[0.02] border-white/8"
+                  ? step.isAgent
+                    ? "bg-orange-500/20 border-orange-400/40 scale-110 shadow-[0_0_20px_rgba(251,146,60,0.25)]"
+                    : "bg-white/15 border-white/30 scale-110 shadow-[0_0_12px_rgba(255,255,255,0.1)]"
+                  : step.isAgent
+                    ? "bg-orange-500/5 border-orange-400/20"
+                    : "bg-white/5 border-white/15"
               }`}
             >
               <span className={`transition-colors duration-700 ${
                 activeIndex === i
-                  ? i === 7 ? "text-red-400/80" : "text-white/60"
-                  : "text-white/25"
+                  ? step.isAgent ? "text-orange-300" : "text-white/80"
+                  : step.isAgent ? "text-orange-400/40" : "text-white/40"
               }`}>
                 {step.icon}
               </span>
             </div>
-            <span className={`text-[9px] font-light tracking-tight transition-all duration-700 w-14 ${
+            <span className={`text-[8px] font-light tracking-tight transition-all duration-700 w-24 ${
               activeIndex === i
-                ? i === 7 ? "text-red-400/70" : "text-white/60"
+                ? step.isAgent ? "text-orange-300/80" : "text-white/60"
                 : "text-white/20"
             }`}>
               {step.label}
             </span>
           </div>
           {i < steps.length - 1 && (
-            <div
-              className={`w-px h-3 transition-all duration-700 ease-in-out mt-1.5 ${
-                activeIndex === i ? "bg-white/30" : "bg-white/8"
-              }`}
-            />
+            <div className={`w-px h-3 transition-all duration-700 mt-1 ${
+              activeIndex >= i ? "bg-orange-400/40" : "bg-white/10"
+            }`} />
           )}
         </div>
       ))}
-    </div>
-  );
-};
-
-/* Animated Effect3 System: smooth sequential glow from user → agent → checkmark, loops */
-const Effect3Animation = () => {
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const startedRef = useRef(false);
-
-  useEffect(() => {
-    const totalSteps = 3;
-    let interval: ReturnType<typeof setInterval>;
-
-    const trigger = ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: "top 85%",
-      once: true,
-      onEnter: () => {
-        if (startedRef.current) return;
-        startedRef.current = true;
-        let step = 0;
-        interval = setInterval(() => {
-          setActiveIndex(step % totalSteps);
-          step++;
-        }, 1200);
-      },
-    });
-
-    return () => {
-      trigger.kill();
-      clearInterval(interval);
-    };
-  }, []);
-
-  return (
-    <div ref={containerRef} className="flex flex-col items-center justify-center gap-4 py-4">
-      {/* User icon */}
-      <div
-        className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-all duration-700 ease-in-out ${
-          activeIndex === 0
-            ? "bg-orange-500/20 border-orange-400/40 scale-110 shadow-[0_0_20px_rgba(251,146,60,0.2)]"
-            : "bg-white/10 border-white/20"
-        }`}
-      >
-        <User className={`w-4 h-4 transition-colors duration-700 ${activeIndex === 0 ? "text-orange-300" : "text-white/80"}`} />
-      </div>
-
-      <div className={`w-px h-8 transition-all duration-700 ${activeIndex >= 0 ? "bg-orange-400/40" : "bg-white/20"}`} />
-
-      {/* Agent */}
-      <div
-        className={`rounded-xl bg-gradient-to-r from-orange-500/80 to-orange-400/60 border px-4 py-3 flex items-center gap-2 transition-all duration-700 ease-in-out ${
-          activeIndex === 1
-            ? "border-orange-300/50 scale-105 shadow-[0_0_30px_rgba(251,146,60,0.3)]"
-            : "border-orange-400/30"
-        }`}
-      >
-        <Bot className="w-4 h-4 text-white" />
-        <span className="text-xs sm:text-sm font-light text-white tracking-tight">Autonomous Agent</span>
-      </div>
-
-      <div className={`w-px h-8 transition-all duration-700 ${activeIndex >= 1 ? "bg-orange-400/40" : "bg-white/20"}`} />
-
-      {/* Checkmark */}
-      <div
-        className={`relative w-10 h-10 rounded-lg flex items-center justify-center border bg-gradient-to-br from-orange-500/80 to-orange-400/60 transition-all duration-700 ease-in-out ${
-          activeIndex === 2
-            ? "border-orange-300/50 scale-110 shadow-[0_0_30px_rgba(251,146,60,0.4)]"
-            : "border-orange-400/30"
-        }`}
-      >
-        <Check className={`w-5 h-5 text-white transition-transform duration-700 ${activeIndex === 2 ? "scale-125" : ""}`} />
-        {activeIndex === 2 && (
-          <span className="absolute inset-0 rounded-lg bg-orange-400/20 animate-[checkRing_1.5s_ease-in-out_infinite]" />
-        )}
-      </div>
     </div>
   );
 };
