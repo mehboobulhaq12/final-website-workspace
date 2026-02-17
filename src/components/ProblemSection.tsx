@@ -67,7 +67,8 @@ const ProblemSection = () => {
             </div>
           </div>
           <h2 ref={headingRef} className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1]">
-            <span className="text-white/90">Managing all of this at once is really </span>
+            <span className="text-white/90">Managing all of this at once is really</span>
+            <br />
             <TextShimmer
               as="span" duration={2} spread={4}
               className="italic font-light [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
@@ -343,13 +344,15 @@ const RotatingHeadlines = () => {
       {headlines.map((headline, i) => (
         <p
           key={i}
-          className={`absolute inset-x-4 top-3 text-sm sm:text-[15px] font-light leading-relaxed tracking-tight transition-all duration-700 ease-in-out ${
+          className={`absolute inset-x-4 top-3 text-sm sm:text-[15px] italic font-light leading-relaxed tracking-tight transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             activeIndex === i
               ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-4"
+              : i === (activeIndex - 1 + headlines.length) % headlines.length
+                ? "opacity-0 -translate-y-4"
+                : "opacity-0 translate-y-4"
           } text-orange-200/70`}
         >
-          {headline}
+          "{headline}"
         </p>
       ))}
     </div>

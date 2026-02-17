@@ -325,25 +325,25 @@ export default function Hero({
     <section ref={sectionRef} className="relative min-h-screen w-screen overflow-hidden">
       <ShaderBackground />
 
-      <div className="relative mx-auto flex max-w-7xl flex-col items-start gap-4 px-6 pb-16 pt-28 sm:gap-6 sm:pt-36 md:px-10 md:pt-40 lg:px-16 lg:pt-44">
+      <div className="relative mx-auto flex max-w-7xl flex-col items-start gap-3 sm:gap-4 px-5 pb-12 pt-24 sm:px-6 sm:pb-16 sm:pt-32 md:px-10 md:pt-40 lg:px-16 lg:pt-44">
         <div ref={badgeRef} className="w-full flex justify-center">
-          <a href="#get-started" className="group inline-flex items-center gap-2.5 rounded-full border border-orange-400/20 bg-orange-500/5 px-4 py-2 backdrop-blur-sm transition-all duration-300 hover:border-orange-400/40 hover:bg-orange-500/10 cursor-pointer">
-            <span className="relative flex h-2 w-2">
+          <a href="#get-started" className="group inline-flex items-center gap-1.5 sm:gap-2.5 rounded-full border border-orange-400/20 bg-orange-500/5 px-3 py-1.5 sm:px-4 sm:py-2 backdrop-blur-sm transition-all duration-300 hover:border-orange-400/40 hover:bg-orange-500/10 cursor-pointer">
+            <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-green-500"></span>
             </span>
-            <span className="text-xs font-light tracking-tight text-white/90">
+            <span className="text-[10px] sm:text-xs font-light tracking-tight text-white/90 leading-tight">
               🦞 OpenClaw is Now Live Inside Effect3 Systems, <span className="font-medium text-orange-300/90">Don't Get Left Behind.</span>
             </span>
-            <svg className="w-3.5 h-3.5 text-white/40 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white/40 transition-transform duration-300 group-hover:translate-x-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
           </a>
         </div>
 
-        <h1 ref={headerRef} className="max-w-2xl text-left text-5xl font-extralight leading-[1.05] tracking-tight text-white sm:text-6xl md:text-7xl">
+        <h1 ref={headerRef} className="max-w-2xl text-left text-3xl sm:text-5xl font-extralight leading-[1.05] tracking-tight text-white md:text-7xl">
           {title}
         </h1>
 
-        <p ref={paraRef} className="max-w-xl text-left text-base font-light leading-relaxed tracking-tight text-white/75 sm:text-lg">
+        <p ref={paraRef} className="max-w-xl text-left text-sm sm:text-base font-light leading-relaxed tracking-tight text-white/75 md:text-lg">
           {description}
         </p>
 

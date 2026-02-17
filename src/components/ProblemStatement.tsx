@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -85,7 +85,7 @@ const ProblemStatement = () => {
 
         <div
           ref={lineRef}
-          className="w-16 h-px bg-white/10 my-4"
+          className="w-16 h-px bg-white/10 my-1"
         />
 
         <p
@@ -99,8 +99,67 @@ const ProblemStatement = () => {
           third-party platforms, turning lost opportunities into measurable
           revenue.
         </p>
+
+        <ProblemStatementHeadlines />
       </div>
     </section>
+  );
+};
+
+/* Rotating headlines for the 68% section */
+const ProblemStatementHeadlines = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const startedRef = useRef(false);
+
+  const headlines = [
+    "AI Writing App with 20% monthly churn recovered 11% of churned subscribers in 45 days.",
+    "Gymwear Brand recovered 15–35% of inactive customers in 60 days using Effect3 Revenue Recovery system.",
+    "SaaS Platform cut involuntary churn by 28% and reactivated 1,200+ expired trials in under 90 days.",
+    "D2C Skincare Brand re-engaged 22% of lapsed buyers and generated $140K in win-back revenue within 8 weeks.",
+  ];
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+
+    const trigger = ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top 85%",
+      once: true,
+      onEnter: () => {
+        if (startedRef.current) return;
+        startedRef.current = true;
+        let step = 0;
+        interval = setInterval(() => {
+          step++;
+          setActiveIndex(step % headlines.length);
+        }, 3500);
+      },
+    });
+
+    return () => {
+      trigger.kill();
+      clearInterval(interval);
+    };
+  }, []);
+
+  return (
+    <div ref={containerRef} className="relative h-[72px] sm:h-[56px] overflow-hidden rounded-lg border border-white/5 bg-white/[0.02] px-4 py-3 mt-1">
+      {headlines.map((headline, i) => (
+        <p
+          key={i}
+          className={`absolute inset-x-4 top-3 text-sm sm:text-[15px] italic font-light leading-relaxed tracking-tight transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            activeIndex === i
+              ? "opacity-100 translate-y-0"
+              : i === (activeIndex - 1 + headlines.length) % headlines.length
+                ? "opacity-0 -translate-y-4"
+                : "opacity-0 translate-y-4"
+          } text-orange-200/70`}
+        >
+          "{headline}"
+        </p>
+      ))}
+    </div>
   );
 };
 
