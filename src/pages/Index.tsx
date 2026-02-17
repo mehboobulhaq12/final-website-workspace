@@ -53,7 +53,7 @@ const Index = () => {
           badgeText="Enterprises AI System"
           badgeLabel="online"
           ctaButtons={[
-            { text: "Implement Now", href: "#get-started", primary: true }
+            { text: "Run A Free Churn Audit", href: "#get-started", primary: true }
           ]}
           microDetails={["Get your most boring work handled by AI agents."]}
           trustBadge={{
