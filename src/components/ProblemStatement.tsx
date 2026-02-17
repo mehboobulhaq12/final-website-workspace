@@ -18,15 +18,17 @@ const RotatingHeadlines = () => {
   const [isVisible, setIsVisible] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const startedRef = useRef(false);
 
   const startCycling = useCallback(() => {
-    if (intervalRef.current) return;
+    if (startedRef.current) return;
+    startedRef.current = true;
+    // Show first headline immediately
+    setIsVisible(true);
     intervalRef.current = setInterval(() => {
-      // fade out
       setIsVisible(false);
       setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % headlines.length);
-        // fade in
         setIsVisible(true);
       }, 500);
     }, 4000);
@@ -47,9 +49,9 @@ const RotatingHeadlines = () => {
   }, [startCycling]);
 
   return (
-    <div ref={containerRef} className="relative h-[5rem] sm:h-[4rem] md:h-[3.5rem] overflow-hidden">
+    <div ref={containerRef} className="relative min-h-[3.5rem] sm:min-h-[3rem] md:min-h-[2.5rem] mt-4">
       <p
-        className="absolute inset-0 max-w-3xl text-sm sm:text-base font-light leading-relaxed tracking-tight text-orange-300/70 italic"
+        className="max-w-3xl text-sm sm:text-base font-light leading-relaxed tracking-tight text-orange-300/70 italic"
         style={{
           transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
           opacity: isVisible ? 1 : 0,
@@ -60,7 +62,7 @@ const RotatingHeadlines = () => {
         "{headlines[currentIndex]}"
       </p>
       {/* Progress dots */}
-      <div className="absolute bottom-0 left-0 flex gap-1.5">
+      <div className="flex gap-1.5 mt-3 justify-center">
         {headlines.map((_, i) => (
           <div
             key={i}
@@ -78,14 +80,13 @@ const ProblemStatement = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
   const statRef = useRef<HTMLDivElement | null>(null);
   const subtitleRef = useRef<HTMLParagraphElement | null>(null);
-  const bodyRef = useRef<HTMLParagraphElement | null>(null);
-  const lineRef = useRef<HTMLDivElement | null>(null);
+  const bodyRef = useRef<HTMLDivElement | null>(null);
 
   useGSAP(
     () => {
       if (!sectionRef.current) return;
 
-      const elements = [statRef.current, subtitleRef.current, lineRef.current, bodyRef.current].filter(Boolean);
+      const elements = [statRef.current, subtitleRef.current, bodyRef.current].filter(Boolean);
       gsap.set(elements, { autoAlpha: 0, y: 30 });
 
       gsap.to(elements, {
@@ -123,7 +124,7 @@ const ProblemStatement = () => {
       ref={sectionRef}
       className="w-full pt-24 md:pt-32 pb-12 md:pb-16 bg-black border-t border-white/5 overflow-hidden"
     >
-      <div className="parallax-inner mx-auto max-w-4xl px-6 md:px-10 lg:px-16 flex flex-col items-center text-center gap-6">
+      <div className="parallax-inner mx-auto max-w-4xl px-6 md:px-10 lg:px-16 flex flex-col items-center text-center gap-4">
         <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -150,17 +151,7 @@ const ProblemStatement = () => {
           Proven average recovery rate from inactive and ghosted leads
         </p>
 
-        <div
-          ref={lineRef}
-          className="w-16 h-px bg-white/10 my-2"
-        />
-
-        <RotatingHeadlines />
-
-        <p
-          ref={bodyRef}
-          className="max-w-3xl text-base sm:text-lg font-light leading-relaxed tracking-tight text-white/50"
-        >
+        <p className="max-w-3xl text-base sm:text-lg font-light leading-relaxed tracking-tight text-white/50">
           We partner with growth-focused SaaS, eCommerce, and service businesses
           to recover lost revenue from inactive leads and churned customers. Our
           AI agents automatically re-engage, personalise offers, and revive
@@ -168,6 +159,10 @@ const ProblemStatement = () => {
           third-party platforms, turning lost opportunities into measurable
           revenue.
         </p>
+
+        <div ref={bodyRef}>
+          <RotatingHeadlines />
+        </div>
       </div>
     </section>
   );
