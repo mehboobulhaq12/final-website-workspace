@@ -68,7 +68,7 @@ const ProblemSection = () => {
           <h2 ref={headingRef} className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1]">
             <span className="text-white/90">Managing all of this at once is really</span>
             <br />
-            <span className="italic font-light text-transparent bg-clip-text bg-gradient-to-r from-[hsl(0,85%,60%)] via-[hsl(10,90%,65%)] to-[hsl(0,80%,55%)] animate-shimmer-gradient bg-[length:200%_100%]">
+            <span className="italic font-light text-transparent bg-clip-text bg-gradient-to-r from-[hsl(0,100%,55%)] via-[hsl(10,100%,60%)] to-[hsl(355,100%,50%)] animate-shimmer-gradient bg-[length:200%_100%]">
               Painfully exhausting.
             </span>
           </h2>

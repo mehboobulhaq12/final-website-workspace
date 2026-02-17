@@ -322,7 +322,7 @@ export default function Hero({
   );
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen w-screen overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-[auto] sm:min-h-screen w-screen overflow-hidden">
       <ShaderBackground />
 
       <div className="relative mx-auto flex max-w-7xl flex-col items-start gap-3 sm:gap-4 px-5 pb-12 pt-24 sm:px-6 sm:pb-16 sm:pt-32 md:px-10 md:pt-40 lg:px-16 lg:pt-44">
