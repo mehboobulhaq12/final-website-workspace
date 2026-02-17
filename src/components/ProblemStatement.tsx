@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -15,56 +15,50 @@ const headlines = [
 
 const RotatingHeadlines = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
-  const startedRef = useRef(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startCycling = useCallback(() => {
+    if (intervalRef.current) return;
+    intervalRef.current = setInterval(() => {
+      // fade out
+      setIsVisible(false);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % headlines.length);
+        // fade in
+        setIsVisible(true);
+      }, 500);
+    }, 4000);
+  }, []);
 
   useEffect(() => {
     const trigger = ScrollTrigger.create({
       trigger: containerRef.current,
       start: "top 85%",
       once: true,
-      onEnter: () => {
-        if (startedRef.current) return;
-        startedRef.current = true;
-      },
+      onEnter: () => startCycling(),
     });
-
-    const interval = setInterval(() => {
-      if (!startedRef.current) return;
-      setIsAnimating(true);
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % headlines.length);
-        setIsAnimating(false);
-      }, 400);
-    }, 4500);
 
     return () => {
       trigger.kill();
-      clearInterval(interval);
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, []);
+  }, [startCycling]);
 
   return (
-    <div ref={containerRef} className="relative h-[4.5rem] sm:h-[3.5rem] md:h-[3rem] overflow-hidden">
-      {headlines.map((headline, i) => (
-        <p
-          key={i}
-          className="absolute inset-0 max-w-3xl text-sm sm:text-base font-light leading-relaxed tracking-tight text-orange-300/70 italic"
-          style={{
-            transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
-            opacity: i === currentIndex && !isAnimating ? 1 : 0,
-            transform: i === currentIndex && !isAnimating
-              ? "translateY(0) scale(1)"
-              : i === currentIndex && isAnimating
-                ? "translateY(-12px) scale(0.98)"
-                : "translateY(16px) scale(0.98)",
-            filter: i === currentIndex && !isAnimating ? "blur(0px)" : "blur(4px)",
-          }}
-        >
-          "{headline}"
-        </p>
-      ))}
+    <div ref={containerRef} className="relative h-[5rem] sm:h-[4rem] md:h-[3.5rem] overflow-hidden">
+      <p
+        className="absolute inset-0 max-w-3xl text-sm sm:text-base font-light leading-relaxed tracking-tight text-orange-300/70 italic"
+        style={{
+          transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? "translateY(0) scale(1)" : "translateY(-14px) scale(0.97)",
+          filter: isVisible ? "blur(0px)" : "blur(6px)",
+        }}
+      >
+        "{headlines[currentIndex]}"
+      </p>
       {/* Progress dots */}
       <div className="absolute bottom-0 left-0 flex gap-1.5">
         {headlines.map((_, i) => (
