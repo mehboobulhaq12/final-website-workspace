@@ -144,11 +144,11 @@ const ProblemStatementHeadlines = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="relative h-[72px] sm:h-[56px] overflow-hidden rounded-lg border border-white/5 bg-white/[0.02] px-4 py-3 mt-1">
+    <div ref={containerRef} className="relative h-[80px] sm:h-[60px] overflow-hidden rounded-lg border border-white/5 bg-white/[0.02] px-5 py-4 mt-2 w-full max-w-3xl">
       {headlines.map((headline, i) => (
         <p
           key={i}
-          className={`absolute inset-x-4 top-3 text-sm sm:text-[15px] italic font-light leading-relaxed tracking-tight transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`absolute inset-x-5 top-4 text-sm sm:text-[15px] italic font-light leading-relaxed tracking-tight transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             activeIndex === i
               ? "opacity-100 translate-y-0"
               : i === (activeIndex - 1 + headlines.length) % headlines.length
@@ -156,7 +156,7 @@ const ProblemStatementHeadlines = () => {
                 : "opacity-0 translate-y-4"
           } text-orange-200/70`}
         >
-          "{headline}"
+          &ldquo;{headline}&rdquo;
         </p>
       ))}
     </div>
