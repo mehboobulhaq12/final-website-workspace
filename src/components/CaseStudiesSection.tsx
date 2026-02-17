@@ -111,7 +111,7 @@ const CaseStudiesSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="w-full py-16 md:py-24 bg-black border-t border-white/5 overflow-hidden">
+    <section id="case-studies" ref={sectionRef} className="w-full py-16 md:py-24 bg-black border-t border-white/5 overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
         {/* Heading */}
         <div ref={headingRef} className="flex flex-col items-center text-center gap-4 mb-12 md:mb-16">
@@ -138,7 +138,7 @@ const CaseStudiesSection = () => {
           {caseStudies.map((cs, i) => (
             <div
               key={i}
-              className="cs-card flex-shrink-0 w-[320px] sm:w-[460px] md:w-[560px] lg:w-[640px] rounded-2xl overflow-hidden snap-center group cursor-pointer relative"
+              className="cs-card flex-shrink-0 w-[320px] sm:w-[460px] md:w-[560px] lg:w-[640px] rounded-2xl overflow-hidden snap-center group cursor-pointer relative transition-all duration-500 hover:shadow-[0_0_40px_-8px_hsl(25,95%,53%,0.3)] hover:ring-1 hover:ring-orange-500/20 hover:scale-[1.02]"
             >
               {/* Image */}
               <div className="relative aspect-[16/10] overflow-hidden bg-white/5">
