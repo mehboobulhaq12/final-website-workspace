@@ -66,10 +66,10 @@ const ProblemSection = () => {
             </div>
           </div>
           <h2 ref={headingRef} className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1]">
-            <span className="text-white/90">Reviving old leads manually is almost</span>
+            <span className="text-white/90">Managing all of this at once is really</span>
             <br />
-            <span className="italic font-light text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-300 to-orange-500 animate-shimmer-gradient bg-[length:200%_100%]">
-              impossible at scale.
+            <span className="italic font-light text-transparent bg-clip-text bg-gradient-to-r from-[hsl(10,90%,72%)] via-[hsl(20,95%,78%)] to-[hsl(5,85%,68%)] animate-shimmer-gradient bg-[length:200%_100%]">
+              Painfully exhausting.
             </span>
           </h2>
 

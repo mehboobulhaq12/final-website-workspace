@@ -22,7 +22,7 @@ const companies = [
 
 const TrustedBy = () => {
   return (
-    <section className="w-full py-12 bg-black border-t border-white/5">
+    <section className="w-full py-6 sm:py-12 bg-black border-t border-white/5">
       <div className="flex justify-center mb-8">
         <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
           <span className="relative flex h-2 w-2">
