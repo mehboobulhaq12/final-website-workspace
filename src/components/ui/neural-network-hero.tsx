@@ -325,7 +325,7 @@ export default function Hero({
     <section ref={sectionRef} className="relative min-h-screen w-screen overflow-hidden">
       <ShaderBackground />
 
-      <div className="relative mx-auto flex max-w-7xl flex-col items-start gap-3 sm:gap-4 px-5 pb-8 pt-20 sm:px-6 sm:pb-16 sm:pt-32 md:px-10 md:pt-40 lg:px-16 lg:pt-44">
+      <div className="relative mx-auto flex max-w-7xl flex-col items-start gap-2 sm:gap-4 px-5 pb-6 pt-24 sm:px-6 sm:pb-16 sm:pt-32 md:px-10 md:pt-40 lg:px-16 lg:pt-44">
         <div ref={badgeRef} className="w-full flex justify-center">
           <a href="#get-started" className="group inline-flex items-center gap-1.5 sm:gap-2.5 rounded-full border border-orange-400/20 bg-orange-500/5 px-3 py-1.5 sm:px-4 sm:py-2 backdrop-blur-sm transition-all duration-300 hover:border-orange-400/40 hover:bg-orange-500/10 cursor-pointer">
             <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
@@ -339,11 +339,11 @@ export default function Hero({
           </a>
         </div>
 
-        <h1 ref={headerRef} className="max-w-2xl text-left text-2xl sm:text-5xl font-extralight leading-[1.08] tracking-tight text-white md:text-7xl">
+        <h1 ref={headerRef} className="max-w-2xl text-left text-[28px] sm:text-5xl font-extralight leading-[1.1] tracking-tight text-white md:text-7xl">
           {title}
         </h1>
 
-        <p ref={paraRef} className="max-w-xl text-left text-xs sm:text-base font-light leading-relaxed tracking-tight text-white/75 md:text-lg">
+        <p ref={paraRef} className="max-w-xl text-left text-sm sm:text-base font-light leading-relaxed tracking-tight text-white/75 md:text-lg">
           {description}
         </p>
 
@@ -363,7 +363,7 @@ export default function Hero({
           ))}
         </div>
 
-        <ul ref={microRef} className="mt-2 flex flex-wrap gap-6 text-sm font-extralight italic tracking-tight text-white/60">
+        <ul ref={microRef} className="mt-1 flex flex-wrap gap-6 text-xs sm:text-sm font-extralight italic tracking-tight text-white/60">
           {microDetails.map((detail, index) => {
             const refMap = [microItem1Ref, microItem2Ref, microItem3Ref];
             return (
