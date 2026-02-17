@@ -15,12 +15,13 @@ const headlines = [
 
 const RotatingHeadlines = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const headlineRef = useRef<HTMLParagraphElement>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
 
   useEffect(() => {
     const trigger = ScrollTrigger.create({
-      trigger: headlineRef.current,
+      trigger: containerRef.current,
       start: "top 85%",
       once: true,
       onEnter: () => {
@@ -31,8 +32,12 @@ const RotatingHeadlines = () => {
 
     const interval = setInterval(() => {
       if (!startedRef.current) return;
-      setCurrentIndex((prev) => (prev + 1) % headlines.length);
-    }, 4000);
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % headlines.length);
+        setIsAnimating(false);
+      }, 400);
+    }, 4500);
 
     return () => {
       trigger.kill();
@@ -41,19 +46,36 @@ const RotatingHeadlines = () => {
   }, []);
 
   return (
-    <div ref={headlineRef} className="relative h-[4.5rem] sm:h-[3.5rem] md:h-[3rem] overflow-hidden">
+    <div ref={containerRef} className="relative h-[4.5rem] sm:h-[3.5rem] md:h-[3rem] overflow-hidden">
       {headlines.map((headline, i) => (
         <p
           key={i}
-          className={`absolute inset-0 max-w-3xl text-sm sm:text-base font-light leading-relaxed tracking-tight text-orange-300/70 italic transition-all duration-700 ease-in-out ${
-            i === currentIndex
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-4"
-          }`}
+          className="absolute inset-0 max-w-3xl text-sm sm:text-base font-light leading-relaxed tracking-tight text-orange-300/70 italic"
+          style={{
+            transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+            opacity: i === currentIndex && !isAnimating ? 1 : 0,
+            transform: i === currentIndex && !isAnimating
+              ? "translateY(0) scale(1)"
+              : i === currentIndex && isAnimating
+                ? "translateY(-12px) scale(0.98)"
+                : "translateY(16px) scale(0.98)",
+            filter: i === currentIndex && !isAnimating ? "blur(0px)" : "blur(4px)",
+          }}
         >
           "{headline}"
         </p>
       ))}
+      {/* Progress dots */}
+      <div className="absolute bottom-0 left-0 flex gap-1.5">
+        {headlines.map((_, i) => (
+          <div
+            key={i}
+            className={`h-[2px] rounded-full transition-all duration-500 ${
+              i === currentIndex ? "w-5 bg-orange-400/60" : "w-2 bg-white/10"
+            }`}
+          />
+        ))}
+      </div>
     </div>
   );
 };
