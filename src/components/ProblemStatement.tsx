@@ -92,7 +92,7 @@ const ProblemStatement = () => {
           ref={bodyRef}
           className="max-w-3xl text-sm sm:text-lg font-light leading-relaxed tracking-tight text-white/50"
         >
-          <span className="sm:hidden">We recover lost revenue from inactive leads and churned customers using AI agents that re-engage, personalise offers, and revive stalled conversations — turning lost opportunities into measurable revenue.</span>
+          <span className="sm:hidden">We partner with growth-focused SaaS, eCommerce, and service businesses to recover lost revenue from inactive leads and churned customers.</span>
           <span className="hidden sm:inline">We partner with growth-focused SaaS, eCommerce, and service businesses
           to recover lost revenue from inactive leads and churned customers. Our
           AI agents automatically re-engage, personalise offers, and revive
