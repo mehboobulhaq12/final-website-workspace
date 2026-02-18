@@ -3,7 +3,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextShimmer } from "@/components/ui/text-shimmer";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 
 import amazonOutreachImg from "@/assets/case-studies/amazon-outreach.png";
 import aiHrInterviewImg from "@/assets/case-studies/ai-hr-interview.png";
@@ -26,38 +26,6 @@ interface CaseStudy {
 
 const caseStudies: CaseStudy[] = [
   {
-    title: "How an Amazon Agency Automated 861 Brand Outreach and Converted 9% with AI Agents",
-    tag: "Amazon Native Agency",
-    description: "Inbound + outreach system with multi-round follow-ups on every lead, converting cold contacts into signed clients.",
-    image: amazonOutreachImg,
-    metric: "9%",
-    metricLabel: "Conversion Rate",
-  },
-  {
-    title: "AI HR Interview System That Screens Candidates 24/7 Without Human Intervention",
-    tag: "AI HR System",
-    description: "Fully autonomous AI interviewer that handles initial candidate screening, saving 140+ hours per month for the hiring team.",
-    image: aiHrInterviewImg,
-    metric: "140+",
-    metricLabel: "Hours Saved / Month",
-  },
-  {
-    title: "PPC Tracking Dashboard That Improved ROAS by 4.11x Across All Campaigns",
-    tag: "PPC Tracking",
-    description: "Real-time campaign intelligence with AI-powered budget optimization, reducing ACOS by 24% while scaling revenue.",
-    image: ppcTrackingImg,
-    metric: "4.11x",
-    metricLabel: "ROAS Achieved",
-  },
-  {
-    title: "eCommerce Brand Portal Managing Leads, Ads, Content and AEO in One Place",
-    tag: "eCommerce Portal",
-    description: "Unified command center for an eCommerce brand handling lead campaigns, ad performance, content calendar, and answer engine optimization.",
-    image: ecommercePortalImg,
-    metric: "$327K+",
-    metricLabel: "Revenue Tracked",
-  },
-  {
     title: "Buffy Business Validator — AI Agent That Stress-Tests Startup Ideas Like a VC",
     tag: "Buffy Validator",
     description: "Helps solo founders and small teams validate their business ideas with ruthless precision before pitching to investors.",
@@ -74,6 +42,39 @@ const caseStudies: CaseStudy[] = [
     metric: "48hrs",
     metricLabel: "Delivery Time",
     link: "https://theeffect3.com/gtm",
+  },
+  {
+    title: "How an Amazon Agency Automated 861 Brand Outreach and Converted 9% with AI Agents",
+    tag: "Amazon Native Agency",
+    description: "Inbound + outreach system with multi-round follow-ups on every lead, converting cold contacts into signed clients.",
+    image: amazonOutreachImg,
+    metric: "9%",
+    metricLabel: "Conversion Rate",
+  },
+  {
+    title: "AI HR Interview System That Screens Candidates 24/7 Without Human Intervention",
+    tag: "AI HR System",
+    description: "Fully autonomous AI interviewer that handles initial candidate screening, saving 140+ hours per month for the hiring team.",
+    image: aiHrInterviewImg,
+    metric: "140+",
+    metricLabel: "Hours Saved / Month",
+    link: "https://bey.chat/91351a55-f4ae-44e1-bc4a-c6cc73457795",
+  },
+  {
+    title: "PPC Tracking Dashboard That Improved ROAS by 4.11x Across All Campaigns",
+    tag: "PPC Tracking",
+    description: "Real-time campaign intelligence with AI-powered budget optimization, reducing ACOS by 24% while scaling revenue.",
+    image: ppcTrackingImg,
+    metric: "4.11x",
+    metricLabel: "ROAS Achieved",
+  },
+  {
+    title: "eCommerce Brand Portal Managing Leads, Ads, Content and AEO in One Place",
+    tag: "eCommerce Portal",
+    description: "Unified command center for an eCommerce brand handling lead campaigns, ad performance, content calendar, and answer engine optimization.",
+    image: ecommercePortalImg,
+    metric: "$327K+",
+    metricLabel: "Revenue Tracked",
   },
 ];
 
@@ -166,7 +167,7 @@ const CaseStudiesSection = () => {
               className="cs-card flex-shrink-0 w-[320px] sm:w-[460px] md:w-[560px] lg:w-[640px] rounded-2xl overflow-hidden snap-center group cursor-pointer relative transition-all duration-500 hover:shadow-[0_0_40px_-8px_hsl(25,95%,53%,0.3)] hover:ring-1 hover:ring-orange-500/20 hover:scale-[1.02]"
             >
               {/* Image */}
-              <div className="relative aspect-[16/10] overflow-hidden bg-white/5">
+              <div className="relative aspect-[4/5] sm:aspect-[16/10] overflow-hidden bg-white/5">
                 <img
                   src={cs.image}
                   alt={cs.title}
@@ -174,7 +175,7 @@ const CaseStudiesSection = () => {
                   loading="lazy"
                 />
                 {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
                 {/* Tag */}
                 <div className="absolute top-4 left-4">
@@ -200,9 +201,14 @@ const CaseStudiesSection = () => {
                   <h3 className="text-base sm:text-lg md:text-xl font-light text-white/90 leading-snug mb-2">
                     {cs.title}
                   </h3>
-                  <p className="text-xs md:text-sm font-light text-white/40 leading-relaxed line-clamp-2">
+                  <p className="text-xs md:text-sm font-light text-white/40 leading-relaxed line-clamp-2 mb-3">
                     {cs.description}
                   </p>
+                  {cs.link && (
+                    <span className="inline-flex items-center gap-1.5 text-xs font-light text-orange-400 hover:text-orange-300 transition-colors">
+                      View More <ExternalLink className="w-3 h-3" />
+                    </span>
+                  )}
                 </div>
               </div>
             </CardWrapper>
