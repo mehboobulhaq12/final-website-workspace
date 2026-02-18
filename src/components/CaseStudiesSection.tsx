@@ -9,6 +9,8 @@ import amazonOutreachImg from "@/assets/case-studies/amazon-outreach.png";
 import aiHrInterviewImg from "@/assets/case-studies/ai-hr-interview.png";
 import ppcTrackingImg from "@/assets/case-studies/ppc-tracking.png";
 import ecommercePortalImg from "@/assets/case-studies/ecommerce-portal.png";
+import buffyValidatorImg from "@/assets/case-studies/buffy-validator.png";
+import aiMarketingStudioImg from "@/assets/case-studies/ai-marketing-studio.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,6 +21,7 @@ interface CaseStudy {
   image: string;
   metric: string;
   metricLabel: string;
+  link?: string;
 }
 
 const caseStudies: CaseStudy[] = [
@@ -53,6 +56,24 @@ const caseStudies: CaseStudy[] = [
     image: ecommercePortalImg,
     metric: "$327K+",
     metricLabel: "Revenue Tracked",
+  },
+  {
+    title: "Buffy Business Validator — AI Agent That Stress-Tests Startup Ideas Like a VC",
+    tag: "Buffy Validator",
+    description: "Helps solo founders and small teams validate their business ideas with ruthless precision before pitching to investors.",
+    image: buffyValidatorImg,
+    metric: "500+",
+    metricLabel: "Ideas Validated",
+    link: "https://theeffect3.com/buffy",
+  },
+  {
+    title: "Effect3 AI Marketing Studio — Agency-Quality Content in 48 Hours",
+    tag: "AI Marketing Studio",
+    description: "AI-powered marketing studio that creates high-converting content for eCommerce and SaaS brands with a GTM approach — delivered in 48 hours, not weeks.",
+    image: aiMarketingStudioImg,
+    metric: "48hrs",
+    metricLabel: "Delivery Time",
+    link: "https://theeffect3.com/gtm",
   },
 ];
 
@@ -135,9 +156,13 @@ const CaseStudiesSection = () => {
           className="flex gap-5 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide"
           style={{ scrollbarWidth: "none" }}
         >
-          {caseStudies.map((cs, i) => (
-            <div
+          {caseStudies.map((cs, i) => {
+            const CardWrapper = cs.link ? 'a' : 'div';
+            const linkProps = cs.link ? { href: cs.link, target: "_blank", rel: "noopener noreferrer" } : {};
+            return (
+            <CardWrapper
               key={i}
+              {...linkProps}
               className="cs-card flex-shrink-0 w-[320px] sm:w-[460px] md:w-[560px] lg:w-[640px] rounded-2xl overflow-hidden snap-center group cursor-pointer relative transition-all duration-500 hover:shadow-[0_0_40px_-8px_hsl(25,95%,53%,0.3)] hover:ring-1 hover:ring-orange-500/20 hover:scale-[1.02]"
             >
               {/* Image */}
@@ -180,8 +205,9 @@ const CaseStudiesSection = () => {
                   </p>
                 </div>
               </div>
-            </div>
-          ))}
+            </CardWrapper>
+            );
+          })}
         </div>
 
         {/* Navigation */}
