@@ -6,6 +6,7 @@ import TrustedBy from "@/components/TrustedBy";
 import ProblemStatement from "@/components/ProblemStatement";
 import ProblemSection from "@/components/ProblemSection";
 import InfrastructureSection from "@/components/InfrastructureSection";
+import FeaturesSection from "@/components/FeaturesSection";
 import IntegrationSection from "@/components/IntegrationSection";
 import OutcomeSection from "@/components/OutcomeSection";
 import TestimonialSection from "@/components/TestimonialSection";
@@ -65,6 +66,7 @@ const Index = () => {
         <ProblemStatement />
         <ProblemSection />
         <InfrastructureSection />
+        <FeaturesSection />
         <IntegrationSection />
         <OutcomeSection />
         <TestimonialSection />

@@ -320,8 +320,8 @@ const OutcomeSection = () => {
             </div>
             <div className="flex flex-col gap-1">
               <p className="text-base sm:text-lg font-light text-white/80 leading-relaxed">
-                Manual vs AI agent recovery.{" "}
-                <span className="text-white/40">See the difference in real conversions.</span>
+              Manual vs AI agent recovery.{" "}
+                 <span className="text-white/40">See the real difference in conversions.</span>
               </p>
             </div>
             <div className="h-36 sm:h-44 mt-auto">

@@ -21,7 +21,7 @@ const faqs: FAQItem[] = [
   {
     question: "How long does it take to see results?",
     answer:
-      "Most clients see measurable results within the first 30 days. Our AI agents start engaging your leads immediately after deployment, and conversion metrics typically improve within the first 2–4 weeks. Full ROI realization usually happens within 60 days.",
+      "Most clients see measurable results within the first 30 days. Our AI agents start engaging your leads immediately after deployment, and conversion metrics typically improve within the first 2 to 4 weeks. Full ROI realization usually happens within 60 days.",
   },
   {
     question: "Do I need any technical knowledge to get started?",
