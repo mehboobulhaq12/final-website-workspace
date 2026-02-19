@@ -37,7 +37,7 @@ const caseStudies: CaseStudy[] = [
   {
     title: "Effect3 AI Marketing Studio — Agency-Quality Content in 48 Hours",
     tag: "AI Marketing Studio",
-    description: "AI-powered marketing studio that creates high-converting content for eCommerce and SaaS brands with a GTM approach — delivered in 48 hours, not weeks.",
+    description: "AI-powered marketing studio that creates high-converting content for eCommerce and SaaS brands with a GTM approach, delivered in 48 hours, not weeks.",
     image: aiMarketingStudioImg,
     metric: "48hrs",
     metricLabel: "Delivery Time",
