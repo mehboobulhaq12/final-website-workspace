@@ -13,6 +13,7 @@ import TestimonialSection from "@/components/TestimonialSection";
 import CaseStudiesSection from "@/components/CaseStudiesSection";
 import FAQSection from "@/components/FAQSection";
 import CTASection from "@/components/CTASection";
+import BookingSection from "@/components/BookingSection";
 import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -73,6 +74,7 @@ const Index = () => {
         <CaseStudiesSection />
         <FAQSection />
         <CTASection />
+        <BookingSection />
         <Footer />
         <ScrollToTop />
       </div>
