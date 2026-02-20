@@ -130,7 +130,7 @@ const TestimonialSection = () => {
   );
 
   return (
-    <section ref={sectionRef} className="w-full py-12 md:py-16 bg-black border-t border-white/5">
+    <section id="about" ref={sectionRef} className="w-full py-12 md:py-16 bg-black border-t border-white/5">
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
         {/* Heading */}
         <div ref={headingRef} className="flex flex-col gap-4 mb-10 max-w-3xl">

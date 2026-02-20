@@ -543,7 +543,7 @@ const FeaturesSection = () => {
   );
 
   return (
-    <section ref={sectionRef} className="w-full py-12 md:py-20 bg-black border-t border-white/5 overflow-hidden">
+    <section id="solutions" ref={sectionRef} className="w-full py-12 md:py-20 bg-black border-t border-white/5 overflow-hidden">
       <div className="parallax-inner mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
         {/* Heading */}
         <div ref={headingRef} className="flex flex-col items-center text-center gap-6 mb-16">

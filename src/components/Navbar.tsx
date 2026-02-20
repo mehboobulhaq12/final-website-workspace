@@ -6,7 +6,7 @@ const navLinks = [
   { label: "Solutions", href: "#solutions" },
   { label: "Case Studies", href: "#case-studies" },
   { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact", href: "#book" },
 ];
 
 export default function Navbar() {
@@ -39,7 +39,7 @@ export default function Navbar() {
             </a>
           ))}
           <a
-            href="#demo"
+            href="#book"
             className="rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-light tracking-tight text-white backdrop-blur-sm transition-colors duration-200 hover:bg-white/20"
           >
             Book a demo
@@ -70,7 +70,7 @@ export default function Navbar() {
             </a>
           ))}
           <a
-            href="#demo"
+            href="#book"
             onClick={() => setMobileOpen(false)}
             className="rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-center text-sm font-light tracking-tight text-white backdrop-blur-sm hover:bg-white/20"
           >
