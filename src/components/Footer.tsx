@@ -1,4 +1,4 @@
-import { Linkedin, Twitter, Instagram, Mail } from "lucide-react";
+import { Linkedin, Twitter, Mail } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 const footerLinks = {
@@ -14,19 +14,12 @@ const footerLinks = {
     { label: "Careers", href: "#careers" },
     { label: "Contact", href: "#contact" },
   ],
-  Resources: [
-    { label: "Documentation", href: "#docs" },
-    { label: "Blog", href: "#blog" },
-    { label: "Privacy Policy", href: "#privacy" },
-    { label: "Terms of Service", href: "#terms" },
-  ],
 };
 
 const socials = [
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: Mail, href: "#", label: "Email" },
+  { icon: Twitter, href: "https://x.com/0xiibrahim", label: "Twitter" },
+  { icon: Linkedin, href: "https://www.linkedin.com/in/ibm-fullstackmarketer/", label: "LinkedIn" },
+  { icon: Mail, href: "mailto:ibrahim@theeffect3.com", label: "Email" },
 ];
 
 export default function Footer() {
