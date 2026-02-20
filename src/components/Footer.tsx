@@ -41,6 +41,8 @@ export default function Footer() {
                   key={s.label}
                   href={s.href}
                   aria-label={s.label}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="rounded-full border border-white/10 bg-white/5 p-2 text-white/50 transition-colors duration-200 hover:bg-white/10 hover:text-white"
                 >
                   <s.icon size={16} strokeWidth={1.5} />
