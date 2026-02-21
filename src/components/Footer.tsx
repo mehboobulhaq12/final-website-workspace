@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Linkedin, Twitter, Mail } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -23,6 +24,7 @@ const socials = [
 ];
 
 export default function Footer() {
+  const navigate = useNavigate();
   return (
     <footer className="w-full bg-black border-t border-white/5">
       <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 py-16">
@@ -62,6 +64,12 @@ export default function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
+                      onClick={(e) => {
+                        if (link.href.startsWith("/")) {
+                          e.preventDefault();
+                          navigate(link.href);
+                        }
+                      }}
                       className="text-sm font-light tracking-tight text-white/50 transition-colors duration-200 hover:text-white"
                     >
                       {link.label}

@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -6,13 +7,15 @@ const navLinks = [
   { label: "Solutions", href: "#solutions" },
   { label: "Case Studies", href: "#case-studies" },
   { label: "About", href: "#about" },
-  { label: "Careers", href: "/careers", external: true },
+  { label: "Careers", href: "/careers", isRoute: true },
   { label: "Contact", href: "#book" },
 ];
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -20,11 +23,39 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, link: typeof navLinks[0]) => {
+      if (link.isRoute) {
+        e.preventDefault();
+        navigate(link.href);
+        setMobileOpen(false);
+        return;
+      }
+      // Hash links: if we're not on /, navigate home first then scroll
+      if (link.href.startsWith("#") && location.pathname !== "/") {
+        e.preventDefault();
+        navigate("/" + link.href);
+        setMobileOpen(false);
+        return;
+      }
+      setMobileOpen(false);
+    },
+    [navigate, location.pathname]
+  );
+
+  const handleLogoClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+      navigate("/");
+    },
+    [navigate]
+  );
+
   return (
     <nav className={`fixed top-0 inset-x-0 z-50 w-full transition-all duration-300 ${scrolled ? "bg-black/60 backdrop-blur-lg border-b border-white/5" : ""}`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10 lg:px-16">
         {/* Logo */}
-        <a href="/" className="flex items-center">
+        <a href="/" onClick={handleLogoClick} className="flex items-center">
           <img src={logo} alt="Company logo" className="h-8 w-auto" />
         </a>
 
@@ -34,7 +65,7 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              onClick={(e) => handleClick(e, link)}
               className="text-sm font-light tracking-tight text-white/70 transition-colors duration-200 hover:text-white"
             >
               {link.label}
@@ -42,6 +73,12 @@ export default function Navbar() {
           ))}
           <a
             href="#book"
+            onClick={(e) => {
+              if (location.pathname !== "/") {
+                e.preventDefault();
+                navigate("/#book");
+              }
+            }}
             className="rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-light tracking-tight text-white backdrop-blur-sm transition-colors duration-200 hover:bg-white/20"
           >
             Book a demo
@@ -65,8 +102,7 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              onClick={() => setMobileOpen(false)}
+              onClick={(e) => handleClick(e, link)}
               className="text-sm font-light tracking-tight text-white/70 hover:text-white"
             >
               {link.label}
@@ -74,7 +110,13 @@ export default function Navbar() {
           ))}
           <a
             href="#book"
-            onClick={() => setMobileOpen(false)}
+            onClick={(e) => {
+              if (location.pathname !== "/") {
+                e.preventDefault();
+                navigate("/#book");
+              }
+              setMobileOpen(false);
+            }}
             className="rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-center text-sm font-light tracking-tight text-white backdrop-blur-sm hover:bg-white/20"
           >
             Book a demo
