@@ -6,6 +6,7 @@ const navLinks = [
   { label: "Solutions", href: "#solutions" },
   { label: "Case Studies", href: "#case-studies" },
   { label: "About", href: "#about" },
+  { label: "Careers", href: "/careers", external: true },
   { label: "Contact", href: "#book" },
 ];
 
@@ -33,6 +34,7 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
+              {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               className="text-sm font-light tracking-tight text-white/70 transition-colors duration-200 hover:text-white"
             >
               {link.label}
@@ -63,6 +65,7 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
+              {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               onClick={() => setMobileOpen(false)}
               className="text-sm font-light tracking-tight text-white/70 hover:text-white"
             >
