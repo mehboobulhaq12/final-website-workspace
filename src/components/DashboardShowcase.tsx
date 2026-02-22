@@ -197,17 +197,21 @@ const DashboardShowcase = () => {
           </p>
         </motion.div>
 
-        {/* Dashboard frame */}
-        <motion.div
-          className="relative rounded-2xl border border-white/10 bg-[#0a0a0a] shadow-[0_0_80px_-20px_rgba(249,115,22,0.15)] overflow-hidden"
-          initial={{ opacity: 0, y: 40, scale: 0.97 }}
-          animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
+        {/* Dashboard frame — scales down on mobile to preserve desktop layout */}
+        <div className="relative rounded-2xl border border-white/10 shadow-[0_0_80px_-20px_rgba(249,115,22,0.15)] overflow-hidden">
           {/* Shimmer border effect */}
-          <div className="absolute inset-0 rounded-2xl pointer-events-none overflow-hidden">
+          <div className="absolute inset-0 rounded-2xl pointer-events-none overflow-hidden z-20">
             <div className="absolute inset-[-1px] rounded-2xl bg-gradient-to-r from-transparent via-orange-500/20 to-transparent animate-[shimmerBorder_4s_ease-in-out_infinite]" style={{ backgroundSize: "200% 100%" }} />
           </div>
+
+          {/* Scrollable on small screens */}
+          <div className="overflow-x-auto">
+            <motion.div
+              className="relative bg-[#0a0a0a] min-w-[1000px]"
+              initial={{ opacity: 0, y: 40 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
 
           {/* Animated cursor */}
           <AnimatedCursor />
@@ -386,6 +390,8 @@ const DashboardShowcase = () => {
           {/* Bottom gradient fade */}
           <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#0a0a0a] to-transparent pointer-events-none" />
         </motion.div>
+        </div>
+        </div>
       </div>
     </section>
   );
