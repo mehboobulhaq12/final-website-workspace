@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import logoImg from "@/assets/logo.png";
-import PixelArtAgent from "@/components/PixelArtAgent";
 
 /* ── Animated cursor that roams the dashboard ── */
 const CURSOR_PATH = [
@@ -239,9 +238,8 @@ const DashboardShowcase = ({ onCtaClick }: DashboardShowcaseProps) => {
           </p>
         </motion.div>
 
-        {/* SPLIT LAYOUT: Dashboard left, Agent + CTA right */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
-          {/* LEFT: Dashboard frame */}
+        {/* Dashboard */}
+        <div>
           <div ref={containerRef}>
             <div
               ref={frameRef}
@@ -451,59 +449,6 @@ const DashboardShowcase = ({ onCtaClick }: DashboardShowcaseProps) => {
             </div>
           </div>
 
-          {/* RIGHT: Agent + CTA panel */}
-          <motion.div
-            className="hidden lg:flex flex-col gap-4"
-            initial={{ opacity: 0, x: 30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            {/* Pixel Art Agent */}
-            <div className="flex-1 rounded-2xl border border-white/10 bg-[#0a0a0a] overflow-hidden relative min-h-[380px]">
-              {/* Glow behind agent */}
-              <div className="absolute inset-0 bg-gradient-to-b from-orange-500/5 via-transparent to-blue-500/5 pointer-events-none" />
-              <PixelArtAgent />
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col gap-3">
-              <motion.button
-                onClick={() => onCtaClick?.("audit")}
-                className="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-3.5 text-sm font-medium tracking-tight hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-[0_0_30px_-5px_rgba(249,115,22,0.4)]"
-                whileHover={{ scale: 1.02, y: -1 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Sparkles className="w-4 h-4" />
-                Run A Free Churn Audit
-                <ArrowRight className="w-4 h-4" />
-              </motion.button>
-              <motion.button
-                onClick={() => onCtaClick?.("demo")}
-                className="w-full flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 text-white/80 px-5 py-3 text-sm font-light tracking-tight hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
-                whileHover={{ scale: 1.02, y: -1 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Book a Demo
-                <ArrowRight className="w-4 h-4" />
-              </motion.button>
-            </div>
-
-            {/* Trust indicator */}
-            <div className="flex items-center justify-center gap-2 py-2">
-              <div className="flex -space-x-2">
-                {[0, 1, 2].map(i => (
-                  <motion.div
-                    key={i}
-                    className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 border-2 border-[#0a0a0a]"
-                    initial={{ x: -10, opacity: 0 }}
-                    animate={inView ? { x: 0, opacity: 1 } : {}}
-                    transition={{ delay: 0.8 + i * 0.1 }}
-                  />
-                ))}
-              </div>
-              <span className="text-[10px] text-white/40">25+ companies onboarded</span>
-            </div>
-          </motion.div>
         </div>
       </div>
     </section>
