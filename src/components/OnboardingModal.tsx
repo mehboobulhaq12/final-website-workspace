@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowRight, ArrowLeft, Check, Building2, Globe, Users, BarChart3, MessageSquare, Phone, Zap, Search, PenTool, Eye, Sparkles, User, Mail, Hash, Link, FileText, Target, Bot } from "lucide-react";
+import PixelArtAgent from "@/components/PixelArtAgent";
 
 interface OnboardingModalProps {
   open: boolean;
@@ -583,12 +584,29 @@ export default function OnboardingModal({ open, onClose, mode }: OnboardingModal
           />
 
           <motion.div
-            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-[#0a0a0a] shadow-[0_0_100px_-20px_rgba(249,115,22,0.15)]"
+            className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0a] shadow-[0_0_100px_-20px_rgba(249,115,22,0.15)] flex flex-col lg:flex-row"
             initial={{ scale: 0.95, y: 20, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.95, y: 20, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
+            {/* LEFT: Pixel Art Agent (desktop only) */}
+            <div className="hidden lg:flex flex-col items-center justify-center w-[300px] min-w-[300px] border-r border-white/5 bg-[#060608] relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-b from-orange-500/5 via-transparent to-blue-500/5 pointer-events-none" />
+              <PixelArtAgent />
+              <div className="absolute bottom-4 left-0 right-0 text-center">
+                <motion.p
+                  className="text-[10px] text-white/30 tracking-wider uppercase"
+                  animate={{ opacity: [0.3, 0.7, 0.3] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  Your agent is standing by...
+                </motion.p>
+              </div>
+            </div>
+
+            {/* RIGHT: Form content */}
+            <div className="flex-1 overflow-y-auto max-h-[90vh] relative">
             <FloatingOrb delay={0} size={200} x="10%" y="20%" />
             <FloatingOrb delay={1.5} size={150} x="70%" y="60%" />
             <FloatingOrb delay={3} size={100} x="50%" y="10%" />
@@ -704,6 +722,7 @@ export default function OnboardingModal({ open, onClose, mode }: OnboardingModal
                   )}
                 </div>
               )}
+            </div>
             </div>
           </motion.div>
         </motion.div>
