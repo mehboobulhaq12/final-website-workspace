@@ -3,7 +3,25 @@ import { useState, useEffect } from "react";
 
 /* ── CSS pixel-art AI agent working at a desk ── */
 
-const TASKS = [
+const STEP_TASKS: Record<number, string[]> = {
+  0: ["Preparing your profile...", "Setting up secure connection...", "Warming up systems..."],
+  1: ["Analyzing your brand...", "Scanning industry data...", "Building brand profile..."],
+  2: ["Understanding your offer...", "Mapping target market...", "Parsing business model..."],
+  3: ["Crunching your numbers...", "Calculating revenue potential...", "Estimating recovery rate..."],
+  4: ["Diagnosing pain points...", "Matching solutions...", "Prioritizing challenges..."],
+  5: ["Configuring your agents...", "Deploying AI stack...", "Initializing agent swarm..."],
+};
+
+const STEP_COLORS: Record<number, string> = {
+  0: "#f97316", // orange
+  1: "#3b82f6", // blue
+  2: "#a855f7", // purple
+  3: "#22c55e", // green
+  4: "#ef4444", // red
+  5: "#f97316", // orange
+};
+
+const DEFAULT_TASKS = [
   "Reviving 23 dead leads...",
   "Sending outreach emails...",
   "Scoring lead sentiment...",
@@ -14,17 +32,27 @@ const TASKS = [
   "Analyzing churn risk...",
 ];
 
-const PixelArtAgent = () => {
+interface PixelArtAgentProps {
+  currentStep?: number;
+}
+
+const PixelArtAgent = ({ currentStep }: PixelArtAgentProps) => {
+  const tasks = currentStep !== undefined ? STEP_TASKS[currentStep] ?? DEFAULT_TASKS : DEFAULT_TASKS;
+  const accentColor = currentStep !== undefined ? STEP_COLORS[currentStep] ?? "#f97316" : "#f97316";
   const [taskIdx, setTaskIdx] = useState(0);
   const [leadsProcessed, setLeadsProcessed] = useState(142);
 
   useEffect(() => {
+    setTaskIdx(0);
+  }, [currentStep]);
+
+  useEffect(() => {
     const t = setInterval(() => {
-      setTaskIdx(i => (i + 1) % TASKS.length);
+      setTaskIdx(i => (i + 1) % tasks.length);
       setLeadsProcessed(p => p + Math.floor(Math.random() * 5) + 1);
     }, 3500);
     return () => clearInterval(t);
-  }, []);
+  }, [tasks.length]);
 
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center select-none overflow-hidden" style={{ imageRendering: "auto" }}>
@@ -45,7 +73,7 @@ const PixelArtAgent = () => {
           ],
         }}
         transition={{ duration: 2, repeat: Infinity }}
-        style={{ color: "#f97316" }}
+        style={{ color: accentColor }}
       >
         AI Workforce HQ
       </motion.div>
@@ -241,7 +269,7 @@ const PixelArtAgent = () => {
               animate={{ scale: [1, 1.4, 1], opacity: [0.6, 1, 0.6] }}
               transition={{ duration: 1, repeat: Infinity }}
             />
-            <span className="text-[9px] text-white/50 font-mono truncate">{TASKS[taskIdx]}</span>
+            <span className="text-[9px] text-white/50 font-mono truncate">{tasks[taskIdx]}</span>
           </motion.div>
         </AnimatePresence>
 

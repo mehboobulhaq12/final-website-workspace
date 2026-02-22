@@ -593,7 +593,7 @@ export default function OnboardingModal({ open, onClose, mode }: OnboardingModal
             {/* LEFT: Pixel Art Agent (desktop only) */}
             <div className="hidden lg:flex flex-col items-center justify-center w-[300px] min-w-[300px] border-r border-white/5 bg-[#060608] relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-b from-orange-500/5 via-transparent to-blue-500/5 pointer-events-none" />
-              <PixelArtAgent />
+              <PixelArtAgent currentStep={step} />
               <div className="absolute bottom-4 left-0 right-0 text-center">
                 <motion.p
                   className="text-[10px] text-white/30 tracking-wider uppercase"
