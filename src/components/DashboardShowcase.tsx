@@ -164,9 +164,25 @@ const UserRow = ({ name, email, type, msg, time, sentiment, converted, initial, 
 );
 
 /* ── Main Dashboard Showcase ── */
+const DASHBOARD_WIDTH = 1100; // px - the natural width of the dashboard
+
 const DashboardShowcase = () => {
   const ref = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [zoom, setZoom] = useState(1);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    const update = () => {
+      if (containerRef.current) {
+        const w = containerRef.current.offsetWidth;
+        setZoom(w < DASHBOARD_WIDTH ? w / DASHBOARD_WIDTH : 1);
+      }
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   return (
     <section className="w-full py-16 sm:py-24 bg-black relative overflow-hidden">
@@ -197,26 +213,28 @@ const DashboardShowcase = () => {
           </p>
         </motion.div>
 
-        {/* Dashboard frame — scales down on mobile to preserve desktop layout */}
-        <div className="relative rounded-2xl border border-white/10 shadow-[0_0_80px_-20px_rgba(249,115,22,0.15)] overflow-hidden">
+        {/* Dashboard frame — scales down on mobile to fit in view */}
+        <div ref={containerRef} className="relative rounded-2xl border border-white/10 shadow-[0_0_80px_-20px_rgba(249,115,22,0.15)] overflow-hidden">
           {/* Shimmer border effect */}
           <div className="absolute inset-0 rounded-2xl pointer-events-none overflow-hidden z-20">
             <div className="absolute inset-[-1px] rounded-2xl bg-gradient-to-r from-transparent via-orange-500/20 to-transparent animate-[shimmerBorder_4s_ease-in-out_infinite]" style={{ backgroundSize: "200% 100%" }} />
           </div>
 
-          {/* Scrollable on small screens */}
-          <div className="overflow-x-auto">
+          {/* Zoom down on mobile to fit entire dashboard */}
             <motion.div
-              className="relative bg-[#0a0a0a] min-w-[1000px]"
+              className="relative bg-[#0a0a0a]"
               initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2 }}
+              style={{
+                zoom: zoom < 1 ? zoom : undefined,
+                WebkitTextSizeAdjust: 'none',
+              }}
             >
+              {/* Animated cursor */}
+              <AnimatedCursor />
 
-          {/* Animated cursor */}
-          <AnimatedCursor />
-
-          {/* Top navbar */}
+              {/* Top navbar */}
           <div className="flex items-center justify-between px-5 py-3 border-b border-white/5 bg-[#0d0d0d]">
             <div className="flex items-center gap-4">
               <img src={logoImg} alt="Effect3" className="h-6" />
@@ -390,7 +408,6 @@ const DashboardShowcase = () => {
           {/* Bottom gradient fade */}
           <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#0a0a0a] to-transparent pointer-events-none" />
         </motion.div>
-        </div>
         </div>
       </div>
     </section>
