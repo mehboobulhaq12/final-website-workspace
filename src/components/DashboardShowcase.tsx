@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import {
   Search, Upload, Plus, Settings, Bell, ChevronDown, Download, FileText,
@@ -164,12 +164,14 @@ const UserRow = ({ name, email, type, msg, time, sentiment, converted, initial, 
 );
 
 /* ── Main Dashboard Showcase ── */
-const DASHBOARD_WIDTH = 1100; // px - the natural width of the dashboard
+const DASHBOARD_WIDTH = 1100;
 
 const DashboardShowcase = () => {
   const ref = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   useEffect(() => {
@@ -182,6 +184,18 @@ const DashboardShowcase = () => {
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!frameRef.current || zoom < 1) return; // disable tilt on mobile
+    const rect = frameRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ x: y * -6, y: x * 6 }); // max ±3deg
+  }, [zoom]);
+
+  const handleMouseLeave = useCallback(() => {
+    setTilt({ x: 0, y: 0 });
   }, []);
 
   return (
@@ -214,7 +228,16 @@ const DashboardShowcase = () => {
         </motion.div>
 
         {/* Dashboard frame — scales down on mobile to fit in view */}
-        <div ref={containerRef} className="relative rounded-2xl border border-white/10 shadow-[0_0_80px_-20px_rgba(249,115,22,0.15)] overflow-hidden">
+        <div ref={containerRef}>
+        <div
+          ref={frameRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          className="relative rounded-2xl border border-white/10 shadow-[0_0_80px_-20px_rgba(249,115,22,0.15)] overflow-hidden transition-transform duration-200 ease-out"
+          style={{
+            transform: `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+          }}
+        >
           {/* Shimmer border effect */}
           <div className="absolute inset-0 rounded-2xl pointer-events-none overflow-hidden z-20">
             <div className="absolute inset-[-1px] rounded-2xl bg-gradient-to-r from-transparent via-orange-500/20 to-transparent animate-[shimmerBorder_4s_ease-in-out_infinite]" style={{ backgroundSize: "200% 100%" }} />
@@ -408,6 +431,7 @@ const DashboardShowcase = () => {
           {/* Bottom gradient fade */}
           <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#0a0a0a] to-transparent pointer-events-none" />
         </motion.div>
+        </div>
         </div>
       </div>
     </section>
