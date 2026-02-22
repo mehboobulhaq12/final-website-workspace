@@ -4,10 +4,14 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import {
-  RefreshCw, Inbox, Phone, Layers, Trophy,
   Mail, MessageSquare, Twitter, Linkedin, Bot,
   Mic, PhoneCall, PhoneIncoming, Sparkles, BarChart3,
 } from "lucide-react";
+import leadReviverImg from "@/assets/agents/lead-reviver.png";
+import inboundHandlerImg from "@/assets/agents/inbound-handler.png";
+import aiCallAgentImg from "@/assets/agents/ai-call-agent.png";
+import contentSystemImg from "@/assets/agents/content-system.png";
+import rerankSystemImg from "@/assets/agents/rerank-system.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -132,7 +136,7 @@ const InboundViz = () => {
     { icon: <MessageSquare className="w-3 h-3" />, label: "WhatsApp", color: "text-green-400/70", msg: "Lead replied" },
     { icon: <Twitter className="w-3 h-3" />, label: "X (Twitter)", color: "text-sky-400/70", msg: "DM inbound" },
     { icon: <Linkedin className="w-3 h-3" />, label: "LinkedIn", color: "text-blue-500/70", msg: "Connection message" },
-    { icon: <Inbox className="w-3 h-3" />, label: "Meta", color: "text-purple-400/70", msg: "Ad form submission" },
+    { icon: <MessageSquare className="w-3 h-3" />, label: "Meta", color: "text-purple-400/70", msg: "Ad form submission" },
   ];
 
   return (
@@ -366,7 +370,7 @@ interface Feature {
 
 const features: Feature[] = [
   {
-    icon: <RefreshCw className="w-5 h-5" />,
+    icon: <img src={leadReviverImg} alt="Lead Reviver" className="w-8 h-8 rounded-lg object-cover" />,
     number: "01",
     title: "The Lead Reviver",
     body: [
@@ -378,7 +382,7 @@ const features: Feature[] = [
     wide: false,
   },
   {
-    icon: <Inbox className="w-5 h-5" />,
+    icon: <img src={inboundHandlerImg} alt="Inbound Handler" className="w-8 h-8 rounded-lg object-cover" />,
     number: "02",
     title: "The Inbound Handler",
     body: [
@@ -390,7 +394,7 @@ const features: Feature[] = [
     wide: false,
   },
   {
-    icon: <Phone className="w-5 h-5" />,
+    icon: <img src={aiCallAgentImg} alt="AI Call Agent" className="w-8 h-8 rounded-lg object-cover" />,
     number: "03",
     title: "AI Call Agent",
     body: [
@@ -402,7 +406,7 @@ const features: Feature[] = [
     wide: false,
   },
   {
-    icon: <Layers className="w-5 h-5" />,
+    icon: <img src={contentSystemImg} alt="Content System" className="w-8 h-8 rounded-lg object-cover" />,
     number: "04",
     title: "Content System",
     body: [
@@ -414,7 +418,7 @@ const features: Feature[] = [
     wide: true,
   },
   {
-    icon: <Trophy className="w-5 h-5" />,
+    icon: <img src={rerankSystemImg} alt="Rerank System" className="w-8 h-8 rounded-lg object-cover" />,
     number: "05",
     title: "Rerank System",
     body: [
