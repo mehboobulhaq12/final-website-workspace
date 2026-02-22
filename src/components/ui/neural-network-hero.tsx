@@ -18,6 +18,7 @@ interface HeroProps {
   ctaButtons?: Array<{ text: string; href: string; primary?: boolean }>;
   microDetails?: Array<string>;
   trustBadge?: { avatars: string[]; text: string };
+  onCtaClick?: (text: string) => void;
 }
 
 export default function Hero({
@@ -31,6 +32,7 @@ export default function Hero({
   ],
   microDetails = ["Low‑weight font", "Tight tracking", "Subtle motion"],
   trustBadge,
+  onCtaClick,
 }: HeroProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const headerRef = useRef<HTMLHeadingElement | null>(null);
@@ -146,7 +148,10 @@ export default function Hero({
                   : "text-white/80 hover:bg-white/5"
               }`}
               onClick={(e) => {
-                if (button.href.startsWith('#')) {
+                if (onCtaClick) {
+                  e.preventDefault();
+                  onCtaClick(button.text);
+                } else if (button.href.startsWith('#')) {
                   e.preventDefault();
                   document.querySelector(button.href)?.scrollIntoView({ behavior: 'smooth' });
                 }

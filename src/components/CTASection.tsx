@@ -5,7 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const CTASection = () => {
+const CTASection = ({ onCtaClick }: { onCtaClick?: (mode: "audit" | "demo") => void }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -83,18 +83,18 @@ const CTASection = () => {
 
           {/* CTA Buttons - matching hero style */}
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <a
-              href="#get-started"
+            <button
+              onClick={() => onCtaClick?.("audit")}
               className="rounded-2xl border border-white/10 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20 px-5 py-3 text-sm font-light tracking-tight transition-colors focus:outline-none focus:ring-2 focus:ring-white/30 duration-300"
             >
               Implement Now
-            </a>
-            <a
-              href="#demo"
+            </button>
+            <button
+              onClick={() => onCtaClick?.("demo")}
               className="rounded-2xl border border-white/10 text-white/80 hover:bg-white/5 px-5 py-3 text-sm font-light tracking-tight transition-colors focus:outline-none focus:ring-2 focus:ring-white/30 duration-300"
             >
               Book a Demo
-            </a>
+            </button>
           </div>
         </div>
       </div>

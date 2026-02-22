@@ -18,6 +18,7 @@ import BookingSection from "@/components/BookingSection";
 import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
 import ScrollToTop from "@/components/ScrollToTop";
+import OnboardingModal from "@/components/OnboardingModal";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import aliRazaImg from "@/assets/clients/ali-raza.png";
 import hassanAbbasImg from "@/assets/clients/hassan-abbas.png";
@@ -26,9 +27,16 @@ import brunoCasanovasImg from "@/assets/clients/bruno-casanovas.png";
 
 const Index = () => {
   const [loading, setLoading] = useState(true);
+  const [onboardingOpen, setOnboardingOpen] = useState(false);
+  const [onboardingMode, setOnboardingMode] = useState<"audit" | "demo">("audit");
 
   const handleLoadingComplete = useCallback(() => {
     setLoading(false);
+  }, []);
+
+  const openOnboarding = useCallback((mode: "audit" | "demo") => {
+    setOnboardingMode(mode);
+    setOnboardingOpen(true);
   }, []);
 
   return (
@@ -63,6 +71,10 @@ const Index = () => {
             avatars: [aliRazaImg, hassanAbbasImg, awaisNematImg, brunoCasanovasImg],
             text: "25+ companies",
           }}
+          onCtaClick={(text) => {
+            if (text.toLowerCase().includes("audit")) openOnboarding("audit");
+            else if (text.toLowerCase().includes("demo")) openOnboarding("demo");
+          }}
         />
         <TrustedBy />
         <DashboardShowcase />
@@ -75,11 +87,16 @@ const Index = () => {
         <TestimonialSection />
         <CaseStudiesSection />
         <FAQSection />
-        <CTASection />
+        <CTASection onCtaClick={(mode) => openOnboarding(mode)} />
         <BookingSection />
         <Footer />
         <ScrollToTop />
       </div>
+      <OnboardingModal
+        open={onboardingOpen}
+        onClose={() => setOnboardingOpen(false)}
+        mode={onboardingMode}
+      />
     </>
   );
 };

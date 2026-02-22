@@ -218,12 +218,12 @@ const DashboardShowcase = () => {
         >
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 mb-4">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
             </span>
             <span className="text-xs text-white/70">Live Agent Dashboard</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-extralight text-white tracking-tight leading-[1.08]">
             See Your AI Agents{" "}
             <TextShimmer
               as="span"
