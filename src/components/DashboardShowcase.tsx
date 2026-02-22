@@ -5,6 +5,7 @@ import {
   MoreHorizontal, TrendingUp, TrendingDown, Edit, BellRing, Eye,
   MousePointer2, Mail, MessageSquare, Instagram
 } from "lucide-react";
+import { TextShimmer } from "@/components/ui/text-shimmer";
 import logoImg from "@/assets/logo.png";
 
 /* ── Animated cursor that roams the dashboard ── */
@@ -172,6 +173,7 @@ const DashboardShowcase = () => {
   const frameRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [spotlight, setSpotlight] = useState({ x: 50, y: 50, active: false });
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   useEffect(() => {
@@ -187,15 +189,17 @@ const DashboardShowcase = () => {
   }, []);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!frameRef.current || zoom < 1) return; // disable tilt on mobile
+    if (!frameRef.current || zoom < 1) return;
     const rect = frameRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ x: y * -6, y: x * 6 }); // max ±3deg
+    const xNorm = (e.clientX - rect.left) / rect.width;
+    const yNorm = (e.clientY - rect.top) / rect.height;
+    setTilt({ x: (yNorm - 0.5) * -6, y: (xNorm - 0.5) * 6 });
+    setSpotlight({ x: xNorm * 100, y: yNorm * 100, active: true });
   }, [zoom]);
 
   const handleMouseLeave = useCallback(() => {
     setTilt({ x: 0, y: 0 });
+    setSpotlight(s => ({ ...s, active: false }));
   }, []);
 
   return (
@@ -219,8 +223,16 @@ const DashboardShowcase = () => {
             </span>
             <span className="text-xs text-white/70">Live Agent Dashboard</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-bold text-white">
-            See Your AI Agents <span className="text-orange-400">In Action</span>
+          <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight">
+            See Your AI Agents{" "}
+            <TextShimmer
+              as="span"
+              duration={2}
+              spread={4}
+              className="italic font-light [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
+            >
+              In Action
+            </TextShimmer>
           </h2>
           <p className="text-white/40 mt-2 text-sm max-w-xl mx-auto">
             Real-time visibility into every conversation, conversion, and campaign your agents run.
@@ -242,6 +254,16 @@ const DashboardShowcase = () => {
           <div className="absolute inset-0 rounded-2xl pointer-events-none overflow-hidden z-20">
             <div className="absolute inset-[-1px] rounded-2xl bg-gradient-to-r from-transparent via-orange-500/20 to-transparent animate-[shimmerBorder_4s_ease-in-out_infinite]" style={{ backgroundSize: "200% 100%" }} />
           </div>
+
+          {/* Mouse-following spotlight glow */}
+          {spotlight.active && (
+            <div
+              className="absolute inset-0 pointer-events-none z-10 rounded-2xl transition-opacity duration-300"
+              style={{
+                background: `radial-gradient(600px circle at ${spotlight.x}% ${spotlight.y}%, rgba(249,115,22,0.08), transparent 60%)`,
+              }}
+            />
+          )}
 
           {/* Zoom down on mobile to fit entire dashboard */}
             <motion.div
