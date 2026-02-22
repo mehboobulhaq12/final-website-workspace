@@ -1,175 +1,278 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 
-/* 
-  CSS-based isometric pixel-art AI agent working at a desk.
-  Everything is built with divs, borders, and CSS — no images.
-*/
+/* ── CSS pixel-art AI agent working at a desk ── */
+
+const TASKS = [
+  "Reviving 23 dead leads...",
+  "Sending outreach emails...",
+  "Scoring lead sentiment...",
+  "Calling warm prospects...",
+  "Generating content...",
+  "Reranking brand visibility...",
+  "Handling inbound tickets...",
+  "Analyzing churn risk...",
+];
 
 const PixelArtAgent = () => {
-  return (
-    <div className="relative w-full h-full flex items-center justify-center select-none" style={{ imageRendering: "pixelated" }}>
-      {/* Room floor (isometric diamond) */}
-      <div className="relative w-[280px] h-[200px]">
-        {/* Floor */}
-        <div
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[220px] h-[110px] bg-[#1a1a2e] border border-white/5"
-          style={{ transform: "translateX(-50%) rotateX(60deg) rotateZ(45deg)", transformOrigin: "center" }}
-        />
+  const [taskIdx, setTaskIdx] = useState(0);
+  const [leadsProcessed, setLeadsProcessed] = useState(142);
 
+  useEffect(() => {
+    const t = setInterval(() => {
+      setTaskIdx(i => (i + 1) % TASKS.length);
+      setLeadsProcessed(p => p + Math.floor(Math.random() * 5) + 1);
+    }, 3500);
+    return () => clearInterval(t);
+  }, []);
+
+  return (
+    <div className="relative w-full h-full flex flex-col items-center justify-center select-none overflow-hidden" style={{ imageRendering: "auto" }}>
+      {/* Background grid */}
+      <div className="absolute inset-0 opacity-[0.03]" style={{
+        backgroundImage: "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
+        backgroundSize: "20px 20px",
+      }} />
+
+      {/* Neon header */}
+      <motion.div
+        className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 text-center"
+        animate={{
+          textShadow: [
+            "0 0 6px rgba(249,115,22,0.4)",
+            "0 0 16px rgba(249,115,22,0.7)",
+            "0 0 6px rgba(249,115,22,0.4)",
+          ],
+        }}
+        transition={{ duration: 2, repeat: Infinity }}
+        style={{ color: "#f97316" }}
+      >
+        AI Workforce HQ
+      </motion.div>
+
+      {/* Agent workspace scene */}
+      <div className="relative w-[200px] h-[160px]">
         {/* Desk */}
-        <div className="absolute bottom-[50px] left-1/2 -translate-x-1/2">
-          <div className="relative">
-            {/* Desk top */}
-            <div className="w-[120px] h-[8px] bg-[#8B4513] rounded-sm border border-[#6B3410] mx-auto" />
-            {/* Desk legs */}
-            <div className="flex justify-between px-2">
-              <div className="w-[4px] h-[30px] bg-[#6B3410]" />
-              <div className="w-[4px] h-[30px] bg-[#6B3410]" />
-            </div>
+        <div className="absolute bottom-[35px] left-1/2 -translate-x-1/2 w-[130px]">
+          <div className="w-full h-[6px] bg-gradient-to-b from-[#a0522d] to-[#8B4513] rounded-sm shadow-[0_2px_8px_rgba(139,69,19,0.3)]" />
+          <div className="flex justify-between px-3">
+            <div className="w-[3px] h-[25px] bg-[#6B3410]" />
+            <div className="w-[3px] h-[25px] bg-[#6B3410]" />
           </div>
         </div>
 
         {/* Monitor */}
-        <div className="absolute bottom-[58px] left-1/2 -translate-x-1/2">
-          <div className="relative flex flex-col items-center">
-            {/* Screen */}
-            <div className="w-[60px] h-[40px] bg-[#0f0f23] border-2 border-[#333] rounded-sm overflow-hidden relative">
-              {/* Screen content - scrolling code lines */}
-              <motion.div
-                className="absolute inset-0 flex flex-col gap-[3px] p-1"
-                animate={{ y: [0, -40, 0] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              >
-                {Array.from({ length: 12 }).map((_, i) => (
-                  <div key={i} className="flex gap-[2px]">
-                    <div className={`h-[2px] rounded-full ${i % 3 === 0 ? "bg-orange-400/80 w-[8px]" : i % 3 === 1 ? "bg-emerald-400/60 w-[14px]" : "bg-blue-400/50 w-[10px]"}`} />
-                    <div className={`h-[2px] rounded-full ${i % 2 === 0 ? "bg-white/20 w-[12px]" : "bg-purple-400/40 w-[6px]"}`} />
-                  </div>
-                ))}
-              </motion.div>
-              {/* Screen glow */}
-              <div className="absolute inset-0 bg-gradient-to-t from-blue-500/10 to-transparent" />
-            </div>
-            {/* Monitor stand */}
-            <div className="w-[4px] h-[6px] bg-[#333]" />
-            <div className="w-[16px] h-[3px] bg-[#333] rounded-sm" />
-          </div>
-        </div>
-
-        {/* Agent character */}
-        <div className="absolute bottom-[30px] left-1/2 ml-[-40px]">
-          <div className="flex flex-col items-center">
-            {/* Head */}
+        <div className="absolute bottom-[42px] left-1/2 -translate-x-1/2 flex flex-col items-center">
+          <div className="w-[72px] h-[48px] bg-[#0a0a1a] border-2 border-[#2a2a3a] rounded-md overflow-hidden relative shadow-[0_0_20px_rgba(59,130,246,0.15)]">
+            {/* Screen content - animated code */}
             <motion.div
-              className="relative"
-              animate={{ y: [0, -2, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inset-0 flex flex-col gap-[3px] p-1.5"
+              animate={{ y: [0, -50, 0] }}
+              transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
             >
-              {/* Hair/hat */}
-              <div className="w-[16px] h-[4px] bg-[#4a90d9] rounded-t-sm mx-auto" />
-              {/* Face */}
-              <div className="w-[14px] h-[12px] bg-[#ffcc99] rounded-sm mx-auto relative">
-                {/* Eyes */}
-                <motion.div
-                  className="absolute top-[3px] left-[2px] flex gap-[4px]"
-                  animate={{ scaleY: [1, 0.1, 1] }}
-                  transition={{ duration: 4, repeat: Infinity, repeatDelay: 2 }}
-                >
-                  <div className="w-[2px] h-[2px] bg-[#333] rounded-full" />
-                  <div className="w-[2px] h-[2px] bg-[#333] rounded-full" />
-                </motion.div>
-              </div>
+              {Array.from({ length: 16 }).map((_, i) => (
+                <div key={i} className="flex gap-[2px] items-center">
+                  <div className={`h-[2px] rounded-full ${
+                    i % 4 === 0 ? "bg-orange-400/80 w-[10px]" :
+                    i % 4 === 1 ? "bg-emerald-400/60 w-[16px]" :
+                    i % 4 === 2 ? "bg-blue-400/50 w-[12px]" :
+                    "bg-purple-400/40 w-[8px]"
+                  }`} />
+                  <div className={`h-[2px] rounded-full ${
+                    i % 3 === 0 ? "bg-white/15 w-[14px]" :
+                    i % 3 === 1 ? "bg-cyan-400/30 w-[10px]" :
+                    "bg-yellow-400/25 w-[6px]"
+                  }`} />
+                </div>
+              ))}
             </motion.div>
-            {/* Body */}
-            <div className="w-[14px] h-[14px] bg-[#f97316] rounded-sm" />
-            {/* Arms - typing animation */}
-            <div className="flex gap-[10px] -mt-[8px]">
-              <motion.div
-                className="w-[6px] h-[8px] bg-[#ffcc99] rounded-sm"
-                animate={{ rotate: [-5, 5, -5] }}
-                transition={{ duration: 0.4, repeat: Infinity }}
-              />
-              <motion.div
-                className="w-[6px] h-[8px] bg-[#ffcc99] rounded-sm"
-                animate={{ rotate: [5, -5, 5] }}
-                transition={{ duration: 0.3, repeat: Infinity }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Floating task indicators */}
-        {[
-          { label: "Reviving leads...", color: "bg-orange-500", x: "right-0", y: "top-[10px]", delay: 0 },
-          { label: "Sending emails...", color: "bg-blue-500", x: "right-[-10px]", y: "top-[35px]", delay: 1.5 },
-          { label: "Scoring leads...", color: "bg-emerald-500", x: "right-[10px]", y: "top-[60px]", delay: 3 },
-        ].map((task, i) => (
-          <motion.div
-            key={i}
-            className={`absolute ${task.x} ${task.y} flex items-center gap-1.5`}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: [0, 1, 1, 0], x: [20, 0, 0, -10] }}
-            transition={{ duration: 4, delay: task.delay, repeat: Infinity, repeatDelay: 8 }}
-          >
+            {/* Screen glow */}
             <motion.div
-              className={`w-1.5 h-1.5 rounded-full ${task.color}`}
-              animate={{ scale: [1, 1.3, 1] }}
+              className="absolute inset-0"
+              animate={{
+                background: [
+                  "linear-gradient(to top, rgba(59,130,246,0.08), transparent)",
+                  "linear-gradient(to top, rgba(249,115,22,0.08), transparent)",
+                  "linear-gradient(to top, rgba(34,197,94,0.08), transparent)",
+                  "linear-gradient(to top, rgba(59,130,246,0.08), transparent)",
+                ],
+              }}
+              transition={{ duration: 6, repeat: Infinity }}
+            />
+            {/* Cursor blink */}
+            <motion.div
+              className="absolute bottom-1.5 right-2 w-[3px] h-[6px] bg-emerald-400"
+              animate={{ opacity: [1, 0, 1] }}
               transition={{ duration: 1, repeat: Infinity }}
             />
-            <span className="text-[8px] text-white/60 whitespace-nowrap font-mono">{task.label}</span>
-          </motion.div>
-        ))}
+          </div>
+          {/* Stand */}
+          <div className="w-[4px] h-[4px] bg-[#2a2a3a]" />
+          <div className="w-[18px] h-[2px] bg-[#2a2a3a] rounded-sm" />
+        </div>
 
-        {/* Activity particles */}
-        {Array.from({ length: 6 }).map((_, i) => (
+        {/* Agent body */}
+        <div className="absolute bottom-[18px] left-[38px] flex flex-col items-center">
+          {/* Head with hat */}
           <motion.div
-            key={`p-${i}`}
-            className="absolute w-1 h-1 rounded-full bg-orange-400/40"
-            style={{ left: `${30 + i * 12}%`, bottom: "60px" }}
-            animate={{
-              y: [0, -30 - i * 10, -60],
-              opacity: [0, 0.8, 0],
-              x: [0, (i % 2 === 0 ? 10 : -10)],
-            }}
-            transition={{ duration: 2 + i * 0.3, delay: i * 0.5, repeat: Infinity, repeatDelay: 3 }}
-          />
-        ))}
-
-        {/* Neon sign on wall */}
-        <motion.div
-          className="absolute top-0 left-1/2 -translate-x-1/2 text-[7px] font-bold tracking-wider"
-          animate={{ opacity: [0.5, 1, 0.5], textShadow: ["0 0 4px rgba(249,115,22,0.5)", "0 0 12px rgba(249,115,22,0.8)", "0 0 4px rgba(249,115,22,0.5)"] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          style={{ color: "#f97316" }}
-        >
-          AI WORKFORCE
-        </motion.div>
-
-        {/* Bookshelf */}
-        <div className="absolute top-[15px] right-[10px] flex flex-col gap-[2px]">
-          {[["bg-red-500/60", "bg-blue-500/60", "bg-green-500/60"], ["bg-yellow-500/60", "bg-purple-500/60", "bg-pink-500/60"]].map((row, ri) => (
-            <div key={ri} className="flex gap-[1px]">
-              {row.map((c, ci) => (
-                <div key={ci} className={`w-[4px] h-[8px] ${c} rounded-[1px]`} />
-              ))}
+            className="relative"
+            animate={{ y: [0, -1.5, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {/* Cap */}
+            <div className="w-[16px] h-[5px] bg-[#4a90d9] rounded-t-sm mx-auto shadow-sm" />
+            {/* Face */}
+            <div className="w-[14px] h-[12px] bg-[#ffcc99] rounded-b-sm mx-auto relative">
+              {/* Eyes - blinking */}
+              <motion.div
+                className="absolute top-[3px] left-[2px] flex gap-[5px]"
+                animate={{ scaleY: [1, 0.1, 1] }}
+                transition={{ duration: 4, repeat: Infinity, repeatDelay: 2.5 }}
+              >
+                <div className="w-[2px] h-[2px] bg-[#333] rounded-full" />
+                <div className="w-[2px] h-[2px] bg-[#333] rounded-full" />
+              </motion.div>
+              {/* Smile */}
+              <div className="absolute bottom-[2px] left-1/2 -translate-x-1/2 w-[4px] h-[1px] bg-[#c4956e] rounded-full" />
             </div>
-          ))}
-          <div className="w-[16px] h-[2px] bg-[#8B4513]" />
+          </motion.div>
+          {/* Body (shirt) */}
+          <div className="w-[16px] h-[14px] bg-[#f97316] rounded-b-sm relative">
+            {/* Logo on shirt */}
+            <div className="absolute top-[3px] left-1/2 -translate-x-1/2 w-[4px] h-[4px] border border-white/40 rounded-sm" />
+          </div>
+          {/* Arms - active typing */}
+          <div className="flex gap-[12px] -mt-[10px]">
+            <motion.div
+              className="w-[5px] h-[10px] bg-[#ffcc99] rounded-sm origin-top"
+              animate={{ rotateZ: [-8, 8, -8], y: [0, 1, 0] }}
+              transition={{ duration: 0.35, repeat: Infinity }}
+            />
+            <motion.div
+              className="w-[5px] h-[10px] bg-[#ffcc99] rounded-sm origin-top"
+              animate={{ rotateZ: [8, -8, 8], y: [1, 0, 1] }}
+              transition={{ duration: 0.28, repeat: Infinity }}
+            />
+          </div>
+        </div>
+
+        {/* Coffee mug on desk */}
+        <div className="absolute bottom-[42px] right-[25px]">
+          <div className="w-[8px] h-[10px] bg-[#fff] rounded-b-sm border border-white/30 relative">
+            {/* Steam */}
+            <motion.div
+              className="absolute -top-[6px] left-[1px] w-[2px] h-[5px] bg-white/20 rounded-full"
+              animate={{ y: [-2, -6], opacity: [0.4, 0], scaleX: [1, 1.5] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
+            <motion.div
+              className="absolute -top-[4px] left-[4px] w-[2px] h-[4px] bg-white/15 rounded-full"
+              animate={{ y: [-2, -5], opacity: [0.3, 0], scaleX: [1, 1.3] }}
+              transition={{ duration: 1.8, repeat: Infinity, delay: 0.5 }}
+            />
+          </div>
+        </div>
+
+        {/* Keyboard on desk */}
+        <div className="absolute bottom-[42px] left-[55px]">
+          <div className="w-[28px] h-[6px] bg-[#2a2a3a] rounded-sm border border-white/10 flex items-center justify-center gap-[1px] px-[2px]">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <motion.div
+                key={i}
+                className="w-[2px] h-[2px] bg-white/20 rounded-[0.5px]"
+                animate={{ backgroundColor: ["rgba(255,255,255,0.2)", "rgba(249,115,22,0.6)", "rgba(255,255,255,0.2)"] }}
+                transition={{ duration: 0.5, delay: i * 0.08, repeat: Infinity, repeatDelay: 2 }}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Plant */}
-        <div className="absolute top-[20px] left-[15px]">
-          <motion.div
-            animate={{ rotate: [-3, 3, -3] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          >
-            <div className="w-[3px] h-[10px] bg-emerald-600 mx-auto" />
-            <div className="flex gap-[1px] -mt-[6px]">
-              <div className="w-[5px] h-[5px] bg-emerald-500 rounded-full" />
-              <div className="w-[5px] h-[5px] bg-emerald-400 rounded-full -ml-[2px]" />
+        <div className="absolute top-[5px] left-[8px]">
+          <motion.div animate={{ rotate: [-2, 2, -2] }} transition={{ duration: 4, repeat: Infinity }}>
+            <div className="w-[3px] h-[12px] bg-emerald-600 mx-auto" />
+            <div className="flex -mt-[8px]">
+              <motion.div
+                className="w-[6px] h-[6px] bg-emerald-500 rounded-full"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              />
+              <motion.div
+                className="w-[5px] h-[5px] bg-emerald-400 rounded-full -ml-[2px] mt-[1px]"
+                animate={{ scale: [1, 1.08, 1] }}
+                transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+              />
             </div>
           </motion.div>
-          <div className="w-[8px] h-[6px] bg-[#8B4513] rounded-b-sm mx-auto" />
+          <div className="w-[10px] h-[7px] bg-[#8B4513] rounded-b-sm mx-auto mt-[-1px]" />
+        </div>
+
+        {/* Bookshelf */}
+        <div className="absolute top-[5px] right-[5px] flex flex-col gap-[2px]">
+          {[
+            ["bg-red-500/50", "bg-blue-500/50", "bg-emerald-500/50", "bg-yellow-500/50"],
+            ["bg-purple-500/50", "bg-pink-500/50", "bg-cyan-500/50"],
+          ].map((row, ri) => (
+            <div key={ri}>
+              <div className="flex gap-[1px]">
+                {row.map((c, ci) => (
+                  <div key={ci} className={`w-[4px] h-[9px] ${c} rounded-[1px]`} />
+                ))}
+              </div>
+              <div className="w-full h-[2px] bg-[#8B4513]" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Live task display */}
+      <div className="mt-3 w-full max-w-[240px]">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={taskIdx}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.03] border border-white/5"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.div
+              className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"
+              animate={{ scale: [1, 1.4, 1], opacity: [0.6, 1, 0.6] }}
+              transition={{ duration: 1, repeat: Infinity }}
+            />
+            <span className="text-[9px] text-white/50 font-mono truncate">{TASKS[taskIdx]}</span>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Stats bar */}
+        <div className="flex items-center justify-between mt-2 px-1">
+          <div className="flex items-center gap-1">
+            <div className="w-1 h-1 rounded-full bg-orange-400" />
+            <span className="text-[8px] text-white/30">{leadsProcessed} processed</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-1 h-1 rounded-full bg-emerald-400" />
+            <span className="text-[8px] text-white/30">98.7% uptime</span>
+          </div>
+        </div>
+
+        {/* Activity sparkline */}
+        <div className="flex items-end gap-[2px] justify-center mt-2 h-[16px]">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <motion.div
+              key={i}
+              className="w-[3px] rounded-t-sm bg-orange-500/40"
+              animate={{
+                height: [
+                  `${4 + Math.random() * 12}px`,
+                  `${4 + Math.random() * 12}px`,
+                  `${4 + Math.random() * 12}px`,
+                ],
+              }}
+              transition={{ duration: 2, delay: i * 0.1, repeat: Infinity }}
+            />
+          ))}
         </div>
       </div>
     </div>
