@@ -77,7 +77,7 @@ const Index = () => {
           }}
         />
         <TrustedBy />
-        <DashboardShowcase />
+        <DashboardShowcase onCtaClick={(mode) => openOnboarding(mode)} />
         <ProblemStatement />
         <ProblemSection />
         <InfrastructureSection />
