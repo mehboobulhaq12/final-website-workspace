@@ -3,6 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import Hero from "@/components/ui/neural-network-hero";
 import Navbar from "@/components/Navbar";
 import TrustedBy from "@/components/TrustedBy";
+import DashboardShowcase from "@/components/DashboardShowcase";
 import ProblemStatement from "@/components/ProblemStatement";
 import ProblemSection from "@/components/ProblemSection";
 import InfrastructureSection from "@/components/InfrastructureSection";
@@ -64,6 +65,7 @@ const Index = () => {
           }}
         />
         <TrustedBy />
+        <DashboardShowcase />
         <ProblemStatement />
         <ProblemSection />
         <InfrastructureSection />
