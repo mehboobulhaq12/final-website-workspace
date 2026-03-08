@@ -19,6 +19,7 @@ import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
 import ScrollToTop from "@/components/ScrollToTop";
 import OnboardingModal from "@/components/OnboardingModal";
+import FindTheCapGame from "@/components/FindTheCapGame";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import aliRazaImg from "@/assets/clients/ali-raza.png";
 import hassanAbbasImg from "@/assets/clients/hassan-abbas.png";
@@ -97,6 +98,7 @@ const Index = () => {
         onClose={() => setOnboardingOpen(false)}
         mode={onboardingMode}
       />
+      <FindTheCapGame />
     </>
   );
 };
