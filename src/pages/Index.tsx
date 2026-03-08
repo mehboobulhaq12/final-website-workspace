@@ -98,6 +98,7 @@ const Index = () => {
         onClose={() => setOnboardingOpen(false)}
         mode={onboardingMode}
       />
+      <FindTheCapGame />
     </>
   );
 };
