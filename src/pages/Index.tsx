@@ -21,7 +21,6 @@ import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
 import ScrollToTop from "@/components/ScrollToTop";
 import OnboardingModal from "@/components/OnboardingModal";
-import FindTheCapGame from "@/components/FindTheCapGame";
 import HyperAgentsPopup from "@/components/HyperAgentsPopup";
 import SeoHead from "@/components/SeoHead";
 import { TextShimmer } from "@/components/ui/text-shimmer";
@@ -184,7 +183,6 @@ const Index = () => {
         mode={onboardingMode}
         initialProblem={onboardingSeed}
       />
-      <FindTheCapGame />
     </>
   );
 };
