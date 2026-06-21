@@ -14,7 +14,96 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      careers_applications: {
+        Row: {
+          created_at: string
+          email: string
+          id: number
+          message: string
+          name: string
+          role: string
+          source: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: never
+          message: string
+          name: string
+          role: string
+          source?: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: never
+          message?: string
+          name?: string
+          role?: string
+          source?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      onboarding_submissions: {
+        Row: {
+          agents: string[]
+          brand_name: string | null
+          business_desc: string | null
+          category: string | null
+          created_at: string
+          customers: number | null
+          dead_customers: number | null
+          email: string
+          id: number
+          lead_reviver_sub: string | null
+          mode: string
+          mrr: number | null
+          name: string
+          phone: string | null
+          problem: string | null
+          website: string | null
+        }
+        Insert: {
+          agents?: string[]
+          brand_name?: string | null
+          business_desc?: string | null
+          category?: string | null
+          created_at?: string
+          customers?: number | null
+          dead_customers?: number | null
+          email: string
+          id?: never
+          lead_reviver_sub?: string | null
+          mode: string
+          mrr?: number | null
+          name: string
+          phone?: string | null
+          problem?: string | null
+          website?: string | null
+        }
+        Update: {
+          agents?: string[]
+          brand_name?: string | null
+          business_desc?: string | null
+          category?: string | null
+          created_at?: string
+          customers?: number | null
+          dead_customers?: number | null
+          email?: string
+          id?: never
+          lead_reviver_sub?: string | null
+          mode?: string
+          mrr?: number | null
+          name?: string
+          phone?: string | null
+          problem?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

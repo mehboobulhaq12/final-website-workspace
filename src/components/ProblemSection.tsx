@@ -21,6 +21,7 @@ const ProblemSection = () => {
   useGSAP(
     () => {
       if (!sectionRef.current) return;
+      const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
       const leftElements = [headingRef.current, lineRef.current, bodyRef.current, resultRef.current].filter(Boolean);
       gsap.set(leftElements, { autoAlpha: 0, y: 30 });
@@ -38,7 +39,7 @@ const ProblemSection = () => {
 
       // Parallax
       const inner = sectionRef.current.querySelector(".parallax-inner");
-      if (inner) {
+      if (inner && !isMobile) {
         gsap.to(inner, {
           yPercent: -6,
           ease: "none",
@@ -138,6 +139,16 @@ const StandardProcessAnimation = () => {
 
   useEffect(() => {
     const totalSteps = 8;
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    if (isMobile) {
+      let step = 0;
+      const interval = setInterval(() => {
+        setActiveIndex(step % totalSteps);
+        step++;
+      }, 1200);
+      return () => clearInterval(interval);
+    }
+
     let interval: ReturnType<typeof setInterval>;
 
     const trigger = ScrollTrigger.create({
@@ -147,11 +158,12 @@ const StandardProcessAnimation = () => {
       onEnter: () => {
         if (startedRef.current) return;
         startedRef.current = true;
+        const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
         let step = 0;
         interval = setInterval(() => {
           setActiveIndex(step % totalSteps);
           step++;
-        }, 900);
+        }, isMobile ? 1200 : 900);
       },
     });
 
@@ -223,6 +235,16 @@ const Effect3Animation = () => {
 
   useEffect(() => {
     const totalSteps = 3;
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    if (isMobile) {
+      let step = 0;
+      const interval = setInterval(() => {
+        setActiveIndex(step % totalSteps);
+        step++;
+      }, 1600);
+      return () => clearInterval(interval);
+    }
+
     let interval: ReturnType<typeof setInterval>;
 
     const trigger = ScrollTrigger.create({
@@ -232,11 +254,12 @@ const Effect3Animation = () => {
       onEnter: () => {
         if (startedRef.current) return;
         startedRef.current = true;
+        const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
         let step = 0;
         interval = setInterval(() => {
           setActiveIndex(step % totalSteps);
           step++;
-        }, 1200);
+        }, isMobile ? 1600 : 1200);
       },
     });
 

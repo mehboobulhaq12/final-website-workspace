@@ -1,0 +1,213 @@
+{
+  "name": "Effect3 onboarding EMails system",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "effect3-onboarding-emails-5217f9c37b9e958bc4949f85780aaf49",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        260,
+        320
+      ],
+      "id": "onboarding-webhook",
+      "name": "Onboarding Webhook",
+      "webhookId": "3c82d027-90b1-456b-8f44-89149dcd6d0b"
+    },
+    {
+      "parameters": {
+        "jsCode": "const request = $input.first().json;\nconst body = request.body || {};\nconst formType = String(body.formType || '').trim();\nconst email = String(body.email || '').trim();\nconst name = String(body.name || '').trim();\nconst brandName = String(body.brandName || '').trim();\nconst problem = String(body.problem || '').replace(/\\s+/g, ' ').trim();\n\nif (formType !== 'onboarding') {\n  throw new Error('Unsupported formType.');\n}\n\nif (!email) {\n  throw new Error('Missing onboarding email address.');\n}\n\nreturn [{\n  json: {\n    email,\n    name,\n    brandName,\n    problem,\n    mode: String(body.mode || '').trim(),\n    submittedAt: String(body.submittedAt || new Date().toISOString()),\n    pagePath: String(body.pagePath || '').trim()\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        320
+      ],
+      "id": "normalize-submission",
+      "name": "Normalize Onboarding Submission"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://theeffect3.com/onboarding-email.php",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "1df76492707130597c6c77f87f0d0b7d118d839a"
+            },
+            {
+              "name": "stage",
+              "value": "thank_you"
+            },
+            {
+              "name": "email",
+              "value": "={{ $json.email }}"
+            },
+            {
+              "name": "name",
+              "value": "={{ $json.name }}"
+            },
+            {
+              "name": "brandName",
+              "value": "={{ $json.brandName }}"
+            },
+            {
+              "name": "problem",
+              "value": "={{ $json.problem }}"
+            },
+            {
+              "name": "submittedAt",
+              "value": "={{ $json.submittedAt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        320
+      ],
+      "id": "send-thank-you",
+      "name": "Send Thank You Email"
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 1,
+        "unit": "days"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1280,
+        320
+      ],
+      "id": "wait-one-day",
+      "name": "Wait 1 Day"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://theeffect3.com/onboarding-email.php",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "1df76492707130597c6c77f87f0d0b7d118d839a"
+            },
+            {
+              "name": "stage",
+              "value": "founder_followup"
+            },
+            {
+              "name": "email",
+              "value": "={{ $json.email }}"
+            },
+            {
+              "name": "name",
+              "value": "={{ $json.name }}"
+            },
+            {
+              "name": "brandName",
+              "value": "={{ $json.brandName }}"
+            },
+            {
+              "name": "problem",
+              "value": "={{ $json.problem }}"
+            },
+            {
+              "name": "submittedAt",
+              "value": "={{ $json.submittedAt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1600,
+        320
+      ],
+      "id": "send-founder-followup",
+      "name": "Send Founder Follow-up Email"
+    },
+    {
+      "parameters": {
+        "content": "Onboarding customer-email workflow.\n\nWhat it does:\n1. Receives onboarding submissions from the website webhook.\n2. Normalizes the form payload.\n3. Calls the Hostinger mail endpoint immediately for the thank-you email.\n4. Waits 24 hours.\n5. Calls the same Hostinger mail endpoint for the founder follow-up.\n\nThis workflow is designed for direct website-to-n8n triggering so the customer email goes out instantly.",
+        "height": 280,
+        "width": 380
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        60,
+        60
+      ],
+      "id": "workflow-note",
+      "name": "Workflow Notes"
+    }
+  ],
+  "connections": {
+    "Onboarding Webhook": {
+      "main": [
+        [
+          {
+            "node": "Normalize Onboarding Submission",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Onboarding Submission": {
+      "main": [
+        [
+          {
+            "node": "Send Thank You Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Thank You Email": {
+      "main": [
+        [
+          {
+            "node": "Wait 1 Day",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 1 Day": {
+      "main": [
+        [
+          {
+            "node": "Send Founder Follow-up Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Karachi"
+  }
+}

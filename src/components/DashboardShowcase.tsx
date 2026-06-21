@@ -16,12 +16,14 @@ const CURSOR_PATH = [
   { x: 75, y: 60 }, { x: 40, y: 35 }, { x: 15, y: 12 },
 ];
 
-const AnimatedCursor = () => {
+const AnimatedCursor = ({ disabled = false }: { disabled?: boolean }) => {
   const [pos, setPos] = useState({ x: 15, y: 12 });
   const [clicking, setClicking] = useState(false);
   const idx = useRef(0);
 
   useEffect(() => {
+    if (disabled) return;
+
     const interval = setInterval(() => {
       idx.current = (idx.current + 1) % CURSOR_PATH.length;
       setPos(CURSOR_PATH[idx.current]);
@@ -32,7 +34,9 @@ const AnimatedCursor = () => {
       }
     }, 1800);
     return () => clearInterval(interval);
-  }, []);
+  }, [disabled]);
+
+  if (disabled) return null;
 
   return (
     <motion.div
@@ -170,32 +174,52 @@ const DASHBOARD_WIDTH = 1100;
 const DashboardShowcase = () => {
   const ref = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const dashboardContentRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
+  const [scaledHeight, setScaledHeight] = useState<number | null>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [spotlight, setSpotlight] = useState({ x: 50, y: 50, active: false });
+  const [isMobile, setIsMobile] = useState(false);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   useEffect(() => {
     const update = () => {
-      if (containerRef.current) {
-        const w = containerRef.current.offsetWidth;
-        setZoom(w < DASHBOARD_WIDTH ? w / DASHBOARD_WIDTH : 1);
+      if (!containerRef.current) return;
+
+      const availableWidth = containerRef.current.offsetWidth;
+      const nextZoom = availableWidth < DASHBOARD_WIDTH ? availableWidth / DASHBOARD_WIDTH : 1;
+      setZoom(nextZoom);
+      setIsMobile(window.innerWidth < 768);
+
+      if (dashboardContentRef.current) {
+        setScaledHeight(dashboardContentRef.current.offsetHeight * nextZoom);
       }
     };
+
     update();
     window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+
+    let observer: ResizeObserver | null = null;
+    if (dashboardContentRef.current) {
+      observer = new ResizeObserver(update);
+      observer.observe(dashboardContentRef.current);
+    }
+
+    return () => {
+      window.removeEventListener("resize", update);
+      observer?.disconnect();
+    };
   }, []);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!frameRef.current || zoom < 1) return;
+    if (!frameRef.current || zoom < 1 || isMobile) return;
     const rect = frameRef.current.getBoundingClientRect();
     const xNorm = (e.clientX - rect.left) / rect.width;
     const yNorm = (e.clientY - rect.top) / rect.height;
     setTilt({ x: (yNorm - 0.5) * -6, y: (xNorm - 0.5) * 6 });
     setSpotlight({ x: xNorm * 100, y: yNorm * 100, active: true });
-  }, [zoom]);
+  }, [zoom, isMobile]);
 
   const handleMouseLeave = useCallback(() => {
     setTilt({ x: 0, y: 0 });
@@ -208,7 +232,7 @@ const DashboardShowcase = () => {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[60%] bg-orange-500/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute top-1/3 left-1/3 w-[40%] h-[40%] bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4" ref={ref}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6" ref={ref}>
         {/* Section header */}
         <motion.div
           className="text-center mb-10"
@@ -239,15 +263,23 @@ const DashboardShowcase = () => {
           </p>
         </motion.div>
 
-        {/* Dashboard frame — scales down on mobile to fit in view */}
-        <div ref={containerRef}>
+        {/* Dashboard frame  -  scales down on mobile to fit in view */}
+        <div ref={containerRef} className="w-full">
+        <div
+          className="relative w-full overflow-hidden"
+          style={zoom < 1 && scaledHeight ? { height: `${scaledHeight}px` } : undefined}
+        >
         <div
           ref={frameRef}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           className="relative rounded-2xl border border-white/10 shadow-[0_0_80px_-20px_rgba(249,115,22,0.15)] overflow-hidden transition-transform duration-200 ease-out"
           style={{
-            transform: `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+            width: zoom < 1 ? `${DASHBOARD_WIDTH}px` : "100%",
+            transform: isMobile
+              ? `scale(${zoom})`
+              : `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(${zoom})`,
+            transformOrigin: "top left",
           }}
         >
           {/* Shimmer border effect */}
@@ -256,7 +288,7 @@ const DashboardShowcase = () => {
           </div>
 
           {/* Mouse-following spotlight glow */}
-          {spotlight.active && (
+          {!isMobile && spotlight.active && (
             <div
               className="absolute inset-0 pointer-events-none z-10 rounded-2xl transition-opacity duration-300"
               style={{
@@ -267,13 +299,13 @@ const DashboardShowcase = () => {
 
           {/* Zoom down on mobile to fit entire dashboard */}
             <motion.div
+              ref={dashboardContentRef}
               className="relative bg-[#0a0a0a]"
               initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2 }}
               style={{
-                zoom: zoom < 1 ? zoom : undefined,
-                WebkitTextSizeAdjust: 'none',
+                WebkitTextSizeAdjust: "none",
               }}
             >
               {/* Animated cursor */}
@@ -453,6 +485,7 @@ const DashboardShowcase = () => {
           {/* Bottom gradient fade */}
           <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#0a0a0a] to-transparent pointer-events-none" />
         </motion.div>
+        </div>
         </div>
         </div>
       </div>

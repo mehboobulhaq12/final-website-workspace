@@ -16,6 +16,7 @@ const ProblemStatement = () => {
   useGSAP(
     () => {
       if (!sectionRef.current) return;
+      const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
       const elements = [statRef.current, subtitleRef.current, lineRef.current, bodyRef.current].filter(Boolean);
       gsap.set(elements, { autoAlpha: 0, y: 30 });
@@ -35,7 +36,7 @@ const ProblemStatement = () => {
 
       // Parallax on inner content
       const inner = sectionRef.current.querySelector(".parallax-inner");
-      if (inner) {
+      if (inner && !isMobile) {
         gsap.to(inner, {
           yPercent: -8,
           ease: "none",
@@ -121,6 +122,16 @@ const ProblemStatementHeadlines = () => {
   ];
 
   useEffect(() => {
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    if (isMobile) {
+      let step = 0;
+      const interval = setInterval(() => {
+        step++;
+        setActiveIndex(step % headlines.length);
+      }, 4200);
+      return () => clearInterval(interval);
+    }
+
     let interval: ReturnType<typeof setInterval>;
 
     const trigger = ScrollTrigger.create({
@@ -130,11 +141,12 @@ const ProblemStatementHeadlines = () => {
       onEnter: () => {
         if (startedRef.current) return;
         startedRef.current = true;
+        const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
         let step = 0;
         interval = setInterval(() => {
           step++;
           setActiveIndex(step % headlines.length);
-        }, 3500);
+        }, isMobile ? 4200 : 3500);
       },
     });
 

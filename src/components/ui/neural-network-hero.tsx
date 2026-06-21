@@ -19,6 +19,7 @@ interface HeroProps {
   microDetails?: Array<string>;
   trustBadge?: { avatars: string[]; text: string };
   onCtaClick?: (text: string) => void;
+  disableBackground?: boolean;
 }
 
 export default function Hero({
@@ -27,12 +28,13 @@ export default function Hero({
   badgeText = "Generative Surfaces",
   badgeLabel = "New",
   ctaButtons = [
-    { text: "Get started", href: "#get-started", primary: true },
+    { text: "Get started", href: "#book", primary: true },
     { text: "View showcase", href: "#showcase" }
   ],
-  microDetails = ["Low‑weight font", "Tight tracking", "Subtle motion"],
+  microDetails = [],
   trustBadge,
   onCtaClick,
+  disableBackground = false,
 }: HeroProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const headerRef = useRef<HTMLHeadingElement | null>(null);
@@ -111,12 +113,19 @@ export default function Hero({
   );
 
   return (
-    <section ref={sectionRef} className="relative min-h-[auto] sm:min-h-screen w-screen overflow-hidden">
-      <ShaderBackground />
+    <section ref={sectionRef} className="relative min-h-[auto] sm:min-h-screen w-full overflow-hidden">
+      {disableBackground ? (
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.18),_transparent_35%),radial-gradient(circle_at_80%_20%,_rgba(251,191,36,0.12),_transparent_28%),linear-gradient(180deg,_#060606_0%,_#0b0b0b_55%,_#050505_100%)]"
+        />
+      ) : (
+        <ShaderBackground />
+      )}
 
       <div className="relative mx-auto flex max-w-7xl flex-col items-start gap-3 sm:gap-4 px-5 pb-12 pt-24 sm:px-6 sm:pb-16 sm:pt-32 md:px-10 md:pt-40 lg:px-16 lg:pt-44">
         <div ref={badgeRef} className="w-full flex justify-center">
-          <a href="#get-started" className="group inline-flex items-center gap-1.5 sm:gap-2.5 rounded-full border border-orange-400/20 bg-orange-500/5 px-3 py-1.5 sm:px-4 sm:py-2 backdrop-blur-sm transition-all duration-300 hover:border-orange-400/40 hover:bg-orange-500/10 cursor-pointer">
+          <a href="#book" className="group inline-flex items-center gap-1.5 sm:gap-2.5 rounded-full border border-orange-400/20 bg-orange-500/5 px-3 py-1.5 sm:px-4 sm:py-2 backdrop-blur-sm transition-all duration-300 hover:border-orange-400/40 hover:bg-orange-500/10 cursor-pointer">
             <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-green-500"></span>
@@ -162,16 +171,18 @@ export default function Hero({
           ))}
         </div>
 
-        <ul ref={microRef} className="mt-2 flex flex-wrap gap-6 text-sm font-extralight italic tracking-tight text-white/60">
-          {microDetails.map((detail, index) => {
-            const refMap = [microItem1Ref, microItem2Ref, microItem3Ref];
-            return (
-              <li key={index} ref={refMap[index]} className="flex items-center">
-                {detail}
-              </li>
-            );
-          })}
-        </ul>
+        {microDetails.length > 0 && (
+          <ul ref={microRef} className="mt-2 flex flex-wrap gap-6 text-sm font-extralight italic tracking-tight text-white/60">
+            {microDetails.map((detail, index) => {
+              const refMap = [microItem1Ref, microItem2Ref, microItem3Ref];
+              return (
+                <li key={index} ref={refMap[index]} className="flex items-center">
+                  {detail}
+                </li>
+              );
+            })}
+          </ul>
+        )}
 
         {/* Trust badge */}
         {trustBadge && (

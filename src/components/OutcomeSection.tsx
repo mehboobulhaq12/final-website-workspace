@@ -31,24 +31,24 @@ const connections = [
   { x1: 45, y1: 22, x2: 55, y2: 22 }, { x1: 70, y1: 18, x2: 85, y2: 20 },
 ];
 
-const MapComponent = () => (
+const MapComponent = ({ staticMode = false }: { staticMode?: boolean }) => (
   <svg viewBox="0 0 120 60" className="w-full h-full text-white/20">
     {points.map((point, index) => (
       <circle key={index} cx={point.x} cy={point.y} r={0.15} fill="currentColor" />
     ))}
     {connections.map((c, i) => (
       <line key={`line-${i}`} x1={c.x1} y1={c.y1} x2={c.x2} y2={c.y2} stroke="hsl(25 95% 53%)" strokeWidth="0.3" opacity="0.35">
-        <animate attributeName="opacity" values="0.2;0.5;0.2" dur={`${2.5 + i * 0.3}s`} repeatCount="indefinite" />
+        {!staticMode && <animate attributeName="opacity" values="0.2;0.5;0.2" dur={`${2.5 + i * 0.3}s`} repeatCount="indefinite" />}
       </line>
     ))}
     {highlightedPoints.map((p, i) => (
       <g key={`hl-${i}`}>
         <circle cx={p.cx} cy={p.cy} r="1.8" fill="hsl(25 95% 53%)" opacity="0.15">
-          <animate attributeName="r" values="1.2;2.8;1.2" dur={`${2 + i * 0.2}s`} repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.2;0.06;0.2" dur={`${2 + i * 0.2}s`} repeatCount="indefinite" />
+          {!staticMode && <animate attributeName="r" values="1.2;2.8;1.2" dur={`${2 + i * 0.2}s`} repeatCount="indefinite" />}
+          {!staticMode && <animate attributeName="opacity" values="0.2;0.06;0.2" dur={`${2 + i * 0.2}s`} repeatCount="indefinite" />}
         </circle>
         <circle cx={p.cx} cy={p.cy} r="0.6" fill="hsl(25 95% 53%)" opacity="1">
-          <animate attributeName="opacity" values="0.7;1;0.7" dur={`${1.5 + i * 0.15}s`} repeatCount="indefinite" />
+          {!staticMode && <animate attributeName="opacity" values="0.7;1;0.7" dur={`${1.5 + i * 0.15}s`} repeatCount="indefinite" />}
         </circle>
       </g>
     ))}
@@ -73,64 +73,88 @@ const TypingIndicator = ({ color = "white" }: { color?: string }) => (
 const ChatAnimation = () => {
   const [stage, setStage] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const startedRef = useRef(false);
 
   useEffect(() => {
-    let cycleCount = 0;
-    const maxCycles = 3;
-    const cycleDuration = 5000;
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    const cycleDuration = isMobile ? 5600 : 5000;
     const allTimers: ReturnType<typeof setTimeout>[] = [];
+    let cycleInterval: ReturnType<typeof setInterval> | null = null;
 
-    const runCycle = () => {
-      if (cycleCount >= maxCycles) return;
-      const offset = cycleCount * cycleDuration;
-      cycleCount++;
+    const runCycle = (offset = 0) => {
       allTimers.push(
         setTimeout(() => setStage(0), offset),
-        setTimeout(() => setStage(1), offset + 200),
-        setTimeout(() => setStage(2), offset + 900),
-        setTimeout(() => setStage(3), offset + 1400),
-        setTimeout(() => setStage(4), offset + 2200),
-        setTimeout(() => setStage(5), offset + 3000),
-        setTimeout(() => setStage(6), offset + 3800),
+        setTimeout(() => setStage(1), offset + (isMobile ? 250 : 200)),
+        setTimeout(() => setStage(2), offset + (isMobile ? 1100 : 900)),
+        setTimeout(() => setStage(3), offset + (isMobile ? 1800 : 1400)),
+        setTimeout(() => setStage(4), offset + (isMobile ? 2800 : 2200)),
+        setTimeout(() => setStage(5), offset + (isMobile ? 3800 : 3000)),
+        setTimeout(() => setStage(6), offset + (isMobile ? 4600 : 3800)),
       );
-      if (cycleCount < maxCycles) {
-        allTimers.push(setTimeout(() => runCycle(), cycleDuration));
-      }
     };
 
-    const trigger = ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: "top 85%",
-      once: true,
-      onEnter: () => {
-        if (!startedRef.current) { startedRef.current = true; runCycle(); }
-      },
-    });
+    runCycle(0);
+    cycleInterval = setInterval(() => runCycle(0), cycleDuration);
 
-    return () => { trigger.kill(); allTimers.forEach(clearTimeout); };
+    return () => {
+      if (cycleInterval) clearInterval(cycleInterval);
+      allTimers.forEach(clearTimeout);
+    };
   }, []);
 
   return (
-    <div ref={containerRef} className="flex flex-col gap-3 mt-auto">
+    <div
+      ref={containerRef}
+      className="mt-auto grid h-[224px] grid-rows-[76px_76px_56px] gap-3 overflow-hidden sm:h-[196px] sm:grid-rows-[64px_64px_44px]"
+    >
       <div className={`flex items-start gap-2 transition-all duration-500 ${stage >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
-        <div className="w-5 h-5 rounded-full bg-orange-500/20 mt-0.5 flex-shrink-0 flex items-center justify-center"><span className="text-[8px]">🤖</span></div>
-        <div>
+        <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-orange-500/20">
+          <span className="text-[8px]">🤖</span>
+        </div>
+        <div className="min-w-0 flex-1">
           <p className="text-[10px] text-white/40">AI Agent</p>
-          {stage >= 1 && stage < 2 ? <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10"><TypingIndicator color="orange" /></div>
-           : stage >= 2 ? <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10 px-3 py-2"><p className="text-xs text-white/80">Hey, we noticed you haven't completed your setup...</p></div> : null}
+          <div className="mt-1 h-[56px] overflow-hidden">
+            {stage >= 1 && stage < 2 ? (
+              <div className="rounded-lg border border-orange-500/20 bg-orange-500/10">
+                <TypingIndicator color="orange" />
+              </div>
+            ) : stage >= 2 ? (
+              <div className="rounded-lg border border-orange-500/20 bg-orange-500/10 px-3 py-2">
+                <p className="text-xs leading-relaxed text-white/80">Hey, we noticed you haven&apos;t completed your setup...</p>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
       <div className={`flex items-start gap-2 transition-all duration-500 ${stage >= 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
-        <div className="w-5 h-5 rounded-full bg-orange-500/20 mt-0.5 flex-shrink-0 flex items-center justify-center"><span className="text-[8px]">🤖</span></div>
-        <div>
-          {stage >= 3 && stage < 4 ? <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10"><TypingIndicator color="orange" /></div>
-           : stage >= 4 ? <div className="mt-1 rounded-lg border border-orange-500/20 bg-orange-500/10 px-3 py-2"><p className="text-xs text-white/80">Would you like to schedule a quick call to finish onboarding?</p></div> : null}
+        <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-orange-500/20">
+          <span className="text-[8px]">🤖</span>
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="mt-[18px] h-[56px] overflow-hidden">
+            {stage >= 3 && stage < 4 ? (
+              <div className="rounded-lg border border-orange-500/20 bg-orange-500/10">
+                <TypingIndicator color="orange" />
+              </div>
+            ) : stage >= 4 ? (
+              <div className="rounded-lg border border-orange-500/20 bg-orange-500/10 px-3 py-2">
+                <p className="text-xs leading-relaxed text-white/80">Would you like to schedule a quick call to finish onboarding?</p>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
       <div className={`flex justify-end transition-all duration-500 ${stage >= 5 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
-        {stage >= 5 && stage < 6 ? <div className="rounded-lg bg-white/10 border border-white/10"><TypingIndicator color="white" /></div>
-         : stage >= 6 ? <div className="rounded-lg bg-white/10 border border-white/10 px-3 py-2 max-w-[80%]"><p className="text-xs text-white/70">Thanks for checking in! I'd love to pick this back up.</p><p className="text-[10px] text-white/30 mt-1 text-right">Now</p></div> : null}
+        <div className="h-[56px] w-[84%] max-w-[216px] overflow-hidden sm:h-[44px] sm:max-w-[196px]">
+          {stage >= 5 && stage < 6 ? (
+            <div className="rounded-lg border border-white/10 bg-white/10">
+              <TypingIndicator color="white" />
+            </div>
+          ) : stage >= 6 ? (
+            <div className="flex h-full items-center rounded-lg border border-white/10 bg-white/10 px-3 py-2">
+              <p className="text-xs leading-relaxed text-white/70">Thanks for checking in! I&apos;d love to pick this back up.</p>
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );
@@ -143,11 +167,29 @@ const AutoOutcomeChart = () => {
   const [manualCount, setManualCount] = useState(0);
   const [agentCount, setAgentCount] = useState(0);
   const startedRef = useRef(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    if (isMobile) {
+      const startTime = performance.now();
+      const cycleDuration = 8000;
+      intervalRef.current = setInterval(() => {
+        const elapsed = (performance.now() - startTime) % cycleDuration;
+        const t = elapsed / cycleDuration;
+        const eased = 1 - Math.pow(1 - t, 3);
+        setProgress(eased);
+        setManualCount(Math.round(eased * 11));
+        setAgentCount(Math.round(eased * 210));
+      }, 120);
+      return () => {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      };
+    }
+
     let animFrame: number;
     let startTime: number;
-    const cycleDuration = 8000; // 8s — slow and smooth
+    const cycleDuration = 8000; // 8s  -  slow and smooth
 
     const trigger = ScrollTrigger.create({
       trigger: containerRef.current,
@@ -156,7 +198,20 @@ const AutoOutcomeChart = () => {
       onEnter: () => {
         if (startedRef.current) return;
         startedRef.current = true;
+        const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
         startTime = performance.now();
+
+        if (isMobile) {
+          intervalRef.current = setInterval(() => {
+            const elapsed = (performance.now() - startTime) % cycleDuration;
+            const t = elapsed / cycleDuration;
+            const eased = 1 - Math.pow(1 - t, 3);
+            setProgress(eased);
+            setManualCount(Math.round(eased * 11));
+            setAgentCount(Math.round(eased * 210));
+          }, 120);
+          return;
+        }
 
         const animate = (now: number) => {
           const elapsed = (now - startTime) % cycleDuration;
@@ -172,7 +227,11 @@ const AutoOutcomeChart = () => {
       },
     });
 
-    return () => { trigger.kill(); cancelAnimationFrame(animFrame); };
+    return () => {
+      trigger.kill();
+      cancelAnimationFrame(animFrame);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, []);
 
   // Manual line (flat-ish)
@@ -232,6 +291,7 @@ const OutcomeSection = () => {
   useGSAP(
     () => {
       if (!sectionRef.current) return;
+      const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
       const elements = [headingRef.current, gridRef.current].filter(Boolean);
       gsap.set(elements, { autoAlpha: 0, y: 30 });
       gsap.to(elements, {
@@ -241,7 +301,7 @@ const OutcomeSection = () => {
 
       // Parallax
       const inner = sectionRef.current.querySelector(".parallax-inner");
-      if (inner) {
+      if (inner && !isMobile) {
         gsap.to(inner, {
           yPercent: -5,
           ease: "none",
@@ -295,7 +355,7 @@ const OutcomeSection = () => {
           </div>
 
           {/* Card 2 - AI Conversations */}
-          <div className="md:col-span-2 rounded-xl border border-white/10 bg-white/[0.02] p-6 flex flex-col gap-4">
+          <div className="md:col-span-2 rounded-xl border border-white/10 bg-white/[0.02] p-6 flex flex-col gap-4 overflow-hidden">
             <div className="flex items-center gap-2 text-white/50">
               <MessageCircle className="w-4 h-4" />
               <span className="text-xs font-light tracking-wide">AI-powered conversations</span>

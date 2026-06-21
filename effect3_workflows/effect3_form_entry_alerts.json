@@ -1,0 +1,126 @@
+{
+  "name": "Effect3 Form Entry Alerts",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        260,
+        320
+      ],
+      "id": "schedule-trigger",
+      "name": "Every 5 Minutes"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        260,
+        520
+      ],
+      "id": "manual-trigger",
+      "name": "Manual Test"
+    },
+    {
+      "parameters": {
+        "jsCode": "const staticData = $getWorkflowStaticData('global');\n\nconst recipient = 'effect3.agency@gmail.com';\nconst sources = [\n  {\n    formType: 'onboarding',\n    url: 'https://docs.google.com/spreadsheets/d/1ZVTEiXft3cigE9DqshrefMpwx7IgfsFu1nHBCoyhGvU/gviz/tq?tqx=out:csv&sheet=Onboarding'\n  },\n  {\n    formType: 'careers',\n    url: 'https://docs.google.com/spreadsheets/d/1ZVTEiXft3cigE9DqshrefMpwx7IgfsFu1nHBCoyhGvU/gviz/tq?tqx=out:csv&sheet=Careers'\n  }\n];\n\nfunction parseCsv(text) {\n  const rows = [];\n  let row = [];\n  let value = '';\n  let inQuotes = false;\n\n  for (let i = 0; i < text.length; i++) {\n    const char = text[i];\n    const next = text[i + 1];\n\n    if (char === '\"') {\n      if (inQuotes && next === '\"') {\n        value += '\"';\n        i++;\n      } else {\n        inQuotes = !inQuotes;\n      }\n      continue;\n    }\n\n    if (char === ',' && !inQuotes) {\n      row.push(value);\n      value = '';\n      continue;\n    }\n\n    if ((char === '\\n' || char === '\\r') && !inQuotes) {\n      if (char === '\\r' && next === '\\n') i++;\n      row.push(value);\n      value = '';\n      if (row.some(cell => String(cell).trim() !== '')) rows.push(row);\n      row = [];\n      continue;\n    }\n\n    value += char;\n  }\n\n  if (value.length > 0 || row.length > 0) {\n    row.push(value);\n    if (row.some(cell => String(cell).trim() !== '')) rows.push(row);\n  }\n\n  return rows;\n}\n\nfunction rowToObject(headers, row) {\n  const obj = {};\n  headers.forEach((header, index) => {\n    obj[header] = row[index] ?? '';\n  });\n  return obj;\n}\n\nconst seenKeys = new Set(Array.isArray(staticData.seenKeys) ? staticData.seenKeys : []);\nconst initialized = Boolean(staticData.initialized);\nconst newItems = [];\n\nfor (const source of sources) {\n  const response = await fetch(source.url);\n  if (!response.ok) {\n    throw new Error(`Failed to fetch ${source.formType} sheet: ${response.status}`);\n  }\n\n  const csv = await response.text();\n  const rows = parseCsv(csv);\n  if (rows.length < 2) continue;\n\n  const headers = rows[0];\n  const entries = rows.slice(1).filter(row => row.some(cell => String(cell).trim() !== ''));\n\n  for (const row of entries) {\n    const entry = rowToObject(headers, row);\n    const key = `${source.formType}:${entry.submittedAt || ''}:${entry.email || ''}:${entry.name || ''}`;\n\n    if (!initialized) {\n      seenKeys.add(key);\n      continue;\n    }\n\n    if (seenKeys.has(key)) continue;\n    seenKeys.add(key);\n\n    if (source.formType === 'onboarding') {\n      newItems.push({\n        json: {\n          recipient,\n          formType: source.formType,\n          submittedAt: entry.submittedAt || '',\n          subject: `New Effect3 onboarding entry \u2014 ${entry.name || entry.brandName || 'Unknown'}`,\n          message: `New onboarding entry received on Effect3.\\n\\nSubmitted at: ${entry.submittedAt || 'Unknown'}\\nName: ${entry.name || 'Unknown'}\\nEmail: ${entry.email || 'Unknown'}\\nPhone: ${entry.phone || 'Not provided'}\\nBrand: ${entry.brandName || 'Not provided'}\\nCategory: ${entry.category || 'Not provided'}\\nWebsite: ${entry.website || 'Not provided'}\\nMode: ${entry.mode || 'Not provided'}\\nProblem: ${entry.problem || 'Not provided'}\\nAgents: ${entry.agents || 'Not provided'}\\n\\nSheet: Onboarding\\nSource: https://docs.google.com/spreadsheets/d/1ZVTEiXft3cigE9DqshrefMpwx7IgfsFu1nHBCoyhGvU/edit`\n        }\n      });\n    } else {\n      newItems.push({\n        json: {\n          recipient,\n          formType: source.formType,\n          submittedAt: entry.submittedAt || '',\n          subject: `New Effect3 careers entry \u2014 ${entry.name || 'Unknown'}`,\n          message: `New careers application received on Effect3.\\n\\nSubmitted at: ${entry.submittedAt || 'Unknown'}\\nName: ${entry.name || 'Unknown'}\\nEmail: ${entry.email || 'Unknown'}\\nRole: ${entry.role || 'Not provided'}\\nMessage: ${entry.message || 'Not provided'}\\nSource: ${entry.source || 'Not provided'}\\n\\nSheet: Careers\\nSource: https://docs.google.com/spreadsheets/d/1ZVTEiXft3cigE9DqshrefMpwx7IgfsFu1nHBCoyhGvU/edit`\n        }\n      });\n    }\n  }\n}\n\nstaticData.initialized = true;\nstaticData.seenKeys = Array.from(seenKeys).slice(-500);\n\nreturn newItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        420
+      ],
+      "id": "check-new-entries",
+      "name": "Check New Form Entries"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.recipient }}",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.message }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        920,
+        420
+      ],
+      "id": "send-email-alert",
+      "name": "Send Gmail Alert",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "HKptktwsqCYXCiC8",
+          "name": "ETGmail"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Effect3-only form alert workflow.\n\nWhat it does:\n1. Polls the public Google Sheet every 5 minutes\n2. Detects new rows in Onboarding and Careers\n3. Sends alert emails to effect3.agency@gmail.com\n4. Stores seen keys in workflow static data so rows are not alerted twice\n\nImportant: WhatsApp transport is not configured in this n8n account yet. The detection workflow is live and isolated from Ecomera. Add a WhatsApp provider credential later and swap the final Gmail node.",
+        "height": 260,
+        "width": 360
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        108,
+        96
+      ],
+      "id": "note",
+      "name": "Workflow Notes"
+    }
+  ],
+  "connections": {
+    "Every 5 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Check New Form Entries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Test": {
+      "main": [
+        [
+          {
+            "node": "Check New Form Entries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check New Form Entries": {
+      "main": [
+        [
+          {
+            "node": "Send Gmail Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

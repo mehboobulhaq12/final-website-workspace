@@ -1,0 +1,107 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" rx="28" fill="#EEF2F8"/>
+  <rect x="0" y="0" width="1600" height="78" fill="#FFFFFF"/>
+  <rect x="0" y="77" width="1600" height="1" fill="#E6EAF0"/>
+  <g>
+    <polygon points="34,28 57,16 68,28 45,40" fill="#FF6A00"/>
+    <polygon points="45,40 68,28 75,46 52,58" fill="#F6A623"/>
+    <polygon points="52,58 75,46 69,64 46,76" fill="#FFC06A"/>
+    <text x="88" y="52" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700" fill="#111827">EFFECT3</text>
+  </g>
+  <rect x="220" y="14" width="430" height="46" rx="14" fill="#F5F7FB" stroke="#E0E6EF"/>
+  <circle cx="250" cy="37" r="9" stroke="#94A3B8" stroke-width="3"/>
+  <line x1="256" y1="44" x2="264" y2="52" stroke="#94A3B8" stroke-width="3" stroke-linecap="round"/>
+  <text x="278" y="45" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#94A3B8">Search leads, campaigns...</text>
+  <rect x="950" y="14" width="164" height="46" rx="14" fill="#FFFFFF" stroke="#D6DDE8"/>
+  <text x="988" y="45" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" fill="#334155">Upload Leads</text>
+  <text x="969" y="44" font-family="Arial, Helvetica, sans-serif" font-size="34" fill="#334155">+</text>
+  <rect x="1140" y="14" width="176" height="46" rx="14" fill="#FF5C00"/>
+  <text x="1184" y="45" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">New Campaign</text>
+  <text x="1168" y="44" font-family="Arial, Helvetica, sans-serif" font-size="34" fill="#FFFFFF">+</text>
+  <circle cx="1474" cy="37" r="21" fill="#D8E7F6" stroke="#B7C9DD"/>
+  <text x="1512" y="45" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#475569">Alex Morgan</text>
+  <rect x="0" y="78" width="1600" height="64" fill="#FFFFFF"/>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="600">
+    <text x="36" y="118" fill="#64748B">Dashboard</text>
+    <text x="150" y="118" fill="#4F46E5">Leads Analysis</text>
+    <line x1="150" y1="138" x2="266" y2="138" stroke="#4F46E5" stroke-width="4"/>
+    <text x="300" y="118" fill="#64748B">Campaigns</text>
+    <text x="418" y="118" fill="#64748B">Voice Agents</text>
+    <text x="554" y="118" fill="#64748B">Reports</text>
+    <text x="661" y="118" fill="#64748B">Settings</text>
+  </g>
+  <rect x="24" y="182" width="1552" height="594" rx="24" fill="#FFFFFF" stroke="#DCE3ED"/>
+  <text x="52" y="236" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#0F172A">Lead Segmentation</text>
+  <text x="52" y="270" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#64748B">Filter and target specific customer groups</text>
+  <rect x="1326" y="224" width="190" height="46" rx="14" fill="#FF5C00"/>
+  <text x="1366" y="253" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">Create Campaign</text>
+  <text x="1350" y="252" font-family="Arial, Helvetica, sans-serif" font-size="32" fill="#FFFFFF">+</text>
+  <g>
+    <text x="52" y="322" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#64748B">Churn Reason</text>
+    <rect x="52" y="336" width="486" height="40" rx="12" fill="#F8FAFD" stroke="#D5DEE9"/>
+    <text x="68" y="362" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#334155">All Reasons</text>
+    <text x="520" y="362" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#64748B">⌄</text>
+    <text x="556" y="322" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#64748B">Sentiment</text>
+    <rect x="556" y="336" width="486" height="40" rx="12" fill="#F8FAFD" stroke="#D5DEE9"/>
+    <text x="572" y="362" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#334155">All Sentiments</text>
+    <text x="1024" y="362" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#64748B">⌄</text>
+    <text x="1060" y="322" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#64748B">LTV Range</text>
+    <rect x="1060" y="336" width="456" height="40" rx="12" fill="#F8FAFD" stroke="#D5DEE9"/>
+    <text x="1076" y="362" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#334155">All Values</text>
+    <text x="1498" y="362" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#64748B">⌄</text>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#64748B">
+    <text x="60" y="420">Company Name</text>
+    <text x="420" y="420">Churn Reason</text>
+    <text x="760" y="420">Sentiment</text>
+    <text x="1080" y="420">LTV</text>
+    <text x="1270" y="420">Status</text>
+  </g>
+  <line x1="52" y1="438" x2="1528" y2="438" stroke="#E7EDF4"/>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="17">
+    <text x="60" y="472" font-weight="700" fill="#1E293B">Acme Corp</text>
+    <text x="420" y="472" fill="#475569">Pricing</text>
+    <rect x="760" y="450" width="84" height="28" rx="14" fill="#FFE4E6"/>
+    <text x="770" y="469" font-weight="700" fill="#E11D48">Angry</text>
+    <text x="1080" y="472" fill="#475569">$12,000</text>
+    <rect x="1270" y="450" width="76" height="28" rx="14" fill="#FFF1E6"/>
+    <text x="1280" y="469" font-weight="700" fill="#F97316">New</text>
+
+    <text x="60" y="528" font-weight="700" fill="#1E293B">Globex Inc</text>
+    <text x="420" y="528" fill="#475569">Product Quality</text>
+    <rect x="760" y="506" width="110" height="28" rx="14" fill="#FEF3C7"/>
+    <text x="770" y="525" font-weight="700" fill="#D97706">Disappointed</text>
+    <text x="1080" y="528" fill="#475569">$8,500</text>
+    <rect x="1270" y="506" width="110" height="28" rx="14" fill="#FFF1E6"/>
+    <text x="1280" y="525" font-weight="700" fill="#F97316">Contacted</text>
+
+    <rect x="52" y="552" width="1476" height="46" fill="#F8FAFD"/>
+    <text x="60" y="582" font-weight="700" fill="#1E293B">Soylent Corp</text>
+    <text x="420" y="582" fill="#475569">No Results</text>
+    <rect x="760" y="560" width="80" height="28" rx="14" fill="#EEF2F7"/>
+    <text x="770" y="579" font-weight="700" fill="#64748B">Neutral</text>
+    <text x="1080" y="582" fill="#475569">$4,500</text>
+    <rect x="1270" y="560" width="92" height="28" rx="14" fill="#DCFCE7"/>
+    <text x="1280" y="579" font-weight="700" fill="#10B981">Recovered</text>
+
+    <text x="60" y="638" font-weight="700" fill="#1E293B">Initech</text>
+    <text x="420" y="638" fill="#475569">Service</text>
+    <rect x="760" y="616" width="92" height="28" rx="14" fill="#FFF1E6"/>
+    <text x="770" y="635" font-weight="700" fill="#F97316">Frustrated</text>
+    <text x="1080" y="638" fill="#475569">$15,000</text>
+    <rect x="1270" y="616" width="76" height="28" rx="14" fill="#FFF1E6"/>
+    <text x="1280" y="635" font-weight="700" fill="#F97316">New</text>
+
+    <text x="60" y="694" font-weight="700" fill="#1E293B">Umbrella Corp</text>
+    <text x="420" y="694" fill="#475569">Pricing</text>
+    <rect x="760" y="672" width="84" height="28" rx="14" fill="#FFE4E6"/>
+    <text x="770" y="691" font-weight="700" fill="#E11D48">Angry</text>
+    <text x="1080" y="694" fill="#475569">$25,000</text>
+    <rect x="1270" y="672" width="76" height="28" rx="14" fill="#EFF6FF"/>
+    <text x="1280" y="691" font-weight="700" fill="#64748B">Lost</text>
+  </g>
+  <rect x="24" y="810" width="760" height="70" rx="22" fill="#FFFFFF" stroke="#DCE3ED"/>
+  <rect x="816" y="810" width="760" height="70" rx="22" fill="#FFFFFF" stroke="#DCE3ED"/>
+  <text x="52" y="850" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#0F172A">Churn Sentiment Analysis</text>
+  <text x="844" y="850" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#0F172A">Channel Performance</text>
+</svg>

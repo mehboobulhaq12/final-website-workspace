@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, Building2, MapPin, ArrowDown, Send, User, Mail, FileText, Briefcase } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import ShaderBackground from "@/components/ShaderBackground";
+import SeoHead from "@/components/SeoHead";
 import { TextShimmer } from "@/components/ui/text-shimmer";
+import { supabase } from "@/integrations/supabase/client";
+import { submitToGoogleSheets } from "@/lib/googleSheets";
+import { getCanonicalUrl, getCareersStructuredData } from "@/lib/seo";
 
 type Department = "All" | "Engineering" | "Marketing" | "Growth";
 
@@ -44,7 +48,7 @@ const jobs = [
     location: "Worldwide",
     department: "Growth" as Department,
     description:
-      "Own the go-to-market engineering stack—building sales automation, CRM integrations, and analytics dashboards that accelerate pipeline velocity and customer acquisition.",
+      "Own the go-to-market engineering stack - building sales automation, CRM integrations, and analytics dashboards that accelerate pipeline velocity and customer acquisition.",
   },
   {
     title: "AEO / SEO Specialist",
@@ -78,28 +82,78 @@ const fadeUp = {
 };
 
 export default function Careers() {
+  const isPrerenderMode = useMemo(() => {
+    if (typeof window === "undefined") return false;
+
+    const search = new URLSearchParams(window.location.search);
+    return search.has("prerender") || /HeadlessChrome/i.test(window.navigator.userAgent);
+  }, []);
+
   const [activeDept, setActiveDept] = useState<Department>("All");
   const [formData, setFormData] = useState({ name: "", email: "", role: "", message: "" });
-  const [formStatus, setFormStatus] = useState<"idle" | "sent">("idle");
+  const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "sent" | "error">("idle");
+  const structuredData = useMemo(() => getCareersStructuredData(), []);
 
   const filtered = activeDept === "All" ? jobs : jobs.filter((j) => j.department === activeDept);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`${formData.role || "General"} — Application`);
-    const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`);
-    window.open(`mailto:ibrahim@theeffect3.com?subject=${subject}&body=${body}`, "_blank");
+    if (formStatus === "submitting") return;
+    setFormStatus("submitting");
+
+    const payload = {
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      role: formData.role,
+      message: formData.message.trim(),
+      source: "website",
+    };
+
+    const [sheetsResult, supabaseResult] = await Promise.allSettled([
+      submitToGoogleSheets({
+        formType: "careers",
+        submittedAt: new Date().toISOString(),
+        pagePath: window.location.pathname,
+        payload,
+      }),
+      supabase.from("careers_applications").insert(payload),
+    ]);
+
+    if (sheetsResult.status === "rejected") {
+      setFormStatus("error");
+      setTimeout(() => setFormStatus("idle"), 3000);
+      return;
+    }
+
+    if (supabaseResult.status === "rejected" || supabaseResult.value.error) {
+      console.warn("Supabase backup save failed for careers submission.");
+    }
+
     setFormStatus("sent");
+    setFormData({ name: "", email: "", role: "", message: "" });
     setTimeout(() => setFormStatus("idle"), 3000);
   };
 
   return (
-    <div className="w-screen min-h-screen flex flex-col relative bg-black text-white">
+    <div className="w-full min-h-screen flex flex-col relative bg-black text-white overflow-x-clip">
+      <SeoHead
+        title="Careers at Effect3 | AI, GTM, Marketing Roles"
+        description="Join Effect3 across AI engineering, GTM engineering, marketing, growth, and AEO/SEO. Explore open roles and apply directly."
+        canonical={getCanonicalUrl("/careers")}
+        structuredData={structuredData}
+      />
       <Navbar />
 
       {/* Hero with Shader */}
       <section className="relative min-h-[70vh] w-full overflow-hidden flex items-end">
-        <ShaderBackground />
+        {isPrerenderMode ? (
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.18),_transparent_35%),radial-gradient(circle_at_80%_20%,_rgba(251,191,36,0.12),_transparent_28%),linear-gradient(180deg,_#060606_0%,_#0b0b0b_55%,_#050505_100%)]"
+          />
+        ) : (
+          <ShaderBackground />
+        )}
         <div className="relative z-10 mx-auto max-w-7xl w-full px-6 md:px-10 lg:px-16 pb-16 pt-32 sm:pt-40">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -142,7 +196,7 @@ export default function Careers() {
       {/* Jobs Section */}
       <section id="roles" className="relative px-6 md:px-10 lg:px-16 py-24 max-w-7xl mx-auto w-full">
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-12 lg:gap-16">
-          {/* Left — Title + Filters */}
+          {/* Left  -  Title + Filters */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -173,7 +227,7 @@ export default function Careers() {
             </div>
           </motion.div>
 
-          {/* Right — Job Cards */}
+          {/* Right  -  Job Cards */}
           <div className="flex flex-col gap-4">
             <AnimatePresence mode="popLayout">
               {filtered.map((job, i) => (
@@ -219,7 +273,7 @@ export default function Careers() {
         </div>
       </section>
 
-      {/* Apply Section — Contact Form + Protocol */}
+      {/* Apply Section  -  Contact Form + Protocol */}
       <section className="relative px-6 md:px-10 lg:px-16 pb-24 max-w-7xl mx-auto w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Contact Form */}
@@ -231,7 +285,7 @@ export default function Careers() {
           >
             <h2 className="text-2xl md:text-3xl font-light tracking-tight mb-2">Apply Now</h2>
             <p className="text-sm font-light text-white/40 leading-relaxed tracking-tight mb-6">
-              Fill out the form and we'll open your email client with the details pre-filled.
+              Fill out the form and your application will be submitted instantly.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -287,9 +341,10 @@ export default function Careers() {
               </div>
               <button
                 type="submit"
+                disabled={formStatus === "submitting"}
                 className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/10 px-5 py-2.5 text-sm font-light tracking-tight text-white backdrop-blur-sm transition-colors duration-200 hover:bg-white/20"
               >
-                {formStatus === "sent" ? "Email Client Opened ✓" : (
+                {formStatus === "submitting" ? "Submitting..." : formStatus === "sent" ? "Application Sent ✓" : formStatus === "error" ? "Failed. Try Again" : (
                   <>Send Application <Send size={14} /></>
                 )}
               </button>
@@ -318,19 +373,17 @@ export default function Careers() {
               <div className="text-white/30 text-xs mb-4 tracking-wider">submission_protocol.txt</div>
               <div className="space-y-3">
                 <div className="flex gap-4">
-                  <span className="text-white/25 uppercase text-xs w-16 shrink-0">To:</span>
-                  <a href="mailto:ibrahim@theeffect3.com" className="text-white/70 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
-                    ibrahim@theeffect3.com
-                  </a>
+                  <span className="text-white/25 uppercase text-xs w-16 shrink-0">Route:</span>
+                  <span className="text-white/70">Website form → Google Sheets (+ Supabase backup)</span>
                 </div>
                 <div className="flex gap-4">
-                  <span className="text-white/25 uppercase text-xs w-16 shrink-0">Subject:</span>
-                  <span className="text-white/40">"[Role Title] — Application"</span>
+                  <span className="text-white/25 uppercase text-xs w-16 shrink-0">Table:</span>
+                  <span className="text-white/40">Careers tab in Google Sheet</span>
                 </div>
                 <div className="flex gap-4">
-                  <span className="text-white/25 uppercase text-xs w-16 shrink-0">Body:</span>
+                  <span className="text-white/25 uppercase text-xs w-16 shrink-0">Payload:</span>
                   <span className="text-white/50">
-                    Please include your resume/LinkedIn and a brief note on a project you led end-to-end.
+                    name, email, role, and project note are saved for review.
                   </span>
                 </div>
               </div>

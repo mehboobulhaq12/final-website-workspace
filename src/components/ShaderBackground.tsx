@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
 import { shaderMaterial } from '@react-three/drei';
 import * as THREE from 'three';
@@ -88,41 +88,73 @@ function ShaderPlane() {
 
 export default function ShaderBackground() {
   const canvasRef = useRef<HTMLDivElement | null>(null);
-  
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isNearViewport, setIsNearViewport] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
   const camera = useMemo(() => ({ position: [0, 0, 1] as [number, number, number], fov: 75, near: 0.1, far: 1000 }), []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const syncMotion = () => setPrefersReducedMotion(mediaQuery.matches);
+    syncMotion();
+    const syncViewport = () => setIsMobile(window.innerWidth < 768);
+    syncViewport();
+    mediaQuery.addEventListener('change', syncMotion);
+    window.addEventListener('resize', syncViewport);
+    return () => {
+      mediaQuery.removeEventListener('change', syncMotion);
+      window.removeEventListener('resize', syncViewport);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsNearViewport(entry.isIntersecting),
+      { rootMargin: '300px 0px' }
+    );
+    observer.observe(canvasRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const shouldRenderCanvas = !prefersReducedMotion && isNearViewport;
   
   useGSAP(
     () => {
       if (!canvasRef.current) return;
       
       gsap.set(canvasRef.current, {
-        filter: 'blur(20px)',
-        scale: 1.1,
-        autoAlpha: 0.7
+        filter: isMobile ? 'blur(0px)' : 'blur(20px)',
+        scale: isMobile ? 1 : 1.1,
+        autoAlpha: isMobile ? 1 : 0.7
       });
       
       gsap.to(canvasRef.current, {
         filter: 'blur(0px)',
         scale: 1,
         autoAlpha: 1,
-        duration: 1.5,
+        duration: isMobile ? 0.6 : 1.5,
         ease: 'power3.out',
-        delay: 0.3
+        delay: isMobile ? 0 : 0.3
       });
     },
-    { scope: canvasRef }
+    { scope: canvasRef, dependencies: [isMobile] }
   );
   
   return (
     <div ref={canvasRef} className="bg-black absolute inset-0 -z-10 w-full h-full" aria-hidden>
-      <Canvas
-        camera={camera}
-        gl={{ antialias: true, alpha: false }}
-        dpr={[1, 2]}
-        style={{ width: '100%', height: '100%' }}
-      >
-        <ShaderPlane />
-      </Canvas>
+      {shouldRenderCanvas && (
+        <Canvas
+          camera={camera}
+          gl={{ antialias: !isMobile, alpha: false, powerPreference: isMobile ? 'low-power' : 'high-performance' }}
+          dpr={isMobile ? [0.75, 1] : [1, 1.25]}
+          performance={isMobile ? { min: 0.35 } : undefined}
+          style={{ width: '100%', height: '100%' }}
+        >
+          <ShaderPlane />
+        </Canvas>
+      )}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20" />
     </div>
   );

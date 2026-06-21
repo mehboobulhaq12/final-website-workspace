@@ -4,16 +4,48 @@ import logo from "@/assets/logo.png";
 
 const footerLinks = {
   Solutions: [
-    { label: "Lead Recovery", href: "#solutions" },
-    { label: "AI Agents", href: "#solutions" },
-    { label: "Integrations", href: "#integrations" },
-    { label: "Infrastructure", href: "#infrastructure" },
+    { label: "AI Automation Agency", href: "/ai-automation-agency" },
+    { label: "AI Agency", href: "/ai-agency" },
+    { label: "AI Inbound Automation", href: "/ai-inbound-automation" },
+    { label: "Lead Revival AI", href: "/lead-revival-ai" },
+    { label: "AI Call Agent", href: "/ai-call-agent" },
+    { label: "Ecommerce Operating System", href: "/ecommerce-operating-system" },
+    { label: "Legal AI Automation", href: "/legal-ai-automation" },
+  ],
+  Expertise: [
+    { label: "AEO Scanner", href: "/aeo-scanner" },
+    { label: "Claude Automation Agency", href: "/claude-automation-agency" },
+    { label: "AI Marketing Agency", href: "/ai-marketing-agency" },
+    { label: "AI Automation for D2C Brands", href: "/ai-automation-for-d2c-brands" },
+    { label: "SaaS AI Conversion System", href: "/saas-ai-conversion-system" },
+    { label: "Ecommerce Ads Agency", href: "/ecommerce-ads-agency" },
+    { label: "AI Amazon Agency", href: "/ai-amazon-agency" },
+    { label: "ChatGPT SEO Agency", href: "/chatgpt-seo-agency" },
+    { label: "AI SEO Agency", href: "/ai-seo-agency" },
+    { label: "LLM Visibility Agency", href: "/llm-visibility-agency" },
+    { label: "AI Search Monitoring", href: "/ai-search-monitoring" },
+    { label: "LLM Rank Tracking", href: "/llm-rank-tracking" },
+    { label: "GEO Audit", href: "/geo-audit" },
   ],
   Company: [
-    { label: "About", href: "#about" },
-    { label: "Case Studies", href: "#case-studies" },
+    { label: "AI Operating Systems", href: "/ai-operating-systems" },
+    { label: "Enterprise AI Operations", href: "/enterprise-ai-operations" },
+    { label: "Enterprise AI Solutions", href: "/enterprise-ai-solutions" },
+    { label: "AEO Agency", href: "/aeo-agency" },
+    { label: "GEO Agency", href: "/geo-agency" },
+    { label: "Google AI Overviews Agency", href: "/google-ai-overviews-agency" },
+    { label: "Effect3 vs ManyChat", href: "/effect3-vs-manychat" },
+    { label: "Effect3 vs Kore.ai", href: "/effect3-vs-kore-ai" },
+    { label: "Effect3 vs Yellow.ai", href: "/effect3-vs-yellow-ai" },
+    { label: "Effect3 vs Cognigy", href: "/effect3-vs-cognigy" },
+    { label: "Company", href: "/company" },
+    { label: "Founder", href: "/founder" },
+    { label: "FAQ", href: "/faq" },
+    { label: "AI Search Prompts", href: "/ai-search-prompts" },
+    { label: "Effect3 Agency", href: "/effect3-agency" },
+    { label: "Case Studies", href: "/case-studies" },
     { label: "Careers", href: "/careers" },
-    { label: "Contact", href: "#contact" },
+    { label: "ManyChat Replacement", href: "/manychat-replacement" },
   ],
 };
 
@@ -35,7 +67,7 @@ export default function Footer() {
               <img src={logo} alt="Company logo" className="h-8 w-auto" />
             </a>
             <p className="text-sm font-light text-white/40 leading-relaxed tracking-tight max-w-xs">
-              We deploy custom AI agents that revive your dead leads and bring your customers back to life.
+              Effect3 is an AI operating systems company that designs, deploys, and operates production AI systems for revenue and service teams.
             </p>
             <div className="flex items-center gap-3 pt-1">
               {socials.map((s) => (

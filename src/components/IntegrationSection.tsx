@@ -83,7 +83,7 @@ const IntegrationSection = () => {
             </TextShimmer>
           </h2>
           <p className="text-base sm:text-lg font-light leading-relaxed text-white/40">
-            Our agents connect directly to your systems — Microsoft 365, Google Workspace, ERP, CRM, finance tools — reading, writing, and executing workflows without migration or platform changes.
+            Our agents connect directly to your systems  -  Microsoft 365, Google Workspace, ERP, CRM, finance tools  -  reading, writing, and executing workflows without migration or platform changes.
           </p>
         </div>
       </div>
@@ -119,6 +119,9 @@ const IntegrationSection = () => {
               <img
                 src={logo.src}
                 alt={logo.alt}
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
                 className="max-w-full max-h-full object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
                 style={{ mixBlendMode: "lighten" }}
               />

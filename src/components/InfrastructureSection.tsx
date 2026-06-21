@@ -20,11 +20,28 @@ function AutoAnimatingChart() {
   const [count, setCount] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    if (isMobile) {
+      const startTime = performance.now();
+      const cycleDuration = 8000;
+      intervalRef.current = setInterval(() => {
+        const elapsed = (performance.now() - startTime) % cycleDuration;
+        const t = elapsed / cycleDuration;
+        const eased = 1 - Math.pow(1 - t, 3);
+        setProgress(eased);
+        setCount(Math.round(eased * 98.7 * 10) / 10);
+      }, 120);
+      return () => {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      };
+    }
+
     let animFrame: number;
     let startTime: number;
-    const cycleDuration = 8000; // 8s per cycle — slow and steady
+    const cycleDuration = 8000; // 8s per cycle  -  slow and steady
 
     const trigger = ScrollTrigger.create({
       trigger: containerRef.current,
@@ -33,7 +50,19 @@ function AutoAnimatingChart() {
       onEnter: () => {
         if (startedRef.current) return;
         startedRef.current = true;
+        const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
         startTime = performance.now();
+
+        if (isMobile) {
+          intervalRef.current = setInterval(() => {
+            const elapsed = (performance.now() - startTime) % cycleDuration;
+            const t = elapsed / cycleDuration;
+            const eased = 1 - Math.pow(1 - t, 3);
+            setProgress(eased);
+            setCount(Math.round(eased * 98.7 * 10) / 10);
+          }, 120);
+          return;
+        }
 
         const animate = (now: number) => {
           const elapsed = (now - startTime) % cycleDuration;
@@ -51,6 +80,7 @@ function AutoAnimatingChart() {
     return () => {
       trigger.kill();
       cancelAnimationFrame(animFrame);
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, []);
 
@@ -107,6 +137,7 @@ const InfrastructureSection = () => {
   useGSAP(
     () => {
       if (!sectionRef.current) return;
+      const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
       gsap.set(headingRef.current, { autoAlpha: 0, y: 30 });
       gsap.to(headingRef.current, {
         autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out",
@@ -124,7 +155,7 @@ const InfrastructureSection = () => {
 
       // Parallax
       const inner = sectionRef.current.querySelector(".parallax-inner");
-      if (inner) {
+      if (inner && !isMobile) {
         gsap.to(inner, {
           yPercent: -5,
           ease: "none",
@@ -160,7 +191,7 @@ const InfrastructureSection = () => {
 
         {/* Bento Grid */}
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-6 gap-4">
-          {/* Card 1 — Audit */}
+          {/* Card 1  -  Audit */}
           <Card className="step-card md:col-span-2 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group relative">
             <div className="absolute top-4 left-4 w-7 h-7 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-xs font-light text-white/40 group-hover:border-orange-400/20 group-hover:text-orange-300/70 transition-all duration-500">1</div>
             <CardContent className="p-0 flex flex-col h-full">
@@ -180,7 +211,7 @@ const InfrastructureSection = () => {
             </CardContent>
           </Card>
 
-          {/* Card 2 — Secure Data Integration */}
+          {/* Card 2  -  Secure Data Integration */}
           <Card className="step-card md:col-span-2 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group relative">
             <div className="absolute top-4 left-4 w-7 h-7 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-xs font-light text-white/40 group-hover:border-orange-400/20 group-hover:text-orange-300/70 transition-all duration-500">2</div>
             <CardContent className="p-0 flex flex-col h-full">
@@ -199,7 +230,7 @@ const InfrastructureSection = () => {
             </CardContent>
           </Card>
 
-          {/* Card 3 — Lead Analysis (auto-animating chart) */}
+          {/* Card 3  -  Lead Analysis (auto-animating chart) */}
           <Card className="step-card md:col-span-2 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group relative">
             <div className="absolute top-4 left-4 w-7 h-7 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-xs font-light text-white/40 group-hover:border-orange-400/20 group-hover:text-orange-300/70 transition-all duration-500">3</div>
             <CardContent className="p-0 flex flex-col h-full">
@@ -215,7 +246,7 @@ const InfrastructureSection = () => {
             </CardContent>
           </Card>
 
-          {/* Card 4 — Strategy & Execution */}
+          {/* Card 4  -  Strategy & Execution */}
           <Card className="step-card md:col-span-3 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group relative">
             <div className="absolute top-4 left-4 w-7 h-7 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-xs font-light text-white/40 group-hover:border-orange-400/20 group-hover:text-orange-300/70 transition-all duration-500">4</div>
             <CardContent className="p-0 flex flex-col sm:flex-row h-full">
@@ -250,7 +281,7 @@ const InfrastructureSection = () => {
             </CardContent>
           </Card>
 
-          {/* Card 5 — Revenue Recovery */}
+          {/* Card 5  -  Revenue Recovery */}
           <Card className="step-card md:col-span-3 border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 overflow-hidden group relative">
             <div className="absolute top-4 left-4 w-7 h-7 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-xs font-light text-white/40 group-hover:border-orange-400/20 group-hover:text-orange-300/70 transition-all duration-500">5</div>
             <CardContent className="p-0 flex flex-col sm:flex-row h-full">

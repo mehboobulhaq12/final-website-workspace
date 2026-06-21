@@ -20,6 +20,8 @@ const companies = [
   { name: "Google", logo: googleLogo, invert: false },
 ];
 
+const MARQUEE_DURATION_SECONDS = 24;
+
 const TrustedBy = () => {
   return (
     <section className="w-full py-6 sm:py-12 bg-black border-t border-white/5">
@@ -32,20 +34,26 @@ const TrustedBy = () => {
           <span className="text-xs font-light tracking-tight text-white/80">Leading by engineers from</span>
         </div>
       </div>
-      <div className="relative overflow-hidden">
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-black to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-black to-transparent z-10" />
 
-        <div className="flex animate-marquee w-max gap-16 items-center">
-          {[...companies, ...companies].map((company, i) => (
+      <div className="relative overflow-hidden px-4 sm:px-6">
+        <div className="absolute left-0 top-0 bottom-0 w-10 sm:w-16 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-10 sm:w-16 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+
+        <div
+          className="flex w-max items-center gap-4 will-change-transform motion-reduce:animate-none"
+          style={{ animation: `logoMarquee ${MARQUEE_DURATION_SECONDS}s linear infinite` }}
+        >
+          {[...companies, ...companies].map((company, idx) => (
             <div
-              key={`${company.name}-${i}`}
-              className="flex items-center justify-center w-[120px] h-[48px] shrink-0"
+              key={`${company.name}-${idx}`}
+              className="flex items-center justify-center w-[124px] h-[52px] rounded-lg border border-white/10 bg-white/[0.04] px-3 shrink-0"
             >
               <img
                 src={company.logo}
                 alt={company.name}
-                className={`w-auto h-auto object-contain hover:scale-110 transition-transform duration-300 max-h-[48px] max-w-[120px] ${company.invert ? 'invert' : ''}`}
+                decoding="async"
+                fetchPriority="low"
+                className={`w-[92px] h-[28px] object-contain transition-transform duration-300 hover:scale-105 ${company.invert ? "invert" : ""}`}
                 loading="lazy"
               />
             </div>

@@ -1,0 +1,77 @@
+{
+  "redirects": [
+    {
+      "source": "/buffy",
+      "destination": "/case-studies/buffy-business-validator",
+      "permanent": false
+    },
+    {
+      "source": "/buffy/",
+      "destination": "/case-studies/buffy-business-validator",
+      "permanent": false
+    },
+    {
+      "source": "/gtm",
+      "destination": "/gtm/",
+      "permanent": false
+    },
+    {
+      "source": "/gtm/onboard",
+      "destination": "/gtm/onboard/",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/client",
+      "destination": "/client/Dashboard.html"
+    },
+    {
+      "source": "/client/",
+      "destination": "/client/Dashboard.html"
+    },
+    {
+      "source": "/client/login",
+      "destination": "/client/Login.html"
+    },
+    {
+      "source": "/client/dashboard",
+      "destination": "/client/Dashboard.html"
+    },
+    {
+      "source": "/tasktracker",
+      "destination": "https://tasktracker.srv1045058.hstgr.cloud/tasktracker"
+    },
+    {
+      "source": "/tasktracker/",
+      "destination": "https://tasktracker.srv1045058.hstgr.cloud/tasktracker/"
+    },
+    {
+      "source": "/tasktracker/:path*",
+      "destination": "https://tasktracker.srv1045058.hstgr.cloud/tasktracker/:path*"
+    },
+    {
+      "source": "/gtm/onboard/:path*",
+      "destination": "/gtm/onboard/index.html"
+    },
+    {
+      "source": "/gtm/:path*",
+      "destination": "/gtm/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/client/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
+  ]
+}

@@ -1,348 +1,581 @@
-import { useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowRight, ArrowLeft, Check, Building2, Globe, Users, BarChart3, MessageSquare, Phone, Zap, Search, PenTool, Eye, Sparkles } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Building2,
+  Check,
+  Eye,
+  MessageSquare,
+  PenTool,
+  Phone,
+  Scale,
+  Search,
+  Sparkles,
+  Store,
+  X,
+  Zap,
+} from "lucide-react";
+
+import { submitToGoogleSheets } from "@/lib/googleSheets";
+import {
+  buildOnboardingPayload,
+  type FormState,
+  type OnboardingMode,
+  validateOnboardingSubmission,
+} from "@/lib/onboardingSubmission";
+import { triggerOnboardingEmailAutomation } from "@/lib/onboardingEmailAutomation";
+import { supabase } from "@/integrations/supabase/client";
 
 interface OnboardingModalProps {
   open: boolean;
   onClose: () => void;
-  mode: "audit" | "demo";
+  mode: OnboardingMode;
+  initialProblem?: string;
 }
 
+const SYSTEM_REVIEW_FORM_SRC =
+  "https://spiral-fish-b54.notion.site/ebd//35117297181e8022b27aff0a10759983";
+
+const ENABLE_PREBOOK_LEAD_CAPTURE = false;
+
+const EMPTY_FORM: FormState = {
+  name: "",
+  email: "",
+  phone: "",
+  brandName: "",
+  category: "",
+  website: "",
+  businessDesc: "",
+  mrr: "",
+  customers: "",
+  deadCustomers: "",
+  problem: "",
+  agents: [],
+  leadReviverSub: "",
+};
+
 const BUSINESS_CATEGORIES = [
-  { label: "SaaS", icon: <Zap className="w-5 h-5" /> },
-  { label: "Ecommerce", icon: <Building2 className="w-5 h-5" /> },
-  { label: "Agency", icon: <Users className="w-5 h-5" /> },
-  { label: "Others", icon: <Globe className="w-5 h-5" /> },
+  { label: "SaaS / Growth", icon: <Zap className="h-5 w-5" /> },
+  { label: "D2C / Retail", icon: <Store className="h-5 w-5" /> },
+  { label: "Legal / Services", icon: <Scale className="h-5 w-5" /> },
+  { label: "Enterprise", icon: <Building2 className="h-5 w-5" /> },
 ];
 
 const AGENT_OPTIONS = [
-  { id: "lead-reviver", label: "Lead Reviver", desc: "The outreach agent that revives dead leads", icon: <MessageSquare className="w-5 h-5" />, subOptions: ["Text Agent", "Call Agent"] },
-  { id: "inbound-handler", label: "Inbound Handler", desc: "Handles all business operations automatically", icon: <Zap className="w-5 h-5" /> },
-  { id: "ai-call-agent", label: "AI Call Agent", desc: "For outreaches and inbound calling", icon: <Phone className="w-5 h-5" /> },
-  { id: "outreach-system", label: "Outreach System", desc: "Find new leads and customers at scale", icon: <Search className="w-5 h-5" /> },
-  { id: "content-system", label: "Content System", desc: "Scale your brand with organic content", icon: <PenTool className="w-5 h-5" /> },
-  { id: "rerank-system", label: "Rerank System", desc: "Get visible in ChatGPT, Gemini, Claude, Perplexity, Mistral, GLM 5, Kimi K2, DeepSeek", icon: <Eye className="w-5 h-5" /> },
+  {
+    id: "lead-reviver",
+    label: "Lead Reviver",
+    desc: "Revives dead leads with text or call follow-up.",
+    icon: <MessageSquare className="h-5 w-5" />,
+    subOptions: ["Text Agent", "Call Agent"],
+  },
+  {
+    id: "inbound-handler",
+    label: "Inbound Handler",
+    desc: "Handles routing, replies, and intake across channels.",
+    icon: <Zap className="h-5 w-5" />,
+  },
+  {
+    id: "ai-call-agent",
+    label: "AI Call Agent",
+    desc: "Runs inbound and outbound call workflows.",
+    icon: <Phone className="h-5 w-5" />,
+  },
+  {
+    id: "outreach-system",
+    label: "Outreach System",
+    desc: "Finds and engages new leads at scale.",
+    icon: <Search className="h-5 w-5" />,
+  },
+  {
+    id: "content-system",
+    label: "Content System",
+    desc: "Turns content into a repeatable growth system.",
+    icon: <PenTool className="h-5 w-5" />,
+  },
+  {
+    id: "rerank-system",
+    label: "Rerank System",
+    desc: "Improves visibility across AI search surfaces.",
+    icon: <Eye className="h-5 w-5" />,
+  },
 ];
 
 const STEPS = [
-  { title: "Let's Get Acquainted", subtitle: "Tell us about yourself" },
-  { title: "Your Brand", subtitle: "Help us understand your business" },
-  { title: "Your Business", subtitle: "What do you do?" },
-  { title: "Your Numbers", subtitle: "Let's look at the data" },
-  { title: "Your Challenge", subtitle: "What's holding you back?" },
-  { title: "Your AI Stack", subtitle: "Choose your agents" },
+  {
+    title: "Let's Get Acquainted",
+    subtitle: "Tell us about yourself.",
+  },
+  {
+    title: "Your Brand",
+    subtitle: "Help us understand your business.",
+  },
+  {
+    title: "Your Business",
+    subtitle: "What do you do and who do you serve?",
+  },
+  {
+    title: "Your Numbers",
+    subtitle: "Share the operating context.",
+  },
+  {
+    title: "Your Challenge",
+    subtitle: "What is actually blocked right now?",
+  },
+  {
+    title: "Your AI Stack",
+    subtitle: "Choose the systems you want next.",
+  },
 ];
 
-const StepIndicator = ({ current, total }: { current: number; total: number }) => (
-  <div className="flex items-center gap-1.5">
-    {Array.from({ length: total }).map((_, i) => (
-      <div
-        key={i}
-        className={`h-1 rounded-full transition-all duration-500 ${
-          i === current ? "w-8 bg-orange-500" : i < current ? "w-4 bg-orange-500/40" : "w-4 bg-white/10"
-        }`}
-      />
-    ))}
-  </div>
-);
+function getModeCopy(mode: OnboardingMode) {
+  if (mode === "audit") {
+    return {
+      badge: "System Audit",
+      title: "Request a System Audit",
+      subtitle: "Complete the booking form below.",
+      submitLabel: "Request Audit",
+      notionTitle: "Book Your System Audit",
+      notionSubtitle: "Complete the booking form below to schedule the review.",
+    };
+  }
 
-const FloatingOrb = ({ delay, size, x, y }: { delay: number; size: number; x: string; y: string }) => (
-  <motion.div
-    className="absolute rounded-full bg-orange-500/10 blur-2xl pointer-events-none"
-    style={{ width: size, height: size, left: x, top: y }}
-    animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
-    transition={{ duration: 4, delay, repeat: Infinity, ease: "easeInOut" }}
-  />
-);
+  if (mode === "implement") {
+    return {
+      badge: "Implementation Intake",
+      title: "Start Your Implementation",
+      subtitle: "Complete the booking form below.",
+      submitLabel: "Start Implementation",
+      notionTitle: "Book Your Implementation Review",
+      notionSubtitle: "Complete the booking form below to schedule the next step.",
+    };
+  }
 
-export default function OnboardingModal({ open, onClose, mode }: OnboardingModalProps) {
+  return {
+    badge: "System Review",
+    title: "Book a System Review",
+    subtitle: "Tell us about your workflow first. Then finish booking below.",
+    submitLabel: "Continue to Booking",
+    notionTitle: "Book a System Review",
+    notionSubtitle: "Finish your booking in the form below.",
+  };
+}
+
+function StepIndicator({ current, total }: { current: number; total: number }) {
+  return (
+    <div className="flex items-center gap-1.5">
+      {Array.from({ length: total }).map((_, index) => (
+        <div
+          key={index}
+          className={`h-1 rounded-full transition-all duration-300 ${
+            index === current
+              ? "w-8 bg-orange-500"
+              : index < current
+                ? "w-4 bg-orange-500/40"
+                : "w-4 bg-white/10"
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
+
+export default function OnboardingModal({
+  open,
+  onClose,
+  mode,
+  initialProblem = "",
+}: OnboardingModalProps) {
+  const modeCopy = useMemo(() => getModeCopy(mode), [mode]);
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
-  const [data, setData] = useState({
-    name: "", email: "", phone: "",
-    brandName: "", category: "", website: "",
-    businessDesc: "",
-    mrr: "", customers: "", deadCustomers: "",
-    problem: "",
-    agents: [] as string[],
-    leadReviverSub: "",
-  });
-  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState<FormState>(EMPTY_FORM);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [showNotionForm, setShowNotionForm] = useState(false);
 
-  const update = useCallback((field: string, value: string) => {
-    setData(prev => ({ ...prev, [field]: value }));
+  const isLeadCaptureFlow =
+    mode === "demo" && ENABLE_PREBOOK_LEAD_CAPTURE && !showNotionForm;
+
+  useEffect(() => {
+    if (!open || !initialProblem.trim()) return;
+
+    setForm((current) =>
+      current.problem.trim()
+        ? current
+        : {
+            ...current,
+            problem: initialProblem.trim(),
+          },
+    );
+  }, [initialProblem, open]);
+
+  const resetState = useCallback(() => {
+    setStep(0);
+    setDirection(1);
+    setForm(EMPTY_FORM);
+    setSubmitting(false);
+    setError("");
+    setShowNotionForm(false);
   }, []);
+
+  const handleClose = useCallback(() => {
+    resetState();
+    onClose();
+  }, [onClose, resetState]);
+
+  const updateField = useCallback(
+    <K extends keyof FormState>(field: K, value: FormState[K]) => {
+      setError("");
+      setForm((current) => ({
+        ...current,
+        [field]: value,
+      }));
+    },
+    [],
+  );
 
   const toggleAgent = useCallback((id: string) => {
-    setData(prev => ({
-      ...prev,
-      agents: prev.agents.includes(id) ? prev.agents.filter(a => a !== id) : [...prev.agents, id],
-    }));
+    setError("");
+    setForm((current) => {
+      const hasAgent = current.agents.includes(id);
+      return {
+        ...current,
+        agents: hasAgent
+          ? current.agents.filter((agent) => agent !== id)
+          : [...current.agents, id],
+        leadReviverSub:
+          id === "lead-reviver" && hasAgent ? "" : current.leadReviverSub,
+      };
+    });
   }, []);
 
-  const next = () => { if (step < 5) { setDirection(1); setStep(s => s + 1); } };
-  const prev = () => { if (step > 0) { setDirection(-1); setStep(s => s - 1); } };
-  const handleSubmit = () => setSubmitted(true);
+  const nextStep = useCallback(() => {
+    if (step >= STEPS.length - 1) return;
+    setDirection(1);
+    setStep((current) => current + 1);
+  }, [step]);
 
-  const handleClose = () => {
-    setStep(0);
-    setSubmitted(false);
-    setData({ name: "", email: "", phone: "", brandName: "", category: "", website: "", businessDesc: "", mrr: "", customers: "", deadCustomers: "", problem: "", agents: [], leadReviverSub: "" });
-    onClose();
-  };
+  const previousStep = useCallback(() => {
+    if (step <= 0) return;
+    setDirection(-1);
+    setStep((current) => current - 1);
+  }, [step]);
+
+  const handleLeadSubmit = useCallback(async () => {
+    if (submitting) return;
+
+    const validationError = validateOnboardingSubmission(form);
+    if (validationError) {
+      setStep(validationError.step);
+      setError(validationError.error);
+      return;
+    }
+
+    const payload = buildOnboardingPayload(form, mode);
+    const submittedAt = new Date().toISOString();
+    const pagePath = window.location.pathname;
+
+    setSubmitting(true);
+    setError("");
+
+    const [googleSheetsResult, supabaseResult] = await Promise.allSettled([
+      submitToGoogleSheets({
+        formType: "onboarding",
+        submittedAt,
+        pagePath,
+        payload,
+      }),
+      supabase.from("onboarding_submissions").insert({
+        mode,
+        name: payload.name,
+        email: payload.email,
+        phone: payload.phone || null,
+        brand_name: payload.brandName || null,
+        category: payload.category || null,
+        website: payload.website || null,
+        business_desc: payload.businessDesc || null,
+        mrr: payload.mrr,
+        customers: payload.customers,
+        dead_customers: payload.deadCustomers,
+        problem: payload.problem || null,
+        agents: payload.agents,
+        lead_reviver_sub: payload.leadReviverSub || null,
+      }),
+    ]);
+
+    if (googleSheetsResult.status === "rejected") {
+      setSubmitting(false);
+      setError("Could not submit right now. Please try again.");
+      return;
+    }
+
+    if (supabaseResult.status === "rejected" || supabaseResult.value.error) {
+      console.warn("Supabase backup save failed for onboarding submission.");
+    }
+
+    try {
+      await triggerOnboardingEmailAutomation({
+        submittedAt,
+        pagePath,
+        payload,
+      });
+    } catch {
+      console.warn("n8n onboarding email trigger failed.");
+    }
+
+    setSubmitting(false);
+    setShowNotionForm(true);
+  }, [form, mode, submitting]);
 
   if (!open) return null;
 
   const slideVariants = {
-    enter: (d: number) => ({ x: d > 0 ? 80 : -80, opacity: 0 }),
-    center: { x: 0, opacity: 1 },
-    exit: (d: number) => ({ x: d > 0 ? -80 : 80, opacity: 0 }),
+    enter: (currentDirection: number) => ({
+      x: currentDirection > 0 ? 64 : -64,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (currentDirection: number) => ({
+      x: currentDirection > 0 ? -64 : 64,
+      opacity: 0,
+    }),
   };
 
-  const inputClass = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all duration-300";
+  const inputClass =
+    "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 transition-colors duration-200 focus:border-orange-500/50 focus:outline-none focus:ring-1 focus:ring-orange-500/20";
 
-  const renderStep = () => {
-    if (submitted) {
-      return (
-        <motion.div
-          key="done"
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="flex flex-col items-center justify-center gap-6 py-10"
-        >
-          <motion.div
-            className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
-          >
-            <Check className="w-10 h-10 text-green-400" />
-          </motion.div>
-          <h3 className="text-2xl font-extralight text-white tracking-tight">You're All Set!</h3>
-          <p className="text-white/50 text-sm text-center max-w-xs">
-            Our team will review your details and reach out within 24 hours with a personalized {mode === "audit" ? "churn audit" : "demo"}.
-          </p>
-          <button onClick={handleClose} className="mt-4 rounded-2xl border border-white/10 bg-white/10 text-white px-6 py-3 text-sm font-light tracking-tight hover:bg-white/20 transition-colors duration-300">
-            Close
-          </button>
-        </motion.div>
-      );
-    }
-
+  const renderLeadCaptureStep = () => {
     switch (step) {
       case 0:
         return (
           <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label className="text-xs text-white/40 mb-1.5 block">Full Name</label>
-                <input className={inputClass} placeholder="John Doe" value={data.name} onChange={e => update("name", e.target.value)} />
+                <label className="mb-1.5 block text-xs text-white/40">Full Name</label>
+                <input
+                  className={inputClass}
+                  placeholder="John Doe"
+                  value={form.name}
+                  onChange={(event) => updateField("name", event.target.value)}
+                />
               </div>
               <div>
-                <label className="text-xs text-white/40 mb-1.5 block">Phone Number</label>
-                <input className={inputClass} placeholder="+1 (555) 000-0000" value={data.phone} onChange={e => update("phone", e.target.value)} />
+                <label className="mb-1.5 block text-xs text-white/40">Phone Number</label>
+                <input
+                  className={inputClass}
+                  placeholder="+1 (555) 000-0000"
+                  value={form.phone}
+                  onChange={(event) => updateField("phone", event.target.value)}
+                />
               </div>
             </div>
             <div>
-              <label className="text-xs text-white/40 mb-1.5 block">Email Address</label>
-              <input className={inputClass} type="email" placeholder="john@company.com" value={data.email} onChange={e => update("email", e.target.value)} />
-            </div>
-            {/* Visual: animated connection lines */}
-            <div className="mt-4 flex items-center justify-center gap-3">
-              {[0, 1, 2].map(i => (
-                <motion.div
-                  key={i}
-                  className="w-2 h-2 rounded-full bg-orange-500/60"
-                  animate={{ scale: [1, 1.5, 1], opacity: [0.4, 1, 0.4] }}
-                  transition={{ duration: 2, delay: i * 0.3, repeat: Infinity }}
-                />
-              ))}
+              <label className="mb-1.5 block text-xs text-white/40">Email Address</label>
+              <input
+                className={inputClass}
+                type="email"
+                placeholder="john@company.com"
+                value={form.email}
+                onChange={(event) => updateField("email", event.target.value)}
+              />
             </div>
           </div>
         );
+
       case 1:
         return (
           <div className="flex flex-col gap-4">
             <div>
-              <label className="text-xs text-white/40 mb-1.5 block">Brand Name</label>
-              <input className={inputClass} placeholder="Acme Inc." value={data.brandName} onChange={e => update("brandName", e.target.value)} />
+              <label className="mb-1.5 block text-xs text-white/40">Brand Name</label>
+              <input
+                className={inputClass}
+                placeholder="Acme Inc."
+                value={form.brandName}
+                onChange={(event) => updateField("brandName", event.target.value)}
+              />
             </div>
             <div>
-              <label className="text-xs text-white/40 mb-2 block">Business Category</label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {BUSINESS_CATEGORIES.map(cat => (
+              <label className="mb-2 block text-xs text-white/40">Business Category</label>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {BUSINESS_CATEGORIES.map((category) => (
                   <button
-                    key={cat.label}
-                    onClick={() => update("category", cat.label)}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all duration-300 ${
-                      data.category === cat.label
+                    key={category.label}
+                    type="button"
+                    onClick={() => updateField("category", category.label)}
+                    className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition-colors duration-200 ${
+                      form.category === category.label
                         ? "border-orange-500/60 bg-orange-500/10 text-orange-300"
-                        : "border-white/10 bg-white/5 text-white/50 hover:border-white/20 hover:bg-white/10"
+                        : "border-white/10 bg-white/5 text-white/55 hover:border-white/20 hover:bg-white/10"
                     }`}
                   >
-                    {cat.icon}
-                    <span className="text-xs font-light">{cat.label}</span>
+                    {category.icon}
+                    <span className="text-xs font-light">{category.label}</span>
                   </button>
                 ))}
               </div>
             </div>
             <div>
-              <label className="text-xs text-white/40 mb-1.5 block">Brand Website</label>
-              <input className={inputClass} placeholder="https://acme.com" value={data.website} onChange={e => update("website", e.target.value)} />
+              <label className="mb-1.5 block text-xs text-white/40">Brand Website</label>
+              <input
+                className={inputClass}
+                placeholder="https://acme.com"
+                value={form.website}
+                onChange={(event) => updateField("website", event.target.value)}
+              />
             </div>
           </div>
         );
+
       case 2:
         return (
           <div className="flex flex-col gap-4">
             <div>
-              <label className="text-xs text-white/40 mb-1.5 block">Describe your business, your offer, and the problem you're solving</label>
+              <label className="mb-1.5 block text-xs text-white/40">
+                Describe your business, your offer, and the problem you solve
+              </label>
               <textarea
                 className={`${inputClass} min-h-[140px] resize-none`}
                 placeholder="We help [target audience] solve [problem] by [your solution]..."
-                value={data.businessDesc}
-                onChange={e => update("businessDesc", e.target.value)}
+                value={form.businessDesc}
+                onChange={(event) => updateField("businessDesc", event.target.value)}
               />
             </div>
-            {/* Visual: word cloud animation */}
-            <div className="flex flex-wrap gap-2 justify-center mt-2">
-              {["Growth", "Revenue", "Scale", "Automation", "AI", "Leads"].map((word, i) => (
-                <motion.span
+            <div className="flex flex-wrap justify-center gap-2">
+              {["Growth", "Revenue", "Scale", "Automation", "AI", "Leads"].map((word) => (
+                <span
                   key={word}
-                  className="text-[10px] text-white/20 border border-white/5 rounded-full px-3 py-1"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                  className="rounded-full border border-white/5 px-3 py-1 text-[10px] text-white/25"
                 >
                   {word}
-                </motion.span>
+                </span>
               ))}
             </div>
           </div>
         );
+
       case 3:
         return (
           <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="relative">
-                <label className="text-xs text-white/40 mb-1.5 block">Current MRR</label>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div>
+                <label className="mb-1.5 block text-xs text-white/40">Current MRR</label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 text-sm">$</span>
-                  <input className={`${inputClass} pl-8`} placeholder="10,000" value={data.mrr} onChange={e => update("mrr", e.target.value)} />
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-white/30">
+                    $
+                  </span>
+                  <input
+                    className={`${inputClass} pl-8`}
+                    placeholder="10,000"
+                    value={form.mrr}
+                    onChange={(event) => updateField("mrr", event.target.value)}
+                  />
                 </div>
               </div>
               <div>
-                <label className="text-xs text-white/40 mb-1.5 block">Current Customers</label>
-                <input className={inputClass} placeholder="500" value={data.customers} onChange={e => update("customers", e.target.value)} />
+                <label className="mb-1.5 block text-xs text-white/40">Current Customers</label>
+                <input
+                  className={inputClass}
+                  placeholder="500"
+                  value={form.customers}
+                  onChange={(event) => updateField("customers", event.target.value)}
+                />
               </div>
               <div>
-                <label className="text-xs text-white/40 mb-1.5 block">Dead Customers</label>
-                <input className={inputClass} placeholder="150" value={data.deadCustomers} onChange={e => update("deadCustomers", e.target.value)} />
+                <label className="mb-1.5 block text-xs text-white/40">Dead Customers</label>
+                <input
+                  className={inputClass}
+                  placeholder="150"
+                  value={form.deadCustomers}
+                  onChange={(event) => updateField("deadCustomers", event.target.value)}
+                />
               </div>
-            </div>
-            {/* Visual: metric bars */}
-            <div className="mt-4 space-y-3">
-              {[
-                { label: "Active", pct: data.customers ? 70 : 0, color: "bg-green-500" },
-                { label: "At Risk", pct: data.customers ? 20 : 0, color: "bg-orange-500" },
-                { label: "Churned", pct: data.deadCustomers ? 40 : 0, color: "bg-red-500" },
-              ].map((bar, i) => (
-                <div key={bar.label} className="flex items-center gap-3">
-                  <span className="text-[10px] text-white/30 w-12">{bar.label}</span>
-                  <div className="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden">
-                    <motion.div
-                      className={`h-full rounded-full ${bar.color}`}
-                      initial={{ width: 0 }}
-                      animate={{ width: `${bar.pct}%` }}
-                      transition={{ duration: 1, delay: i * 0.2, ease: "easeOut" }}
-                    />
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         );
+
       case 4:
         return (
           <div className="flex flex-col gap-4">
             <div>
-              <label className="text-xs text-white/40 mb-1.5 block">What's the actual problem you're facing?</label>
+              <label className="mb-1.5 block text-xs text-white/40">
+                What's the actual problem you're facing?
+              </label>
               <textarea
                 className={`${inputClass} min-h-[120px] resize-none`}
-                placeholder="Describe the main challenges blocking your growth..."
-                value={data.problem}
-                onChange={e => update("problem", e.target.value)}
+                placeholder="Describe the main challenge blocking growth or conversions..."
+                value={form.problem}
+                onChange={(event) => updateField("problem", event.target.value)}
               />
-            </div>
-            {/* Visual: problem pulse */}
-            <div className="flex items-center justify-center gap-6 mt-4">
-              {["Churn", "Low Conv.", "No Leads", "Manual Ops"].map((p, i) => (
-                <motion.div
-                  key={p}
-                  className="flex flex-col items-center gap-1.5"
-                  animate={{ y: [0, -4, 0] }}
-                  transition={{ duration: 2, delay: i * 0.4, repeat: Infinity }}
-                >
-                  <div className="w-8 h-8 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                    <BarChart3 className="w-3.5 h-3.5 text-red-400/60" />
-                  </div>
-                  <span className="text-[9px] text-white/30">{p}</span>
-                </motion.div>
-              ))}
             </div>
           </div>
         );
+
       case 5:
         return (
           <div className="flex flex-col gap-4">
-            <label className="text-xs text-white/40 block">Select the agents you want to deploy</label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {AGENT_OPTIONS.map(agent => (
-                <button
-                  key={agent.id}
-                  onClick={() => toggleAgent(agent.id)}
-                  className={`flex items-start gap-3 p-4 rounded-xl border text-left transition-all duration-300 ${
-                    data.agents.includes(agent.id)
-                      ? "border-orange-500/60 bg-orange-500/10"
-                      : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10"
-                  }`}
-                >
-                  <div className={`mt-0.5 ${data.agents.includes(agent.id) ? "text-orange-400" : "text-white/40"}`}>
-                    {agent.icon}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className={`text-sm font-medium ${data.agents.includes(agent.id) ? "text-orange-300" : "text-white/70"}`}>
-                      {agent.label}
+            <label className="block text-xs text-white/40">
+              Select the systems you want to discuss
+            </label>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {AGENT_OPTIONS.map((agent) => {
+                const selected = form.agents.includes(agent.id);
+
+                return (
+                  <button
+                    key={agent.id}
+                    type="button"
+                    onClick={() => toggleAgent(agent.id)}
+                    className={`flex items-start gap-3 rounded-xl border p-4 text-left transition-colors duration-200 ${
+                      selected
+                        ? "border-orange-500/60 bg-orange-500/10"
+                        : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10"
+                    }`}
+                  >
+                    <div className={selected ? "text-orange-400" : "text-white/45"}>
+                      {agent.icon}
                     </div>
-                    <div className="text-[10px] text-white/30 mt-0.5 leading-relaxed">{agent.desc}</div>
-                    {agent.subOptions && data.agents.includes(agent.id) && (
-                      <div className="flex gap-2 mt-2">
-                        {agent.subOptions.map(sub => (
-                          <button
-                            key={sub}
-                            onClick={e => { e.stopPropagation(); update("leadReviverSub", sub); }}
-                            className={`text-[10px] px-3 py-1 rounded-full border transition-all duration-200 ${
-                              data.leadReviverSub === sub
-                                ? "border-orange-500/60 bg-orange-500/20 text-orange-300"
-                                : "border-white/10 text-white/40 hover:border-white/20"
-                            }`}
-                          >
-                            {sub}
-                          </button>
-                        ))}
+                    <div className="min-w-0 flex-1">
+                      <div className={selected ? "text-sm text-orange-300" : "text-sm text-white/75"}>
+                        {agent.label}
                       </div>
-                    )}
-                  </div>
-                  {data.agents.includes(agent.id) && (
-                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="mt-0.5">
-                      <Check className="w-4 h-4 text-orange-400" />
-                    </motion.div>
-                  )}
-                </button>
-              ))}
+                      <div className="mt-1 text-[10px] leading-relaxed text-white/35">
+                        {agent.desc}
+                      </div>
+                      {agent.subOptions && selected ? (
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {agent.subOptions.map((subOption) => (
+                            <button
+                              key={subOption}
+                              type="button"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                updateField("leadReviverSub", subOption);
+                              }}
+                              className={`rounded-full border px-3 py-1 text-[10px] transition-colors duration-200 ${
+                                form.leadReviverSub === subOption
+                                  ? "border-orange-500/60 bg-orange-500/20 text-orange-300"
+                                  : "border-white/10 text-white/45 hover:border-white/20"
+                              }`}
+                            >
+                              {subOption}
+                            </button>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                    {selected ? <Check className="mt-0.5 h-4 w-4 text-orange-400" /> : null}
+                  </button>
+                );
+              })}
             </div>
           </div>
         );
+
       default:
         return null;
     }
@@ -350,119 +583,158 @@ export default function OnboardingModal({ open, onClose, mode }: OnboardingModal
 
   return (
     <AnimatePresence>
-      {open && (
+      <motion.div
+        className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          className="absolute inset-0 bg-black/80 backdrop-blur-md"
+          onClick={handleClose}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          {/* Backdrop */}
-          <motion.div
-            className="absolute inset-0 bg-black/80 backdrop-blur-md"
-            onClick={handleClose}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          />
+        />
 
-          {/* Modal */}
+        {isLeadCaptureFlow ? (
           <motion.div
-            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-[#0a0a0a] shadow-[0_0_100px_-20px_rgba(249,115,22,0.15)]"
+            className="relative max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-[#0a0a0a] shadow-[0_0_100px_-20px_rgba(249,115,22,0.15)]"
             initial={{ scale: 0.95, y: 20, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.95, y: 20, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            {/* Background orbs */}
-            <FloatingOrb delay={0} size={200} x="10%" y="20%" />
-            <FloatingOrb delay={1.5} size={150} x="70%" y="60%" />
-
-            {/* Close */}
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white/70 hover:bg-white/10 transition-all duration-200"
+              aria-label="Close onboarding form"
+              className="absolute right-4 top-4 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/50 text-white/50 backdrop-blur-sm transition-colors duration-200 hover:bg-white/10 hover:text-white/80"
             >
-              <X className="w-4 h-4" />
+              <X className="h-4 w-4" />
             </button>
 
-            <div className="relative z-10 p-6 sm:p-8">
-              {/* Header */}
-              {!submitted && (
-                <div className="mb-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Sparkles className="w-4 h-4 text-orange-400" />
-                    <span className="text-[10px] uppercase tracking-widest text-orange-400/70">
-                      {mode === "audit" ? "Free Churn Audit" : "Book a Demo"}
-                    </span>
-                  </div>
-                  <AnimatePresence mode="wait" custom={direction}>
-                    <motion.div
-                      key={step}
-                      custom={direction}
-                      variants={slideVariants}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      transition={{ duration: 0.25 }}
-                    >
-                      <h3 className="text-2xl font-extralight text-white tracking-tight">
-                        {STEPS[step].title}
-                      </h3>
-                      <p className="text-sm text-white/40 mt-1">{STEPS[step].subtitle}</p>
-                    </motion.div>
-                  </AnimatePresence>
-                  <div className="mt-4">
-                    <StepIndicator current={step} total={STEPS.length} />
-                  </div>
-                </div>
-              )}
-
-              {/* Step content */}
+            <div className="border-b border-white/10 px-5 py-5 sm:px-7">
+              <div className="mb-3 flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-orange-400" />
+                <span className="text-[10px] uppercase tracking-widest text-orange-400/70">
+                  {modeCopy.badge}
+                </span>
+              </div>
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
-                  key={submitted ? "done" : step}
+                  key={step}
                   custom={direction}
                   variants={slideVariants}
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.22 }}
                 >
-                  {renderStep()}
+                  <h3 className="text-2xl font-extralight tracking-tight text-white">
+                    {STEPS[step].title}
+                  </h3>
+                  <p className="mt-1 text-sm text-white/40">{STEPS[step].subtitle}</p>
+                </motion.div>
+              </AnimatePresence>
+              <div className="mt-4">
+                <StepIndicator current={step} total={STEPS.length} />
+              </div>
+            </div>
+
+            <div className="px-5 py-5 sm:px-7 sm:py-6">
+              <AnimatePresence mode="wait" custom={direction}>
+                <motion.div
+                  key={`step-body-${step}`}
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.24 }}
+                >
+                  {renderLeadCaptureStep()}
                 </motion.div>
               </AnimatePresence>
 
-              {/* Nav buttons */}
-              {!submitted && (
-                <div className="flex items-center justify-between mt-8 pt-4 border-t border-white/5">
+              <div className="mt-8 border-t border-white/5 pt-4">
+                {error ? <p className="mb-4 text-xs text-red-400/90">{error}</p> : null}
+                <div className="flex items-center justify-between gap-4">
                   <button
-                    onClick={prev}
-                    disabled={step === 0}
-                    className="flex items-center gap-2 text-sm text-white/40 hover:text-white/70 disabled:opacity-20 disabled:cursor-not-allowed transition-colors duration-200"
+                    type="button"
+                    onClick={previousStep}
+                    disabled={step === 0 || submitting}
+                    className="flex items-center gap-2 text-sm text-white/40 transition-colors duration-200 hover:text-white/70 disabled:cursor-not-allowed disabled:opacity-20"
                   >
-                    <ArrowLeft className="w-4 h-4" /> Back
+                    <ArrowLeft className="h-4 w-4" />
+                    Back
                   </button>
-                  {step < 5 ? (
+
+                  {step < STEPS.length - 1 ? (
                     <button
-                      onClick={next}
-                      className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/10 text-white px-5 py-2.5 text-sm font-light tracking-tight hover:bg-white/20 transition-colors duration-300"
+                      type="button"
+                      onClick={nextStep}
+                      disabled={submitting}
+                      className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/10 px-5 py-2.5 text-sm font-light tracking-tight text-white transition-colors duration-200 hover:bg-white/20 disabled:opacity-60"
                     >
-                      Continue <ArrowRight className="w-4 h-4" />
+                      Continue
+                      <ArrowRight className="h-4 w-4" />
                     </button>
                   ) : (
                     <button
-                      onClick={handleSubmit}
-                      className="flex items-center gap-2 rounded-2xl bg-orange-500 text-white px-6 py-2.5 text-sm font-medium tracking-tight hover:bg-orange-600 transition-colors duration-300"
+                      type="button"
+                      onClick={handleLeadSubmit}
+                      disabled={submitting}
+                      className="flex items-center gap-2 rounded-2xl bg-orange-500 px-6 py-2.5 text-sm font-medium tracking-tight text-white transition-colors duration-200 hover:bg-orange-600 disabled:opacity-60"
                     >
-                      Submit <Check className="w-4 h-4" />
+                      {submitting ? "Submitting..." : modeCopy.submitLabel}
+                      {!submitting ? <ArrowRight className="h-4 w-4" /> : null}
                     </button>
                   )}
                 </div>
-              )}
+              </div>
             </div>
           </motion.div>
-        </motion.div>
-      )}
+        ) : (
+          <motion.div
+            className="relative max-h-[92vh] w-full max-w-4xl overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0a] shadow-[0_0_100px_-20px_rgba(249,115,22,0.15)]"
+            initial={{ scale: 0.95, y: 20, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            exit={{ scale: 0.95, y: 20, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          >
+            <button
+              onClick={handleClose}
+              aria-label="Close onboarding form"
+              className="absolute right-4 top-4 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/50 text-white/50 backdrop-blur-sm transition-colors duration-200 hover:bg-white/10 hover:text-white/80"
+            >
+              <X className="h-4 w-4" />
+            </button>
+
+            <div className="relative z-10 border-b border-white/10 px-5 py-5 sm:px-7">
+              <div className="mb-3 flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-orange-400" />
+                <span className="text-[10px] uppercase tracking-widest text-orange-400/70">
+                  {modeCopy.badge}
+                </span>
+              </div>
+              <h3 className="text-2xl font-extralight tracking-tight text-white">
+                {modeCopy.notionTitle}
+              </h3>
+              <p className="mt-1 text-sm text-white/45">{modeCopy.notionSubtitle}</p>
+            </div>
+
+            <iframe
+              src={SYSTEM_REVIEW_FORM_SRC}
+              title="Effect3 system review form"
+              width="100%"
+              height="600"
+              frameBorder="0"
+              allowFullScreen
+              loading="lazy"
+              className="block h-[calc(92vh-132px)] min-h-[360px] w-full bg-white sm:h-[600px]"
+            />
+          </motion.div>
+        )}
+      </motion.div>
     </AnimatePresence>
   );
 }

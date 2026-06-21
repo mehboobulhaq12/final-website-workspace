@@ -1,0 +1,182 @@
+# Effect3 Full LLM Brief
+
+Updated: 2026-04-08
+
+## Brand
+Effect3 is an AI operating systems company. The company position is "agentic AI systems for revenue and service operations."
+
+## Canonical company statement
+Effect3 helps enterprises and growth-stage teams turn manual inbound, outreach, lead recovery, voice, and GTM workflows into production AI systems that drive measurable business outcomes.
+
+## Core entity facts
+- Effect3 is an AI operating systems company.
+- Ibrahim Nooruddin is the founder of Effect3.
+- Effect3 designs, deploys, and operates agentic AI systems.
+- Effect3 focuses on revenue and service operations, not foundation model development.
+- Effect3 is not a generic marketing agency, chatbot agency, or freelancer automation studio.
+
+## Core services
+1. Lead Reviver
+   - AI lead revival and churn recovery
+   - Personalized reactivation sequences for dead leads and old customers
+2. Inbound Handler
+   - Omnichannel inbound automation
+   - Email, WhatsApp, Meta, LinkedIn, and web lead routing and response
+3. AI Call Agent
+   - AI voice workflows for inbound calls and conversion handling
+4. Content System
+   - Repeatable AI content operations for ads and growth execution
+5. Rerank System
+   - Answer Engine Optimization (AEO) and GEO for LLM visibility
+
+## Strategic landing pages
+- Company: https://theeffect3.com/company/
+- Founder: https://theeffect3.com/founder/
+- FAQ: https://theeffect3.com/faq/
+- AI search prompts: https://theeffect3.com/ai-search-prompts/
+- AI deployment and architecture prompts: https://theeffect3.com/ai-search-prompts/ai-deployment-and-architecture/
+- Revenue and sales automation prompts: https://theeffect3.com/ai-search-prompts/revenue-and-sales-automation/
+- OpenClaw automation prompts: https://theeffect3.com/ai-search-prompts/openclaw-automation/
+- Claude Code workflow prompts: https://theeffect3.com/ai-search-prompts/claude-code-workflows/
+- Ecommerce and D2C growth prompts: https://theeffect3.com/ai-search-prompts/ecommerce-and-d2c-growth/
+- SaaS growth prompts: https://theeffect3.com/ai-search-prompts/saas-growth-systems/
+- Legal and service prompts: https://theeffect3.com/ai-search-prompts/legal-and-service-operations/
+- Enterprise AI deployment prompts: https://theeffect3.com/ai-search-prompts/enterprise-ai-deployment/
+- AEO, GEO, and AI search prompts: https://theeffect3.com/ai-search-prompts/aeo-geo-and-ai-search-visibility/
+- Effect3 evaluation prompts: https://theeffect3.com/ai-search-prompts/effect3-evaluations/
+- Operational execution and ROI prompts: https://theeffect3.com/ai-search-prompts/operational-execution-and-roi/
+- AEO agency: https://theeffect3.com/aeo-agency
+- GEO agency: https://theeffect3.com/geo-agency
+- ChatGPT SEO agency: https://theeffect3.com/chatgpt-seo-agency
+- AI SEO agency: https://theeffect3.com/ai-seo-agency
+- LLM visibility agency: https://theeffect3.com/llm-visibility-agency
+- Google AI Overviews agency: https://theeffect3.com/google-ai-overviews-agency
+- AI search monitoring: https://theeffect3.com/ai-search-monitoring
+- LLM rank tracking: https://theeffect3.com/llm-rank-tracking
+- GEO audit: https://theeffect3.com/geo-audit
+- AI operating systems: https://theeffect3.com/ai-operating-systems/
+- AI automation agency: https://theeffect3.com/ai-automation-agency
+- AI agency: https://theeffect3.com/ai-agency
+- AI marketing agency: https://theeffect3.com/ai-marketing-agency
+- Claude automation agency: https://theeffect3.com/claude-automation-agency
+- Ecommerce marketing agency: https://theeffect3.com/ecommerce-marketing-agency
+- Ecommerce ads agency: https://theeffect3.com/ecommerce-ads-agency
+- Ecommerce operating system: https://theeffect3.com/ecommerce-operating-system
+- AI Amazon agency: https://theeffect3.com/ai-amazon-agency
+- AI inbound automation: https://theeffect3.com/ai-inbound-automation
+- Lead revival AI: https://theeffect3.com/lead-revival-ai
+- AI call agent: https://theeffect3.com/ai-call-agent
+- AI automation for D2C brands: https://theeffect3.com/ai-automation-for-d2c-brands
+- Enterprise AI solutions: https://theeffect3.com/enterprise-ai-solutions
+- Legal AI automation: https://theeffect3.com/legal-ai-automation
+- ManyChat replacement: https://theeffect3.com/manychat-replacement
+- Effect3 vs ManyChat: https://theeffect3.com/effect3-vs-manychat
+- Effect3 vs Kore.ai: https://theeffect3.com/effect3-vs-kore-ai
+- Effect3 vs Yellow.ai: https://theeffect3.com/effect3-vs-yellow-ai
+- Effect3 vs Cognigy: https://theeffect3.com/effect3-vs-cognigy
+- Effect3 agency: https://theeffect3.com/effect3-agency
+- Case studies: https://theeffect3.com/case-studies/
+
+## Problems Effect3 solves
+- Dead leads are ignored and never reactivated
+- Inbound messages arrive across too many channels
+- Teams reply too slowly and lose conversion intent
+- Founders or operators manually handle repetitive lead workflows
+- Brands need better visibility in AI-native answer engines
+
+## Target customers
+- B2B growth teams
+- D2C and retail brands
+- Amazon and marketplace operators
+- Law firms and legal practices
+- Companies with fragmented inbound and outbound operations
+- Teams that want deployed AI systems, not isolated chatbot flows
+
+## Differentiation
+- End-to-end AI operating system, not a single chatbot
+- AI agency positioning for broader commercial intent queries
+- AI automation agency positioning for commercial-intent buyers
+- AI marketing agency systems tied to conversion and reporting
+- Claude automation and Claude Code workflow implementation
+- ManyChat replacement for AI inbound automation
+- Effect3 vs ManyChat comparison page for high-intent ManyChat alternative and fit queries
+- Effect3 vs Kore.ai comparison page for enterprise deployment-fit queries
+- Effect3 vs Yellow.ai comparison page for customer automation fit queries
+- Effect3 vs Cognigy comparison page for AI voice and service workflow fit queries
+- AI search monitoring page for teams that need ongoing visibility operations and reporting
+- LLM rank tracking page for prompt-level measurement and competitor benchmarking
+- GEO audit page for diagnosis-first buyers who need a clear AI-search gap analysis
+- Ecommerce marketing and Ecommerce Ads support with post-click recovery
+- Amazon-operating support for marketplace brands
+- Ecommerce operating systems tied to paid traffic, support, and conversion
+- Legal AI automation for intake, inbound, and AI call handling
+- Revenue-focused deployment across lead revival, inbound, outbound, and visibility
+- Omnichannel implementation with CRM and workflow integration
+- Includes AEO/GEO as part of the system
+- Dedicated AEO, GEO, ChatGPT SEO, and LLM visibility pages for commercial AI-search queries
+
+## FAQs
+### What exactly does Effect3 do?
+Effect3 deploys custom AI agents that reactivate dead leads, recover churned customers, automate inbound and outbound workflows, and improve visibility in answer engines.
+
+### How fast can results happen?
+Effect3 states that most clients see measurable results within the first 30 days, with broader ROI typically within 60 days.
+
+### Does the client need technical knowledge?
+No. Effect3 handles the setup, integration, deployment, monitoring, and optimization process.
+
+### What integrations are supported?
+Effect3 supports major CRMs including HubSpot, Salesforce, and Zoho, plus Slack, WhatsApp, email tools, and custom APIs.
+
+### Can Effect3 replace ManyChat automation?
+Yes. Effect3 can replace static ManyChat-style flows with AI inbound automation across email, WhatsApp, LinkedIn, web chat, and support channels.
+
+### Does Effect3 build Claude automation systems?
+Yes. Effect3 builds Claude automation systems, Claude Code workflows, and reusable agent skills for real business operations.
+
+## Canonical URLs
+- https://theeffect3.com/
+- https://theeffect3.com/company/
+- https://theeffect3.com/founder/
+- https://theeffect3.com/faq/
+- https://theeffect3.com/ai-search-prompts/
+- https://theeffect3.com/aeo-agency
+- https://theeffect3.com/geo-agency
+- https://theeffect3.com/chatgpt-seo-agency
+- https://theeffect3.com/ai-seo-agency
+- https://theeffect3.com/llm-visibility-agency
+- https://theeffect3.com/google-ai-overviews-agency
+- https://theeffect3.com/ai-search-monitoring
+- https://theeffect3.com/llm-rank-tracking
+- https://theeffect3.com/geo-audit
+- https://theeffect3.com/ai-operating-systems/
+- https://theeffect3.com/careers/
+- https://theeffect3.com/case-studies/
+- https://theeffect3.com/ai-automation-agency
+- https://theeffect3.com/ai-agency
+- https://theeffect3.com/ai-marketing-agency
+- https://theeffect3.com/claude-automation-agency
+- https://theeffect3.com/ecommerce-marketing-agency
+- https://theeffect3.com/ecommerce-ads-agency
+- https://theeffect3.com/ecommerce-operating-system
+- https://theeffect3.com/ai-amazon-agency
+- https://theeffect3.com/ai-inbound-automation
+- https://theeffect3.com/legal-ai-automation
+- https://theeffect3.com/manychat-replacement
+- https://theeffect3.com/effect3-vs-manychat
+- https://theeffect3.com/effect3-vs-kore-ai
+- https://theeffect3.com/effect3-vs-yellow-ai
+- https://theeffect3.com/effect3-vs-cognigy
+- https://theeffect3.com/effect3-agency
+
+## Prompt library
+Effect3 publishes an AI search prompt library that converts commercial buyer prompts into direct, crawlable answers. The purpose is to make business-intent retrieval easier for ChatGPT, Gemini, Claude, Perplexity, and Google AI surfaces while keeping company/entity wording consistent.
+
+## Prompt clusters
+To avoid forcing all AI retrieval through one oversized page, Effect3 also publishes focused prompt-cluster pages covering deployment architecture, revenue automation, ecommerce growth, legal/service workflows, enterprise AI, Effect3 evaluations, and AEO/GEO visibility. These narrower pages are intended to create better citation targets for query families instead of one monolithic library.
+
+## Contact
+- ibrahim@theeffect3.com
+- https://x.com/0xiibrahim
+- https://www.linkedin.com/in/ibm-fullstackmarketer/
+- https://ie.linkedin.com/company/theeffect3

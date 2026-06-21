@@ -5,12 +5,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const CTASection = ({ onCtaClick }: { onCtaClick?: (mode: "audit" | "demo") => void }) => {
+const CTASection = ({ onCtaClick }: { onCtaClick?: (mode: "audit" | "implement" | "demo") => void }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!contentRef.current || !sectionRef.current) return;
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
     const children = contentRef.current.children;
     gsap.fromTo(
@@ -30,17 +31,19 @@ const CTASection = ({ onCtaClick }: { onCtaClick?: (mode: "audit" | "demo") => v
       }
     );
 
-    // Parallax
-    gsap.to(contentRef.current, {
-      yPercent: -12,
-      ease: "none",
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: 0.6,
-      },
-    });
+    if (!isMobile) {
+      // Keep heavier parallax disabled on mobile to preserve smoothness.
+      gsap.to(contentRef.current, {
+        yPercent: -12,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.6,
+        },
+      });
+    }
   }, []);
 
   return (
@@ -58,42 +61,42 @@ const CTASection = ({ onCtaClick }: { onCtaClick?: (mode: "audit" | "demo") => v
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
               </span>
               <span className="text-xs font-light tracking-tight text-white/80">
-                So What Are You Upto?
+                Qualified Buyers Start Here
               </span>
             </div>
           </div>
 
           {/* Headline */}
           <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extralight tracking-tight leading-[1.05] text-white">
-            Get Started in{" "}
+            Turn the Right Workflow into a{" "}
             <TextShimmer
               as="span"
               duration={2}
               spread={4}
               className="italic font-light [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
             >
-              Minutes
+              Production AI System
             </TextShimmer>
           </h2>
 
           {/* Description */}
           <p className="text-base font-light text-white/50 max-w-xl leading-relaxed tracking-tight sm:text-lg">
-            Deploy your custom AI system in days, not months. Start recovering lost revenue and converting more customers today.
+            If you already have meaningful inbound volume, response load, or revenue leakage, Effect3 can map the workflow and show where an AI operating system will create measurable lift fastest.
           </p>
 
           {/* CTA Buttons - matching hero style */}
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
             <button
-              onClick={() => onCtaClick?.("audit")}
+              onClick={() => onCtaClick?.("demo")}
               className="rounded-2xl border border-white/10 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20 px-5 py-3 text-sm font-light tracking-tight transition-colors focus:outline-none focus:ring-2 focus:ring-white/30 duration-300"
             >
-              Implement Now
+              Book a System Review
             </button>
             <button
-              onClick={() => onCtaClick?.("demo")}
+              onClick={() => window.location.assign("/case-studies")}
               className="rounded-2xl border border-white/10 text-white/80 hover:bg-white/5 px-5 py-3 text-sm font-light tracking-tight transition-colors focus:outline-none focus:ring-2 focus:ring-white/30 duration-300"
             >
-              Book a Demo
+              Review Case Studies
             </button>
           </div>
         </div>

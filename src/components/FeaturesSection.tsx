@@ -15,13 +15,50 @@ import rerankSystemImg from "@/assets/agents/rerank-system.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const useLoopingStage = (
+  count: number,
+  mobileCadence: number,
+  desktopCadence: number,
+  initial = 0
+) => {
+  const [stage, setStage] = useState(initial);
+
+  useEffect(() => {
+    if (count <= 1) return;
+
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    const cadence = isMobile ? mobileCadence : desktopCadence;
+    const interval = window.setInterval(() => {
+      setStage((prev) => (prev + 1) % count);
+    }, cadence);
+
+    return () => window.clearInterval(interval);
+  }, [count, mobileCadence, desktopCadence]);
+
+  return stage;
+};
+
 /* ─── 1. Lead Reviver: sentiment radar animation ─── */
 const LeadReviverViz = () => {
   const [pulse, setPulse] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
+  const frameRef = useRef<number | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    if (isMobile) {
+      let frame = 0;
+      intervalRef.current = setInterval(() => {
+        frame += 1;
+        setPulse(frame);
+      }, 90);
+      return () => {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      };
+    }
+
     const trigger = ScrollTrigger.create({
       trigger: containerRef.current,
       start: "top 88%",
@@ -31,14 +68,18 @@ const LeadReviverViz = () => {
         startedRef.current = true;
         let frame = 0;
         const tick = () => {
-          frame++;
+          frame += 0.75;
           setPulse(frame);
-          requestAnimationFrame(tick);
+          frameRef.current = requestAnimationFrame(tick);
         };
-        requestAnimationFrame(tick);
+        frameRef.current = requestAnimationFrame(tick);
       },
     });
-    return () => trigger.kill();
+    return () => {
+      trigger.kill();
+      if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, []);
 
   const leads = [
@@ -65,23 +106,24 @@ const LeadReviverViz = () => {
       {/* Lead dots */}
       {leads.map((lead, i) => {
         const rad = (lead.angle * Math.PI) / 180;
-        const dist = 34 + Math.sin((pulse / 60 + i) * 0.8) * 4;
+        const dist = 34 + Math.sin((pulse / 90 + i) * 0.75) * 2.5;
         const x = Math.cos(rad) * dist;
         const y = Math.sin(rad) * dist;
-        const active = Math.floor(pulse / 90) % leads.length === i;
+        const active = Math.floor(pulse / 84) % leads.length === i;
+        const tooltipClassName = x >= 0 ? "left-4 text-left" : "right-4 text-right";
         return (
           <div
             key={i}
-            className="absolute transition-all duration-300"
-            style={{ transform: `translate(${x}px, ${y}px)` }}
+            className="absolute transition-transform duration-500 ease-out"
+            style={{ transform: `translate3d(${x}px, ${y}px, 0)` }}
           >
             <div
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                active ? "bg-orange-400 scale-150 shadow-[0_0_8px_rgba(251,146,60,0.6)]" : "bg-white/30"
+              className={`w-2 h-2 rounded-full transition-all duration-500 ${
+                active ? "bg-orange-400 scale-150 shadow-[0_0_8px_rgba(251,146,60,0.55)]" : "bg-white/30"
               }`}
             />
             {active && (
-              <div className="absolute left-3 -top-1 bg-white/8 border border-white/10 rounded px-1.5 py-0.5 whitespace-nowrap">
+              <div className={`absolute top-1/2 -translate-y-1/2 bg-white/8 border border-white/10 rounded px-1.5 py-0.5 whitespace-nowrap ${tooltipClassName}`}>
                 <span className="text-[9px] text-orange-300">{lead.label}</span>
                 <span className="text-[9px] text-white/40 ml-1">{lead.score}%</span>
               </div>
@@ -96,7 +138,7 @@ const LeadReviverViz = () => {
           height: 40,
           bottom: "50%",
           left: "50%",
-          transform: `translateX(-50%) rotate(${(pulse * 1.2) % 360}deg)`,
+          transform: `translateX(-50%) rotate(${(pulse * 1.8) % 360}deg)`,
           transformOrigin: "50% 100%",
         }}
       />
@@ -106,127 +148,148 @@ const LeadReviverViz = () => {
 
 /* ─── 2. Inbound Handler: multi-channel message stream ─── */
 const InboundViz = () => {
-  const [stage, setStage] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const startedRef = useRef(false);
-
-  useEffect(() => {
-    const trigger = ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: "top 88%",
-      once: true,
-      onEnter: () => {
-        if (startedRef.current) return;
-        startedRef.current = true;
-        const timers: ReturnType<typeof setTimeout>[] = [];
-        const cycle = (offset = 0) => {
-          [0, 600, 1200, 1800, 2400, 3000].forEach((t, i) => {
-            timers.push(setTimeout(() => setStage(i), offset + t));
-          });
-        };
-        cycle(0); cycle(4000); cycle(8000);
-        return () => timers.forEach(clearTimeout);
-      },
-    });
-    return () => trigger.kill();
-  }, []);
 
   const channels = [
-    { icon: <Mail className="w-3 h-3" />, label: "Email", color: "text-blue-400/70", msg: "New inquiry received" },
-    { icon: <MessageSquare className="w-3 h-3" />, label: "WhatsApp", color: "text-green-400/70", msg: "Lead replied" },
-    { icon: <Twitter className="w-3 h-3" />, label: "X (Twitter)", color: "text-sky-400/70", msg: "DM inbound" },
-    { icon: <Linkedin className="w-3 h-3" />, label: "LinkedIn", color: "text-blue-500/70", msg: "Connection message" },
-    { icon: <MessageSquare className="w-3 h-3" />, label: "Meta", color: "text-purple-400/70", msg: "Ad form submission" },
+    { icon: <Mail className="w-3 h-3" />, label: "Email", color: "text-blue-400/70", msg: "Order question" },
+    { icon: <MessageSquare className="w-3 h-3" />, label: "WhatsApp", color: "text-green-400/70", msg: "Abandoned cart reply" },
+    { icon: <Twitter className="w-3 h-3" />, label: "X", color: "text-sky-400/70", msg: "DM inbound" },
+    { icon: <Linkedin className="w-3 h-3" />, label: "LinkedIn", color: "text-blue-500/70", msg: "Partnership lead" },
+    { icon: <MessageSquare className="w-3 h-3" />, label: "Meta", color: "text-purple-400/70", msg: "Ad form lead" },
   ];
+  const activeIndex = useLoopingStage(channels.length, 1000, 860);
 
   return (
-    <div ref={containerRef} className="w-full flex flex-col gap-1.5">
+    <div ref={containerRef} className="mx-auto w-full max-w-[248px] flex flex-col justify-center gap-2">
       {channels.map((ch, i) => (
         <div
           key={i}
-          className={`flex items-center gap-2 rounded-lg border px-3 py-2 transition-all duration-500 ${
-            stage >= i + 1
-              ? "border-white/15 bg-white/[0.04] opacity-100 translate-x-0"
-              : "border-transparent bg-transparent opacity-0 -translate-x-3"
+          className={`grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-xl border px-3 py-2.5 transition-all duration-500 ${
+            activeIndex === i
+              ? "border-orange-400/30 bg-orange-500/10 shadow-[0_0_24px_rgba(249,115,22,0.08)] -translate-y-[1px]"
+              : "border-white/10 bg-white/[0.02] opacity-80"
           }`}
-          style={{ transitionDelay: `${i * 40}ms` }}
         >
-          <span className={ch.color}>{ch.icon}</span>
-          <span className="text-[10px] text-white/50 font-light flex-1">{ch.msg}</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+          <div className="min-w-0 flex items-center gap-2.5">
+            <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border transition-colors duration-500 ${
+              activeIndex === i ? "border-white/15 bg-white/[0.06]" : "border-white/10 bg-white/[0.03]"
+            } ${ch.color}`}>
+              {ch.icon}
+            </span>
+            <div className="min-w-0">
+              <div className="text-[10px] font-light text-white/74">{ch.label}</div>
+              <div className={`text-[10px] font-light truncate transition-colors duration-500 ${activeIndex === i ? "text-white/80" : "text-white/42"}`}>
+                {ch.msg}
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className={`h-1.5 w-1.5 rounded-full transition-all duration-500 ${activeIndex === i ? "bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]" : "bg-white/18"}`} />
+            <span className={`text-[9px] font-mono transition-colors duration-500 ${activeIndex === i ? "text-orange-300/90" : "text-white/24"}`}>
+              {activeIndex === i ? "ROUTED" : "QUEUE"}
+            </span>
+          </div>
         </div>
       ))}
+      <div className="mt-1 rounded-xl border border-white/10 bg-black/25 px-3 py-2">
+        <div className="flex items-center justify-between text-[9px] font-mono text-white/30">
+          <span>UNIFIED INBOX</span>
+          <span className="text-orange-300/80">24/7</span>
+        </div>
+      </div>
     </div>
   );
 };
 
 /* ─── 3. AI Call Agent: waveform animation ─── */
 const CallAgentViz = () => {
-  const [active, setActive] = useState(false);
-  const [bars, setBars] = useState<number[]>(Array(20).fill(0.1));
-  const containerRef = useRef<HTMLDivElement>(null);
-  const startedRef = useRef(false);
-  const frameRef = useRef(0);
+  const [active, setActive] = useState(true);
+  const [bars, setBars] = useState<number[]>(Array(16).fill(0.24));
+  const phaseRef = useRef(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    const trigger = ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: "top 88%",
-      once: true,
-      onEnter: () => {
-        if (startedRef.current) return;
-        startedRef.current = true;
-        setTimeout(() => setActive(true), 600);
-        const animate = () => {
-          setBars(prev =>
-            prev.map((_, i) => 0.1 + Math.abs(Math.sin(Date.now() / 200 + i * 0.5)) * 0.9)
-          );
-          frameRef.current = requestAnimationFrame(animate);
-        };
-        setTimeout(() => { animate(); }, 600);
-      },
-    });
-    return () => { trigger.kill(); cancelAnimationFrame(frameRef.current); };
+    intervalRef.current = setInterval(() => {
+      phaseRef.current += 0.32;
+      const phase = phaseRef.current;
+      setBars((prev) =>
+        prev.map((_, i) => {
+          const wave = (Math.sin(phase + i * 0.55) + 1) / 2;
+          const accent = (Math.cos(phase * 0.75 + i * 0.32) + 1) / 2;
+          return 0.18 + wave * 0.34 + accent * 0.12;
+        })
+      );
+    }, 90);
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, []);
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center gap-4 py-2">
-      {/* Phone icon with ring */}
-      <div className="relative">
-        <div className={`absolute inset-0 rounded-full transition-all duration-700 ${active ? "scale-150 opacity-0 bg-orange-400/20 animate-ping" : "scale-100 opacity-0"}`} />
-        <div className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-700 ${
-          active ? "border-orange-400/50 bg-orange-500/15 shadow-[0_0_20px_rgba(251,146,60,0.2)]" : "border-white/15 bg-white/[0.03]"
-        }`}>
-          {active ? (
-            <PhoneCall className="w-5 h-5 text-orange-300" />
-          ) : (
-            <PhoneIncoming className="w-5 h-5 text-white/40" />
-          )}
+    <div className="mx-auto w-full max-w-[248px]">
+      <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className={`absolute inset-0 rounded-full transition-all duration-700 ${active ? "scale-150 opacity-0 bg-orange-400/20 animate-ping" : "scale-100 opacity-0"}`} style={{ animationDuration: "2.2s" }} />
+              <div className={`w-11 h-11 rounded-full border flex items-center justify-center transition-all duration-700 ${
+                active ? "border-orange-400/50 bg-orange-500/15 shadow-[0_0_20px_rgba(251,146,60,0.2)]" : "border-white/15 bg-white/[0.03]"
+              }`}>
+                {active ? (
+                  <PhoneCall className="w-4 h-4 text-orange-300" />
+                ) : (
+                  <PhoneIncoming className="w-4 h-4 text-white/40" />
+                )}
+              </div>
+            </div>
+            <div>
+              <div className="text-[10px] font-mono tracking-[0.18em] text-white/32">VOICE LAYER</div>
+              <div className={`text-[11px] font-light transition-colors duration-700 ${active ? "text-white/82" : "text-white/44"}`}>
+                {active ? "Inbound call connected" : "Waiting for call"}
+              </div>
+            </div>
+          </div>
+          <div className={`rounded-full border px-2 py-1 text-[9px] font-mono transition-all duration-500 ${
+            active ? "border-green-400/25 bg-green-400/10 text-green-300" : "border-white/10 bg-white/[0.03] text-white/30"
+          }`}>
+            {active ? "LIVE" : "IDLE"}
+          </div>
         </div>
-      </div>
 
-      {/* Status */}
-      <div className="flex items-center gap-1.5">
-        <span className={`w-1.5 h-1.5 rounded-full transition-colors duration-700 ${active ? "bg-green-400 animate-pulse" : "bg-white/20"}`} />
-        <span className={`text-[10px] font-light transition-colors duration-700 ${active ? "text-green-400/80" : "text-white/30"}`}>
-          {active ? "Live Call Active" : "Waiting..."}
-        </span>
-      </div>
+        <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-3">
+          <div className="mb-2 flex items-center justify-between text-[9px] text-white/30">
+            <span className="font-light">Customer intent analysis</span>
+            <span className="font-mono text-orange-300/80">24/7</span>
+          </div>
+          <div className="flex h-11 items-end gap-1">
+            {bars.map((h, i) => (
+              <div
+                key={i}
+                className={`flex-1 rounded-full transition-all duration-150 ${active ? "bg-gradient-to-t from-orange-500/55 to-orange-300/80" : "bg-white/10"}`}
+                style={{ height: `${active ? Math.max(16, h * 100) : 16}%` }}
+              />
+            ))}
+          </div>
+        </div>
 
-      {/* Waveform */}
-      <div className="flex items-center gap-px h-10 w-full max-w-[160px]">
-        {bars.map((h, i) => (
-          <div
-            key={i}
-            className={`flex-1 rounded-full transition-all duration-75 ${active ? "bg-orange-400/60" : "bg-white/10"}`}
-            style={{ height: `${active ? h * 100 : 10}%` }}
-          />
-        ))}
-      </div>
+        <div className="mt-3 grid grid-cols-3 gap-2">
+          {[
+            { label: "VOICE", value: "AI" },
+            { label: "RESP.", value: "<2s" },
+            { label: "GOAL", value: "CLOSE" },
+          ].map((item) => (
+            <div key={item.label} className="rounded-xl border border-white/10 bg-white/[0.02] px-2 py-2 text-center">
+              <div className="text-[8px] font-mono text-white/26">{item.label}</div>
+              <div className="mt-1 text-[10px] font-light text-white/74">{item.value}</div>
+            </div>
+          ))}
+        </div>
 
-      <div className="flex items-center gap-2">
-        <Mic className="w-3 h-3 text-white/30" />
-        <span className="text-[9px] text-white/25 font-light">AI voice is active</span>
+        <div className="mt-3 flex items-center gap-2">
+          <Mic className="w-3 h-3 text-white/30" />
+          <span className="text-[9px] text-white/28 font-light">AI voice handles objections and routes conversion intent.</span>
+        </div>
       </div>
     </div>
   );
@@ -234,39 +297,20 @@ const CallAgentViz = () => {
 
 /* ─── 4. Content System: ad generation typing animation ─── */
 const ContentSystemViz = () => {
-  const [step, setStep] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const startedRef = useRef(false);
-
-  useEffect(() => {
-    const trigger = ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: "top 88%",
-      once: true,
-      onEnter: () => {
-        if (startedRef.current) return;
-        startedRef.current = true;
-        const timers: ReturnType<typeof setTimeout>[] = [];
-        [0, 800, 1600, 2500, 3500, 4500].forEach((t, i) => {
-          timers.push(setTimeout(() => setStep(i + 1), t));
-        });
-        return () => timers.forEach(clearTimeout);
-      },
-    });
-    return () => trigger.kill();
-  }, []);
+  const activeIndex = useLoopingStage(6, 1180, 980);
 
   const pipeline = [
-    { label: "Brief received", done: step >= 1 },
-    { label: "Audience mapped", done: step >= 2 },
-    { label: "Copy generated", done: step >= 3 },
-    { label: "Creative variant A", done: step >= 4 },
-    { label: "Creative variant B", done: step >= 5 },
-    { label: "Ready to deploy", done: step >= 6 },
+    { label: "Brief received" },
+    { label: "Audience mapped" },
+    { label: "Copy generated" },
+    { label: "Creative variant A" },
+    { label: "Creative variant B" },
+    { label: "Ready to deploy" },
   ];
 
   return (
-    <div ref={containerRef} className="w-full flex flex-col gap-2">
+    <div ref={containerRef} className="w-full flex flex-col justify-center gap-2">
       <div className="flex items-center gap-2 mb-1">
         <Sparkles className="w-3.5 h-3.5 text-orange-300/70" />
         <span className="text-[10px] text-orange-300/60 font-light tracking-wider">Content Pipeline</span>
@@ -274,19 +318,32 @@ const ContentSystemViz = () => {
       {pipeline.map((item, i) => (
         <div
           key={i}
-          className={`flex items-center gap-2 transition-all duration-500 ${
-            item.done ? "opacity-100" : "opacity-25"
+          className={`grid grid-cols-[16px_minmax(0,1fr)_54px] items-center gap-3 rounded-lg px-2 py-1.5 transition-all duration-500 ${
+            i === activeIndex
+              ? "bg-orange-500/8"
+              : i < activeIndex
+                ? "bg-white/[0.02]"
+                : ""
           }`}
-          style={{ transitionDelay: `${i * 50}ms` }}
         >
           <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
-            item.done ? "border-orange-400/50 bg-orange-500/20" : "border-white/15 bg-transparent"
+            i === activeIndex
+              ? "border-orange-400/60 bg-orange-500/25"
+              : i < activeIndex
+                ? "border-orange-400/35 bg-orange-500/15"
+                : "border-white/15 bg-transparent"
           }`}>
-            {item.done && <div className="w-1.5 h-1.5 rounded-full bg-orange-400" />}
+            {(i <= activeIndex) && <div className="w-1.5 h-1.5 rounded-full bg-orange-400" />}
           </div>
-          <div className={`h-px flex-1 transition-all duration-700 ${item.done ? "bg-orange-400/20" : "bg-white/8"}`} />
-          <span className={`text-[10px] font-light transition-colors duration-500 ${item.done ? "text-white/60" : "text-white/25"}`}>
+          <span className={`text-[10px] font-light transition-colors duration-500 ${
+            i === activeIndex ? "text-white/82" : i < activeIndex ? "text-white/65" : "text-white/30"
+          }`}>
             {item.label}
+          </span>
+          <span className={`text-[9px] font-mono text-right transition-colors duration-500 ${
+            i === activeIndex ? "text-orange-300/90" : i < activeIndex ? "text-green-400/70" : "text-white/20"
+          }`}>
+            {i === activeIndex ? "LIVE" : i < activeIndex ? "DONE" : "QUEUED"}
           </span>
         </div>
       ))}
@@ -298,29 +355,32 @@ const ContentSystemViz = () => {
 const RerankViz = () => {
   const [progress, setProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const startedRef = useRef(false);
 
   useEffect(() => {
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    if (isMobile) {
+      const cycleStart = performance.now();
+      const duration = 6200;
+      const interval = setInterval(() => {
+        const now = performance.now();
+        const looped = ((now - cycleStart) % duration) / duration;
+        const eased = (Math.sin((looped * Math.PI * 2) - Math.PI / 2) + 1) / 2;
+        setProgress(eased);
+      }, 120);
+      return () => clearInterval(interval);
+    }
+
     let animFrame: number;
-    const trigger = ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: "top 88%",
-      once: true,
-      onEnter: () => {
-        if (startedRef.current) return;
-        startedRef.current = true;
-        const start = performance.now();
-        const duration = 4000;
-        const animate = (now: number) => {
-          const t = Math.min((now - start) / duration, 1);
-          const eased = 1 - Math.pow(1 - t, 3);
-          setProgress(eased);
-          if (t < 1) animFrame = requestAnimationFrame(animate);
-        };
-        animFrame = requestAnimationFrame(animate);
-      },
-    });
-    return () => { trigger.kill(); cancelAnimationFrame(animFrame); };
+    const cycleStart = performance.now();
+    const duration = 5600;
+    const animate = (now: number) => {
+      const looped = ((now - cycleStart) % duration) / duration;
+      const eased = (Math.sin((looped * Math.PI * 2) - Math.PI / 2) + 1) / 2;
+      setProgress(eased);
+      animFrame = requestAnimationFrame(animate);
+    };
+    animFrame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animFrame);
   }, []);
 
   const llms = [
@@ -345,7 +405,7 @@ const RerankViz = () => {
             <span className="text-[9px] text-white/35 w-16 text-right font-light">{llm.name}</span>
             <div className="flex-1 h-2 rounded-full bg-white/[0.04] border border-white/8 overflow-hidden">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-orange-500/60 to-orange-400/80 transition-all duration-100"
+                className="h-full rounded-full bg-gradient-to-r from-orange-500/60 to-orange-400/80 transition-all duration-200"
                 style={{ width: `${current}%` }}
               />
             </div>
@@ -484,12 +544,12 @@ const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) =>
       </div>
 
       {/* Visualization */}
-      <div className={`rounded-xl border p-4 ${feature.accent ? "border-orange-500/15 bg-black/30" : "border-white/6 bg-white/[0.02]"}`}>
+      <div className={`rounded-xl border p-4 min-h-[172px] flex items-center ${feature.accent ? "border-orange-500/15 bg-black/30" : "border-white/6 bg-white/[0.02]"}`}>
         {feature.viz}
       </div>
 
       {/* Title */}
-      <h3 className={`text-xl sm:text-2xl font-light tracking-tight transition-colors duration-300 ${feature.accent ? "text-white" : "text-white/85 group-hover:text-white"}`}>
+      <h3 className="text-xl sm:text-2xl font-light tracking-tight text-white transition-colors duration-300">
         {feature.title}
       </h3>
 
@@ -498,7 +558,7 @@ const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) =>
       {/* Body */}
       <div className="flex flex-col gap-3">
         {feature.body.map((para, i) => (
-          <p key={i} className={`text-sm font-light leading-relaxed ${feature.accent ? "text-white/60" : "text-white/40"}`}>
+          <p key={i} className="text-sm font-light leading-relaxed text-white">
             {para}
           </p>
         ))}
@@ -509,10 +569,10 @@ const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) =>
         <span className={`inline-flex items-center gap-1.5 text-[11px] font-light rounded-full px-3 py-1 border
           ${feature.accent
             ? "border-orange-400/20 bg-orange-500/10 text-orange-300/70"
-            : "border-white/8 bg-white/[0.03] text-white/30"
+            : "border-white/8 bg-white/[0.03] text-white/85"
           }`}
         >
-          <span className={`w-1.5 h-1.5 rounded-full ${feature.accent ? "bg-orange-400" : "bg-green-400"}`} />
+          <span className={`w-1.5 h-1.5 rounded-full ${feature.accent ? "bg-orange-400" : "bg-green-400 animate-pulse shadow-[0_0_10px_rgba(74,222,128,0.75)]"}`} />
           Active in your system
         </span>
       </div>
@@ -528,6 +588,7 @@ const FeaturesSection = () => {
   useGSAP(
     () => {
       if (!sectionRef.current) return;
+      const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
       gsap.set(headingRef.current, { autoAlpha: 0, y: 30 });
       gsap.to(headingRef.current, {
         autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out",
@@ -535,7 +596,7 @@ const FeaturesSection = () => {
       });
 
       const inner = sectionRef.current.querySelector(".parallax-inner");
-      if (inner) {
+      if (inner && !isMobile) {
         gsap.to(inner, {
           yPercent: -4,
           ease: "none",
@@ -553,10 +614,10 @@ const FeaturesSection = () => {
         <div ref={headingRef} className="flex flex-col items-center text-center gap-6 mb-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-90" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400 animate-pulse shadow-[0_0_12px_rgba(74,222,128,0.95)]" />
             </span>
-            <span className="text-xs font-light tracking-tight text-white/80">The Agents</span>
+            <span className="text-xs font-light tracking-tight text-white">The Agents</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extralight tracking-tight leading-[1.1] max-w-3xl">

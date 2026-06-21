@@ -3,11 +3,11 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextShimmer } from "@/components/ui/text-shimmer";
-import aliRazaImg from "@/assets/clients/ali-raza.png";
-import hassanAbbasImg from "@/assets/clients/hassan-abbas.png";
-import awaisNematImg from "@/assets/clients/awais-nemat.png";
-import brunoCasanovasImg from "@/assets/clients/bruno-casanovas.png";
-import davidOkonkwoImg from "@/assets/clients/david-okonkwo.png";
+import aliRazaImg from "@/assets/clients/thumbs/ali-raza.jpg";
+import hassanAbbasImg from "@/assets/clients/thumbs/hassan-abbas.jpg";
+import awaisNematImg from "@/assets/clients/thumbs/awais-nemat.jpg";
+import brunoCasanovasImg from "@/assets/clients/thumbs/bruno-casanovas.jpg";
+import davidOkonkwoImg from "@/assets/clients/thumbs/david-okonkwo.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -157,6 +157,10 @@ const TestimonialSection = () => {
           <p className="text-sm sm:text-base font-light text-white/40">
             See how Effect3 clients feel about our AI systems
           </p>
+          <p className="max-w-2xl text-sm sm:text-base font-light leading-relaxed text-white/55">
+            Effect3 is an AI agency that installs AI operating systems for businesses that need more conversions,
+            faster inbound response, better lead recovery, and measurable revenue outcomes.
+          </p>
         </div>
 
         {/* Desktop grid - exact reference layout */}
@@ -185,7 +189,7 @@ const TestimonialSection = () => {
                   <p className="text-sm font-semibold text-white/90">{cards[0].name}</p>
                   <p className="text-xs text-white/40">{cards[0].role}</p>
                 </div>
-                <img src={cards[0].image} alt={cards[0].name} className="w-11 h-11 rounded-full object-cover border border-orange-500/20 flex-shrink-0" />
+                <img src={cards[0].image} alt={cards[0].name} loading="lazy" decoding="async" fetchPriority="low" className="w-11 h-11 rounded-full object-cover border border-orange-500/20 flex-shrink-0" />
               </div>
             </div>
           </AnimatedCard>
@@ -204,7 +208,7 @@ const TestimonialSection = () => {
                 <p className="text-sm font-semibold text-white">{cards[1].name}</p>
                 <p className="text-xs text-white/70">{cards[1].role}</p>
               </div>
-                <img src={cards[1].image} alt={cards[1].name} className="w-11 h-11 rounded-full object-cover border border-white/30 flex-shrink-0" />
+                <img src={cards[1].image} alt={cards[1].name} loading="lazy" decoding="async" fetchPriority="low" className="w-11 h-11 rounded-full object-cover border border-white/30 flex-shrink-0" />
             </div>
           </AnimatedCard>
 
@@ -223,7 +227,7 @@ const TestimonialSection = () => {
                   <p className="text-sm font-semibold text-white/90">{cards[2].name}</p>
                   <p className="text-xs text-white/40">{cards[2].role}</p>
                 </div>
-                <img src={cards[2].image} alt={cards[2].name} className="w-11 h-11 rounded-full object-cover border border-orange-500/20 flex-shrink-0" />
+                <img src={cards[2].image} alt={cards[2].name} loading="lazy" decoding="async" fetchPriority="low" className="w-11 h-11 rounded-full object-cover border border-orange-500/20 flex-shrink-0" />
               </div>
             </div>
             <div className="h-[45%] relative">
@@ -245,7 +249,7 @@ const TestimonialSection = () => {
                 <p className="text-sm font-semibold text-white">{cards[3].name}</p>
                 <p className="text-xs text-white/70">{cards[3].role}</p>
               </div>
-                <img src={cards[3].image} alt={cards[3].name} className="w-11 h-11 rounded-full object-cover border border-white/30 flex-shrink-0" />
+                <img src={cards[3].image} alt={cards[3].name} loading="lazy" decoding="async" fetchPriority="low" className="w-11 h-11 rounded-full object-cover border border-white/30 flex-shrink-0" />
             </div>
           </AnimatedCard>
 
@@ -263,7 +267,7 @@ const TestimonialSection = () => {
                 <p className="text-sm font-semibold text-white/90">{cards[4].name}</p>
                 <p className="text-xs text-white/40">{cards[4].role}</p>
               </div>
-                <img src={cards[4].image} alt={cards[4].name} className="w-11 h-11 rounded-full object-cover border border-orange-500/20 flex-shrink-0" />
+                <img src={cards[4].image} alt={cards[4].name} loading="lazy" decoding="async" fetchPriority="low" className="w-11 h-11 rounded-full object-cover border border-orange-500/20 flex-shrink-0" />
             </div>
           </AnimatedCard>
         </div>
@@ -307,6 +311,9 @@ const TestimonialSection = () => {
                 <img
                   src={card.image}
                   alt={card.name}
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
                   className={`w-11 h-11 rounded-full object-cover flex-shrink-0 border ${
                     card.variant === "orange"
                       ? "border-white/30"

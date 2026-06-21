@@ -3,47 +3,10 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextShimmer } from "@/components/ui/text-shimmer";
+import { homeFaqs } from "@/lib/seo";
 import { Plus, Minus } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
-
-interface FAQItem {
-  question: string;
-  answer: string;
-}
-
-const faqs: FAQItem[] = [
-  {
-    question: "What exactly does Effect3 do?",
-    answer:
-      "We deploy custom AI agents that reactivate your dead leads, recover churned customers, and automate repetitive outreach — turning cold contacts into paying customers again. Our systems handle everything from personalized email sequences to intelligent follow-ups at scale.",
-  },
-  {
-    question: "How long does it take to see results?",
-    answer:
-      "Most clients see measurable results within the first 30 days. Our AI agents start engaging your leads immediately after deployment, and conversion metrics typically improve within the first 2 to 4 weeks. Full ROI realization usually happens within 60 days.",
-  },
-  {
-    question: "Do I need any technical knowledge to get started?",
-    answer:
-      "Not at all. We handle the entire setup, integration, and deployment process. You just give us access to your CRM or lead data, and we take care of everything — from building custom AI workflows to monitoring performance and optimizing results.",
-  },
-  {
-    question: "How does pricing work?",
-    answer:
-      "We offer performance-based and retainer models depending on your business size and goals. Every engagement starts with a strategy call where we assess your pipeline and recommend the best approach. There are no long-term lock-in contracts.",
-  },
-  {
-    question: "Will the AI outreach feel robotic to my customers?",
-    answer:
-      "No. Our AI agents are trained to write with empathy, context-awareness, and personalization. Every message is tailored to the recipient's history, behavior, and preferences — making it indistinguishable from a human-written message.",
-  },
-  {
-    question: "What integrations do you support?",
-    answer:
-      "We integrate with all major CRMs (HubSpot, Salesforce, Zoho), email platforms, Slack, WhatsApp, and custom APIs. If you use a tool, chances are we can plug right into it without disrupting your existing workflow.",
-  },
-];
 
 const FAQItem = ({
   item,
@@ -51,7 +14,7 @@ const FAQItem = ({
   isOpen,
   onToggle,
 }: {
-  item: FAQItem;
+  item: (typeof homeFaqs)[number];
   index: number;
   isOpen: boolean;
   onToggle: () => void;
@@ -137,7 +100,7 @@ const FAQSection = () => {
     <section ref={sectionRef} className="w-full py-12 md:py-16 bg-black border-t border-white/5">
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-12 lg:gap-20">
-          {/* Left — Heading */}
+          {/* Left  -  Heading */}
           <div ref={headingRef} className="flex flex-col gap-4 max-w-md">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
@@ -164,9 +127,9 @@ const FAQSection = () => {
             </p>
           </div>
 
-          {/* Right — Accordion */}
+          {/* Right  -  Accordion */}
           <div className="border-t border-white/[0.06]">
-            {faqs.map((faq, i) => (
+            {homeFaqs.map((faq, i) => (
               <FAQItem
                 key={i}
                 item={faq}

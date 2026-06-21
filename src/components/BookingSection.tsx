@@ -3,15 +3,16 @@ import { TextShimmer } from "@/components/ui/text-shimmer";
 import { Calendar, Clock, ArrowUpRight, Video, Zap } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { siteMeta } from "@/lib/seo";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const CAL_LINK = "https://cal.com/theeffect.com/30min";
+const CAL_LINK = siteMeta.bookingUrl;
 
 const meetingDetails = [
   { icon: Clock, label: "Duration", value: "30 minutes" },
   { icon: Video, label: "Format", value: "Video Call" },
-  { icon: Zap, label: "Type", value: "Strategy Session" },
+  { icon: Zap, label: "Type", value: "System Review" },
 ];
 
 const slots = [
@@ -57,10 +58,10 @@ export default function BookingSection() {
     >
       {/* Ambient glow */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-orange-500/5 blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] h-[420px] sm:w-[600px] sm:h-[600px] rounded-full bg-orange-500/5 blur-[120px]" />
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 sm:px-8">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div ref={contentRef} className="flex flex-col items-center gap-14">
 
           {/* Header */}
@@ -71,24 +72,24 @@ export default function BookingSection() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
               </span>
               <span className="text-xs font-light tracking-tight text-white/70">
-                Book a Strategy Call
+                Book a System Review
               </span>
             </div>
 
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-extralight tracking-tight leading-[1.05] text-white">
-              Let's Build Your{" "}
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-extralight tracking-tight leading-[1.05] text-white">
+              Map Your Next{" "}
               <TextShimmer
                 as="span"
                 duration={2}
                 spread={4}
                 className="italic font-light [--base-color:theme(colors.orange.300)] [--base-gradient-color:theme(colors.orange.100)] dark:[--base-color:theme(colors.orange.300)] dark:[--base-gradient-color:theme(colors.orange.100)]"
               >
-                AI System
+                AI Operating System
               </TextShimmer>
             </h2>
 
             <p className="text-base font-light text-white/40 max-w-lg leading-relaxed tracking-tight sm:text-lg">
-              Pick a time that works for you. In 30 minutes, we'll map out exactly which agents your business needs and how fast you can go live.
+              Pick a time that works for you. In 30 minutes, we will map the highest-value workflow to automate, the system shape it needs, and whether Effect3 is the right deployment partner.
             </p>
           </div>
 
@@ -97,17 +98,17 @@ export default function BookingSection() {
             <div className="grid grid-cols-1 lg:grid-cols-2">
 
               {/* Left panel */}
-              <div className="flex flex-col gap-8 p-8 border-b lg:border-b-0 lg:border-r border-white/10">
+              <div className="flex flex-col gap-8 p-5 sm:p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-white/10">
                 {/* Meeting info */}
                 <div className="flex flex-col gap-2">
                   <span className="text-xs font-medium uppercase tracking-widest text-white/30">
                     The Effect
                   </span>
                   <h3 className="text-2xl font-light tracking-tight text-white">
-                    AI Revenue Discovery Call
+                    ICP System Review
                   </h3>
                   <p className="text-sm font-light text-white/40 leading-relaxed mt-1">
-                    A focused session to audit your current funnel, identify revenue leaks, and design the right AI agent stack for your business.
+                    A focused session for qualified teams that need a production AI system for inbound, lead recovery, voice, outreach, or GTM operations.
                   </p>
                 </div>
 
@@ -131,10 +132,10 @@ export default function BookingSection() {
                   </span>
                   <ul className="flex flex-col gap-2.5">
                     {[
-                      "Full churn and lead audit of your funnel",
-                      "Custom agent recommendation for your use case",
-                      "Live timeline and implementation plan",
-                      "No pitch. Just strategy.",
+                      "Workflow review for inbound, voice, lead recovery, or GTM ops",
+                      "Recommended system shape and deployment scope",
+                      "Fit check for your ICP, channels, and current stack",
+                      "Implementation path if Effect3 is the right partner",
                     ].map((item) => (
                       <li key={item} className="flex items-start gap-2.5 text-sm font-light text-white/50 leading-relaxed">
                         <span className="mt-1.5 w-1 h-1 rounded-full bg-orange-400 shrink-0" />
@@ -146,12 +147,12 @@ export default function BookingSection() {
               </div>
 
               {/* Right panel - Visual calendar preview */}
-              <div className="flex flex-col gap-6 p-8">
+              <div className="flex flex-col gap-6 p-5 sm:p-6 lg:p-8">
                 <div className="flex flex-col gap-1">
                   <span className="text-xs font-medium uppercase tracking-widest text-white/30">
                     Select a Time
                   </span>
-                  <p className="text-sm font-light text-white/40">February 2026</p>
+                  <p className="text-sm font-light text-white/40">Choose a review slot</p>
                 </div>
 
                 {/* Day headers */}
@@ -197,7 +198,7 @@ export default function BookingSection() {
                   className="group mt-auto flex items-center justify-center gap-2.5 w-full py-3.5 rounded-2xl bg-white text-black text-sm font-medium tracking-tight transition-all duration-300 hover:bg-white/90"
                 >
                   <Calendar size={15} strokeWidth={2} />
-                  Book Your Free Strategy Call
+                  Book Your System Review
                   <ArrowUpRight
                     size={14}
                     strokeWidth={2}
@@ -206,7 +207,7 @@ export default function BookingSection() {
                 </a>
 
                 <p className="text-center text-xs font-light text-white/25 tracking-tight">
-                  Slots fill fast. Booking is free with no commitment.
+                  Best for enterprise and growth-stage teams with active revenue or service workflows to automate.
                 </p>
               </div>
             </div>
