@@ -192,21 +192,38 @@ const getLevel = (score) => {
 };
 
 // Signals that a domain is parked / for-sale rather than a real live website.
+// Domain marketplaces / parking hosts. If the scanned host is one of these,
+// the user pasted a "for sale" listing, not a real website — reject outright.
+const MARKETPLACE_HOSTS = [
+  "hugedomains.com",
+  "sedo.com",
+  "dan.com",
+  "afternic.com",
+  "bodis.com",
+  "undeveloped.com",
+  "domainmarket.com",
+  "buydomains.com",
+  "domainnamesales.com",
+  "uniregistry.com",
+  "parkingcrew.net",
+];
+
+// Specific parked/for-sale phrases. Reject if any appear (regardless of page
+// length) — kept specific to avoid false positives on legit ecommerce copy.
 const PARKING_SIGNALS = [
-  "domain is for sale",
-  "buy this domain",
+  "this domain is for sale",
   "this domain may be for sale",
+  "the domain you are looking for",
+  "buy this domain",
+  "domain is for sale",
   "domain for sale",
-  "is for sale",
+  "interested in this domain",
   "parkingcrew",
   "sedoparking",
-  "bodis.com",
   "hugedomains",
   "domain parking",
-  "is parked",
-  "parked free",
+  "this domain is parked",
   "afternic",
-  "dan.com",
   "godaddy.com/domainsearch",
 ];
 
@@ -229,8 +246,7 @@ const assertValidWebsite = (page, wordCount) => {
     throw invalidWebsite("That URL did not return a web page.");
   }
   const lower = (page.text || "").toLowerCase();
-  const looksParked = PARKING_SIGNALS.some((signal) => lower.includes(signal));
-  if (looksParked && wordCount < 250) {
+  if (PARKING_SIGNALS.some((signal) => lower.includes(signal))) {
     throw invalidWebsite("That domain looks parked or listed for sale — not a live website.");
   }
   if (wordCount < 30) {
@@ -240,6 +256,12 @@ const assertValidWebsite = (page, wordCount) => {
 
 const scanWebsite = async (inputUrl) => {
   const targetUrl = normalizeTargetUrl(inputUrl);
+
+  const host = targetUrl.hostname.replace(/^www\./, "").toLowerCase();
+  if (MARKETPLACE_HOSTS.some((m) => host === m || host.endsWith(`.${m}`))) {
+    throw invalidWebsite("That's a domain-marketplace listing (for-sale page), not a live business website.");
+  }
+
   await assertPublicHost(targetUrl.hostname);
   const origin = targetUrl.origin;
 
