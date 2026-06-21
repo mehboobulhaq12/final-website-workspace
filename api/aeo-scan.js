@@ -399,6 +399,35 @@ const saveLeadToNotion = async (lead, report) => {
   }
 };
 
+// Fire the lead at the n8n webhook for downstream automation (team alert email,
+// etc.). Never throws — alerting must not affect the scan or CRM save.
+const postLeadToN8n = async (lead, report) => {
+  const url = process.env.N8N_LEAD_WEBHOOK_URL;
+  if (!url) return { skipped: true };
+  const pillar = (name) => report.categories.find((c) => c.name === name)?.score ?? 0;
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: `${lead.firstName} ${lead.lastName}`.trim(),
+        email: lead.email,
+        company: lead.company,
+        website: report.scannedUrl || `https://${report.domain}`,
+        score: report.score,
+        diagnosis: report.diagnosis,
+        findable: pillar("Findable"),
+        quotable: pillar("Quotable"),
+        understandable: pillar("Understandable"),
+        trustworthy: pillar("Trustworthy"),
+      }),
+    });
+    return { ok: response.ok };
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : String(error) };
+  }
+};
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -417,8 +446,9 @@ export default async function handler(req, res) {
       company: String(body.company || "").slice(0, 160),
     };
 
-    // Save to CRM (awaited so it completes before the function suspends).
-    await saveLeadToNotion(lead, report);
+    // Save to CRM + fire lead alert (awaited so both complete before the
+    // function suspends; each is internally non-throwing).
+    await Promise.all([saveLeadToNotion(lead, report), postLeadToN8n(lead, report)]);
 
     res.setHeader("Cache-Control", "no-store");
     res.status(200).json({ ...report, lead });
