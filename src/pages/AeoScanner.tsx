@@ -400,11 +400,6 @@ export default function AeoScanner() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const focusScanner = () => {
-    websiteInputRef.current?.focus();
-    websiteInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  };
-
   const copyReportLink = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -588,9 +583,6 @@ export default function AeoScanner() {
                 </div>
               </div>
               <div className="aeo-announcement-controls">
-                <button type="button" className="aeo-announcement-scan" onClick={focusScanner}>
-                  Scan now <ArrowRight size={13} aria-hidden="true" />
-                </button>
                 <button
                   type="button"
                   className="aeo-announcement-close"
