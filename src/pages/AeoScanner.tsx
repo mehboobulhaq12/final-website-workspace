@@ -2,7 +2,6 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, ChevronDown, Download, Link2, X } from "lucide-react";
 import { animate, motion } from "framer-motion";
 import AeoShader from "@/components/AeoShader";
-import { ShimmerText } from "@/components/ui/shimmer-text";
 import SeoHead from "@/components/SeoHead";
 import logo from "@/assets/logo.png";
 import { getCanonicalUrl, siteMeta } from "@/lib/seo";
@@ -544,12 +543,7 @@ export default function AeoScanner() {
               </div>
               <div className="aeo-scanning-copy">
                 <h2>
-                  <ShimmerText
-                    variant="orange"
-                    className="font-bold tracking-tight text-orange-400 [--shimmer-contrast:rgba(255,255,255,0.92)]"
-                  >
-                    Checking how AI sees {getDomain(form.website)}
-                  </ShimmerText>
+                  Scanning <strong>{getDomain(form.website)}</strong>
                 </h2>
                 <div className="aeo-scanning-progress">
                   <span style={{ width: `${progress}%` }}>
