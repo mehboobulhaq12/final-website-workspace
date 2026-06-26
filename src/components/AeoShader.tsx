@@ -60,17 +60,17 @@ const fragmentShader = `
     falloff = pow(falloff, 1.05);
     float beams = pow(f * falloff, 1.35) * 2.3;
 
-    vec3 purple = vec3(0.46, 0.18, 0.86);
-    vec3 indigo = vec3(0.22, 0.30, 0.96);
-    vec3 magenta = vec3(0.74, 0.26, 0.96);
+    vec3 orange = vec3(0.98, 0.45, 0.09);
+    vec3 ember  = vec3(0.85, 0.22, 0.04);
+    vec3 amber  = vec3(1.00, 0.70, 0.26);
 
     vec3 col = vec3(0.0);
-    col += purple * beams;
-    col += indigo * pow(f * falloff, 2.0) * 1.25;
-    col += magenta * pow(max(f - 0.5, 0.0) * falloff, 1.4) * 1.6;
+    col += orange * beams;
+    col += ember * pow(f * falloff, 2.0) * 1.25;
+    col += amber * pow(max(f - 0.5, 0.0) * falloff, 1.4) * 1.6;
 
     float streak = smoothstep(0.7, 0.0, d) * (0.55 + 0.7 * f);
-    col += vec3(0.6, 0.45, 1.0) * streak * falloff * 0.55;
+    col += vec3(1.0, 0.72, 0.38) * streak * falloff * 0.55;
     col *= smoothstep(1.7, 0.2, d);
     col = col / (1.0 + col);
     col = pow(col, vec3(0.86));
@@ -113,7 +113,7 @@ export default function AeoShader() {
     });
 
     if (!gl) {
-      canvas.style.background = "#0a0414";
+      canvas.style.background = "#0b0603";
       return undefined;
     }
 
