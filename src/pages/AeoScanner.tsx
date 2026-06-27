@@ -2,6 +2,8 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, ChevronDown, Download, Link2, X } from "lucide-react";
 import { animate, motion } from "framer-motion";
 import AeoShader from "@/components/AeoShader";
+import { AeoLogoMarquee } from "@/components/AeoLogoMarquee";
+import { AeoVisibilitySection } from "@/components/AeoVisibilitySection";
 import SeoHead from "@/components/SeoHead";
 import logo from "@/assets/logo.png";
 import { getCanonicalUrl, siteMeta } from "@/lib/seo";
@@ -818,6 +820,10 @@ export default function AeoScanner() {
             ) : null}
           </div>
         </section>
+
+        <AeoLogoMarquee />
+
+        <AeoVisibilitySection />
 
         <section className="aeo-guide">
           <div className="aeo-guide-inner">

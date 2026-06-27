@@ -32,3 +32,9 @@ final-website-upload.zip
 /e3-*.jpeg
 /framer-*.jpeg
 /live-404.jpeg
+
+# Downloaded AEO report demo images
+/aeo-report-*.png
+
+# debug screenshots (root)
+/*.jpeg
